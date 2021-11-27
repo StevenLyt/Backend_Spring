@@ -1,0 +1,4 @@
+com/example/pokersc/PokerScApplication.class
+com/example/pokersc/entity/User.class
+com/example/pokersc/controller/UserController.class
+com/example/pokersc/repository/UsersRepository.class
