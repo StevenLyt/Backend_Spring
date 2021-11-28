@@ -1,3 +1,5 @@
+package com.example.pokersc.entity;
+
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -29,7 +31,7 @@ public class Deck {
 	public Card dealCard() throws Exception {
 		
 		if(num_cardsUsed == 52) {
-            throw new Exception("No cards are left in the deck.");
+            		throw new Exception("No cards are left in the deck.");
 		}
 		// pop and return the card at the top
 		num_cardsUsed++;
