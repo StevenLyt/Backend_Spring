@@ -14,6 +14,12 @@ POST /login?username={}&password={}
 POST /signup?username={}&password={}&profile_url={}
 ```
 
+- Fetch all user information 
+
+```
+GET /users 
+```
+
 - Fetch user information and stats from database provifng its username/id (probably unnecessary, since log in would return User entity)
 
 ```
