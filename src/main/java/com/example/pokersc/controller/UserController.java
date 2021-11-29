@@ -4,7 +4,6 @@ import com.example.pokersc.Utils;
 import com.example.pokersc.entity.User;
 import com.example.pokersc.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
@@ -12,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 public class UserController {
+
     @Autowired
     private UsersRepository usersRepository;
 
