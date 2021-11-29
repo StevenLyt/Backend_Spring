@@ -33,6 +33,11 @@ public class UserController {
         return "success";
     }
 
+    @GetMapping("/users")
+    public Iterable<User> getAllUser() {
+        return usersRepository.findAll();
+    }
+
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable int id) {
         return usersRepository.findById(id).orElse(null);

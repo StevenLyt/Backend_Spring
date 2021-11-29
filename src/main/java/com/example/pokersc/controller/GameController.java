@@ -1,10 +1,16 @@
 package com.example.pokersc.controller;
 
 import com.example.pokersc.entity.Game;
+import com.example.pokersc.repository.GameResultsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class GameController {
+
+    @Autowired
+    private GameResultsRepository gameResultsRepository;
+    private Game game;
 
     // a user creates a game
     @PostMapping("games/")
@@ -50,6 +56,7 @@ public class GameController {
         //TODO
         return null;
     }
+
     @PostMapping("games/{game_id}/{user_id}/raise")
     public GameController userRaise(@PathVariable int game_id, @PathVariable int user_id, @RequestParam int amount) {
         //TODO

@@ -13,11 +13,8 @@ public class User {
     private String password;
     private String profile_url;
     private int total_round;
-    private double buyin;
-
-    private double VPIP;
-    private double PFR;
-    private double win_rate;
+    private int buyin;
+    private int total_profit;
 
     protected User(){}
     public int getId() {
@@ -64,7 +61,7 @@ public class User {
         return buyin;
     }
 
-    public void setBuyin(double buyin) {
+    public void setBuyin(int buyin) {
         this.buyin = buyin;
     }
 
