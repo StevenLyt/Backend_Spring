@@ -38,7 +38,7 @@ public class Game {
     public void startGame(){
         while(numPlayers > 1){
             updatePos();
-            Hand hand = new Hand(userArr, posArr);
+            Hand hand = new Hand(userArr, posArr, numPlayers);
         }
     }
 
