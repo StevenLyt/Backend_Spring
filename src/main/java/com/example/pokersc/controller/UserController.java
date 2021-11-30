@@ -4,12 +4,15 @@ import com.example.pokersc.Utils;
 import com.example.pokersc.entity.User;
 import com.example.pokersc.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Base64;
 import java.util.Optional;
 
 @RestController
+//@RequestMapping(name ="/api")
 public class UserController {
 
     @Autowired
@@ -27,10 +30,12 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String userSignup(@RequestParam String username, @RequestParam String password, @RequestParam String profile_url) {
+    public ResponseEntity<String> userSignup(@RequestParam String username, @RequestParam String password, @RequestParam String profile_url) {
         User user = new User(username, Utils.sha256(password), profile_url);
         usersRepository.save(user);
-        return "success";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Control-Allow-Methods", "*");
+        return new ResponseEntity<String>("success",headers, HttpStatus.CREATED);
     }
 
     @GetMapping("/users")

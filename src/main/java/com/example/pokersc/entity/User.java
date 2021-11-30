@@ -14,6 +14,15 @@ public class User {
     private String profile_url;
     private int total_round;
     private int buyin;
+
+    public int getTotal_profit() {
+        return total_profit;
+    }
+
+    public void setTotal_profit(int total_profit) {
+        this.total_profit = total_profit;
+    }
+
     private int total_profit;
 
     protected User(){}
@@ -75,6 +84,7 @@ public class User {
         this.profile_url = profile_url;
         this.buyin = 0;
         this.total_round = 0;
+        this.total_profit = 0;
     }
 
 
