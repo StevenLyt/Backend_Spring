@@ -27,12 +27,29 @@ public class Hand {
         //shuffle the deck
         this.deck.shuffle();
 
-        //start dealing hand to players
+        //start dealing hand to players and the board
         for(int i = 0; i < 8; i++){
             if(posArr[i] == 0){
                 this.dealCardsToPlayers(i);
             }
         }
+
+        this.dealCommunityCards();
+
+    }
+    // start to deal cards given the position of button
+    public void dealCardsToPlayers(int buttonPos) {
+        int start = (buttonPos + 2) % 8;
+        int numCardsDealt = 0;
+        while(numCardsDealt != 2*numPlayers){
+            this.playerCards[start].receiveCard(deck.dealCard());
+            numCardsDealt++;
+            start++;
+            start %= 8;
+        }
+    }
+
+    public void dealCommunityCards(){
 
         //burn one card before flop
         this.deck.dealCard();
@@ -50,17 +67,6 @@ public class Hand {
         this.deck.dealCard();
         //deal river
         river = this.deck.dealCard();
-    }
-    // start to deal cards given the position of button
-    public void dealCardsToPlayers(int buttonPos) {
-        int start = (buttonPos + 2) % 8;
-        int numCardsDealt = 0;
-        while(numCardsDealt != 2*numPlayers){
-            this.playerCards[start].receiveCard(deck.dealCard());
-            numCardsDealt++;
-            start++;
-            start %= 8;
-        }
     }
 
 }
