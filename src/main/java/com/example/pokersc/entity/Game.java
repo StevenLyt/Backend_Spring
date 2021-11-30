@@ -2,6 +2,7 @@ package com.example.pokersc.entity;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
@@ -9,14 +10,42 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    private int numPlayers;
 
-    private List<User> userList;
-    private CommunityCards communityCards;
-    private List<HandCards> handCardsList;
-    private int total_bet;
-    // TODO: to be completed
+    private User[] userArr;
+    private int[] posArr;
 
-    public void addUser(User user) {
-        userList.add(user);
+    public Game(){
+        this.userArr = new User[8];
+        this.posArr = new int[8];
+        this.numPlayers = 0;
     }
+    public void addUser(User user) {
+        this.userArr[numPlayers] = user;
+        this.numPlayers ++;
+        for(int i = 0 ; i < 8; i++){
+            this.posArr[i] = i;
+        }
+    }
+    public void updatePos(){
+        for(int i = 0 ; i < 8; i++){
+            if(this.posArr[i] == 7) {
+                this.posArr[i] = 0;
+            }
+            else {
+                this.posArr[i]++;
+            }
+        }
+    }
+    public void startGame(){
+        while(numPlayers > 1){
+            updatePos();
+            Hand hand = new Hand(userArr, posArr);
+        }
+    }
+
+    public void pauseGame(){
+    }
+
+
 }

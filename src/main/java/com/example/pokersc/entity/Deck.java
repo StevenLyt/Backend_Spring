@@ -18,18 +18,17 @@ public class Deck {
  			}
 		}
 		num_cardsUsed = 0;
-	};
+	}
 	
 	public void shuffle() {
 		Collections.shuffle(Arrays.asList(deck));
-	};
+	}
 	
 	public int cardsLeft() {
 		return 52 - this.num_cardsUsed;
 	}
 	
 	public Card dealCard() throws Exception {
-		
 		if(num_cardsUsed == 52) {
             		throw new Exception("No cards are left in the deck.");
 		}
