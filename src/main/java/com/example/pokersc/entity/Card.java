@@ -7,7 +7,6 @@ public class Card {
     public final static int DIAMONDS = 2;
     public final static int CLUBS = 3;
 
-
     private final int value; // 1-13
     private final int suit; 
     
@@ -60,8 +59,6 @@ public class Card {
         case 11:  value_asString = "Jack";
         case 12:  value_asString = "Queen";
     	}
-    	
-    	return value_asString + " of " + suit_asString;    	
-    	
+    	return value_asString + " of " + suit_asString;
     }
 }

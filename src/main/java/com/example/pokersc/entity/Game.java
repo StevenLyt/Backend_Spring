@@ -8,10 +8,9 @@ import java.util.List;
 public class Game {
 
     private int id;
-    private int numPlayers;
-
-    private User[] userArr;
-    private int[] posArr;
+    public int numPlayers;
+    public User[] userArr;
+    public int[] posArr;
 
     public Game(){
         this.userArr = new User[8];
@@ -31,15 +30,4 @@ public class Game {
             this.posArr[i] &= 8;
         }
     }
-    public void startGame(){
-        while(numPlayers > 1){
-            updatePos();
-            Hand hand = new Hand(userArr, posArr, numPlayers);
-        }
-    }
-
-    public void pauseGame(){
-    }
-
-
 }

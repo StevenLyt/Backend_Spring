@@ -22,24 +22,21 @@ public class Hand {
         this.playerCards = new PlayerCards[8];
         this.deck = new Deck();
         this.flop = new Card[3];
-
     }
 
     public void startHand() {
         //shuffle the deck
         this.deck.shuffle();
-
         //start dealing hand to players and the board
         for(int i = 0; i < 8; i++){
             if(posArr[i] == 0){
                 this.dealCardsToPlayers(i);
             }
         }
-
         this.dealCommunityCards();
-
     }
-    // start to deal cards given the position of button
+
+    // deal cards given the position of button
     public void dealCardsToPlayers(int buttonPos) {
         int start = (buttonPos + 2) % 8;
         int numCardsDealt = 0;
@@ -51,26 +48,25 @@ public class Hand {
         }
     }
 
+    // deal the board
     public void dealCommunityCards(){
-
         //burn one card before flop
         this.deck.dealCard();
         //deal flop
         for(int i = 0; i < 3; i++){
             this.flop[i] = this.deck.dealCard();
         }
-
         //burn one card before turn
         this.deck.dealCard();
         //deal turn
         turn = this.deck.dealCard();
-
         //burn one card before river
         this.deck.dealCard();
         //deal river
         river = this.deck.dealCard();
     }
 
+    // Above is written by Jason
     // Below is written by Peter
     public void startUserThread() {
         ExecutorService exec = Executors.newCachedThreadPool();

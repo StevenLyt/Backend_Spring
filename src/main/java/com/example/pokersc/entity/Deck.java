@@ -29,7 +29,6 @@ public class Deck {
 	}
 	
 	public Card dealCard() {
-
 		// pop and return the card at the top
 		numCardsUsed++;
 		return deck[numCardsUsed - 1];
