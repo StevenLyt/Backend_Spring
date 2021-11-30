@@ -20,19 +20,15 @@ public class Game {
     }
     public void addUser(User user) {
         this.userArr[numPlayers] = user;
-        this.numPlayers ++;
+        this.numPlayers++;
         for(int i = 0 ; i < 8; i++){
             this.posArr[i] = i;
         }
     }
     public void updatePos(){
         for(int i = 0 ; i < 8; i++){
-            if(this.posArr[i] == 7) {
-                this.posArr[i] = 0;
-            }
-            else {
-                this.posArr[i]++;
-            }
+            this.posArr[i]++;
+            this.posArr[i] &= 8;
         }
     }
     public void startGame(){
