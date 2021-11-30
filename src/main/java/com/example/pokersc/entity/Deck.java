@@ -5,7 +5,7 @@ import java.util.Collections;
 
 public class Deck {
 	
-	private int num_cardsUsed; 
+	private int numCardsUsed;
 	private Card[] deck;
 	
 	public Deck() {
@@ -17,7 +17,7 @@ public class Deck {
 				index ++;
  			}
 		}
-		num_cardsUsed = 0;
+		numCardsUsed = 0;
 	};
 	
 	public void shuffle() {
@@ -25,17 +25,17 @@ public class Deck {
 	};
 	
 	public int cardsLeft() {
-		return 52 - this.num_cardsUsed;
+		return 52 - this.numCardsUsed;
 	}
 	
 	public Card dealCard() throws Exception {
 		
-		if(num_cardsUsed == 52) {
-            		throw new Exception("No cards are left in the deck.");
+		if(numCardsUsed == 52) {
+			throw new Exception("No cards are left in the deck.");
 		}
 		// pop and return the card at the top
-		num_cardsUsed++;
-		return deck[num_cardsUsed - 1];
+		numCardsUsed++;
+		return deck[numCardsUsed - 1];
 	}
 	
 }

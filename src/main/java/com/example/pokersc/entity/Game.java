@@ -6,8 +6,6 @@ import java.util.List;
 
 public class Game {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     private List<User> userList;

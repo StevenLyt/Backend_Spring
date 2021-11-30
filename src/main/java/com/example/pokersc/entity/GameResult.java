@@ -12,4 +12,6 @@ public class GameResult {
     private int game_id;
     private int user_id;
     private int amount; // positive win, negative lose
+
+    protected GameResult(){}
 }
