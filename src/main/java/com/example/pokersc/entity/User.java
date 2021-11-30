@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "User")
-public class User {
+public class User extends Thread {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,7 +17,15 @@ public class User {
     private int total_profit;
 
     protected User(){}
-    public int getId() {
+    public User(String username, String password, String profile_url) {
+        this.username = username;
+        this.password = password;
+        this.profile_url = profile_url;
+        this.buyin = 0;
+        this.total_round = 0;
+    }
+    // getId() clashes with Thread getId()
+    public int getUserId() {
         return id;
     }
 
@@ -69,13 +77,7 @@ public class User {
         this.buyin += amount;
     }
 
-    public User(String username, String password, String profile_url) {
-        this.username = username;
-        this.password = password;
-        this.profile_url = profile_url;
-        this.buyin = 0;
-        this.total_round = 0;
+    public void run() {
+
     }
-
-
 }

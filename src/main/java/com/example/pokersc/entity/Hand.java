@@ -1,6 +1,8 @@
 package com.example.pokersc.entity;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Hand {
 
@@ -69,4 +71,17 @@ public class Hand {
         river = this.deck.dealCard();
     }
 
+    // Below is written by Peter
+    public void startUserThread() {
+        ExecutorService exec = Executors.newCachedThreadPool();
+        for (User u : playerArr) {
+            exec.execute(u);
+        }
+        exec.shutdown();
+        while(!exec.isTerminated()){Thread.yield();}
+    }
+
+    public Action getRecentAction() {
+        return new Action(playerArr[0], Action.Act.CHECK);
+    }
 }
