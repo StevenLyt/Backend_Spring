@@ -53,16 +53,16 @@ public class UserController {
         return usersRepository.findById(id).orElse(null);
     }
 
-    @PostMapping("/users/{id}/buyin")
-    public User buyinByid(@PathVariable int id, @RequestParam double amount) {
-        Optional<User> optional = usersRepository.findById(id);
-        if(optional.isPresent()) {
-            User user = optional.get();
-            user.addAmount(amount);
-            return usersRepository.save(user);
-        }else {
-            return null;
-        }
-    }
+//    @PostMapping("/users/{id}/buyin")
+//    public User buyinByid(@PathVariable int id, @RequestParam double amount) {
+//        Optional<User> optional = usersRepository.findById(id);
+//        if(optional.isPresent()) {
+//            User user = optional.get();
+//            user.addAmount(amount);
+//            return usersRepository.save(user);
+//        }else {
+//            return null;
+//        }
+//    }
 
 }
