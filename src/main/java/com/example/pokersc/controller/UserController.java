@@ -4,9 +4,9 @@ import com.example.pokersc.Utils;
 import com.example.pokersc.entity.User;
 import com.example.pokersc.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @RestController
@@ -16,26 +16,31 @@ public class UserController {
     @Autowired
     private UsersRepository usersRepository;
 
+    @ModelAttribute
+    public void setResponseHeader(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<String> userLogin(@RequestParam String username, @RequestParam String password) {
+    public String userLogin(@RequestParam String username, @RequestParam String password) {
         String hash = Utils.sha256(password);
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent() && hash.equals(optional.get().getPassword())) {
-            return Utils.headerWrapper("success");
+            return "success";
         } else {
-            return Utils.headerWrapper("failure");
+            return "failure";
         }
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> userSignup(@RequestParam String username, @RequestParam String password, @RequestParam String profile_url) {
+    public String userSignup(@RequestParam String username, @RequestParam String password, @RequestParam String profile_url) {
         // check if username already exists
         if(usersRepository.findByUsername(username).isPresent()) {
-            return Utils.headerWrapper("username taken");
+            return "username taken";
         }
         User user = new User(username, Utils.sha256(password), profile_url);
         usersRepository.save(user);
-        return Utils.headerWrapper("success");
+        return "success";
     }
 
     @GetMapping("/users")

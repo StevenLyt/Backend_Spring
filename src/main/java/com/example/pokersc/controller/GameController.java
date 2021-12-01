@@ -5,6 +5,8 @@ import com.example.pokersc.repository.GameResultsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping(name ="/api")
 public class GameController {
@@ -12,6 +14,11 @@ public class GameController {
     @Autowired
     private GameResultsRepository gameResultsRepository;
     private Game game;
+
+    @ModelAttribute
+    public void setResponseHeader(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+    }
 
     // a user creates a game
     @PostMapping("/games")
