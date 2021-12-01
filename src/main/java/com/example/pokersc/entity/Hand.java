@@ -15,10 +15,10 @@ public class Hand {
     private Card turn;
     private Card river;
 
-    public Hand(User[] uL, int dP, int nP){
-        this.playerArr = uL;
-        this.dealerPos = dP;
-        this.numPlayers = nP;
+    public Hand(User[] userList, int dPos, int numP){
+        this.playerArr = userList;
+        this.dealerPos = dPos;
+        this.numPlayers = numP;
         this.playerCards = new PlayerCards[8];
         this.deck = new Deck();
         this.flop = new Card[3];
@@ -28,7 +28,6 @@ public class Hand {
         //shuffle the deck
         this.deck.shuffle();
         //start dealing hand to players and the board
-
         this.dealCardsToPlayers(dealerPos);
         this.dealCommunityCards();
     }

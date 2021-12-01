@@ -13,7 +13,6 @@ public class Game {
     public int dealerPos;
 
     public Game(){
-
         this.numPlayers = 0;
         this.userArr = new User[8];
         this.dealerPos = 0;
@@ -37,6 +36,6 @@ public class Game {
                 userArr[i]=null;
             }
         }
-        //TODO Update the pos array.
+        this.numPlayers --;
     }
 }
