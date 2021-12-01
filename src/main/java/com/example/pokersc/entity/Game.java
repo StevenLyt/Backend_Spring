@@ -17,23 +17,25 @@ public class Game {
         this.userArr = new User[8];
         this.dealerPos = 0;
     }
+
     public void addUser(User user) {
         this.userArr[numPlayers] = user;
         this.numPlayers++;
     }
+
     public void updatePos(){
-       dealerPos ++;
-       dealerPos &= 8;
+       this.dealerPos ++;
+       this.dealerPos &= 8;
        while(userArr[dealerPos] == null){
-           dealerPos ++;
-           dealerPos &= 8;
+           this.dealerPos ++;
+           this.dealerPos &= 8;
        }
     }
 
     public void deleteUser(int user_id){
         for(int i = 0; i < userArr.length; i++){
             if (userArr[i].getUserId()==user_id){
-                userArr[i]=null;
+                userArr[i] = null;
             }
         }
         this.numPlayers --;

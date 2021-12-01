@@ -14,6 +14,7 @@ public class Hand {
     private Card[] flop;
     private Card turn;
     private Card river;
+    private int actionOnWhichPlayer;
 
     public Hand(User[] userList, int dPos, int numP){
         this.playerArr = userList;
@@ -22,6 +23,12 @@ public class Hand {
         this.playerCards = new PlayerCards[8];
         this.deck = new Deck();
         this.flop = new Card[3];
+        actionOnWhichPlayer = dealerPos + 3; //first action on UTG;
+        actionOnWhichPlayer %= 8;
+        while(playerArr[actionOnWhichPlayer] == null){
+            actionOnWhichPlayer ++;
+            actionOnWhichPlayer &= 8;
+        }
     }
 
     public void startHand() {
@@ -30,6 +37,12 @@ public class Hand {
         //start dealing hand to players and the board
         this.dealCardsToPlayers(dealerPos);
         this.dealCommunityCards();
+
+        //flop
+        int numActionLeft = numPlayers;
+        while(numActionLeft > 0){
+
+        }
     }
 
     // deal cards given the position of button
