@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 public class Hand {
 
     private User[] playerArr;
+    private boolean[] active;
     private int [] remainingStack;
     private int dealerPos;
     private int numPlayers;
@@ -17,7 +18,7 @@ public class Hand {
     private int actionOnWhichPlayer;
     private int smallBlind;
     private int bigBlind;
-    private boolean[] active;
+
     private int[] chipPutInThisPhase;
     private int maxBetInThisPhase;
     private Action currentAction = null;
@@ -74,6 +75,7 @@ public class Hand {
         this.chipPutInThisPhase[bigBlind] = 2;
 
         //flop
+        this.initializePhase();
         while(!readyForNextRound()){
             while (true){
                 if(currentAction != null){
@@ -92,10 +94,7 @@ public class Hand {
         //end flop
 
         //turn
-        for(int i = 0; i < 8; i++){
-            chipPutInThisPhase[i] = 0;
-        }
-        this.maxBetInThisPhase = 0;
+        this.initializePhase();
         this.actionOnWhichPlayer = smallBlind;
         while(!active[actionOnWhichPlayer]){
             actionOnWhichPlayer ++;
@@ -119,10 +118,7 @@ public class Hand {
         // end turn
 
         //river
-        for(int i = 0; i < 8; i++){
-            chipPutInThisPhase[i] = 0;
-        }
-        this.maxBetInThisPhase = 0;
+        this.initializePhase();
         this.actionOnWhichPlayer = smallBlind;
         while(!active[actionOnWhichPlayer]){
             actionOnWhichPlayer ++;
@@ -146,6 +142,14 @@ public class Hand {
         //end river
     }
 
+    // initialize phase (flop, turn, river);
+
+    public void initializePhase(){
+        for(int i = 0; i < 8; i++){
+            this.chipPutInThisPhase[i] = 0;
+        }
+        this.maxBetInThisPhase = 0;
+    }
     // check if every player puts same amount or folds
     public boolean readyForNextRound(){
         int amount = 0;
@@ -172,10 +176,12 @@ public class Hand {
         else if(currentAction.getAct() == Action.Act.CALL){
             this.chipPutInThisPhase[pos] = maxBetInThisPhase;
             this.pot += maxBetInThisPhase;
+            this.remainingStack[pos] -= maxBetInThisPhase;
         }
         else if(currentAction.getAct() == Action.Act.RAISE){
             maxBetInThisPhase = currentAction.getAmount();
-            this.chipPutInThisPhase[pos] = currentAction.getAmount();
+            this.chipPutInThisPhase[pos] = maxBetInThisPhase;
+            this.remainingStack[pos] -= maxBetInThisPhase;
         }
     }
 
@@ -207,6 +213,7 @@ public class Hand {
     private void dealCommunityCards(){
         //burn one card before flop
         this.deck.dealCard();
+
         //deal flop
         for(int i = 0; i < 3; i++){
             this.communityCards[i] = this.deck.dealCard();
