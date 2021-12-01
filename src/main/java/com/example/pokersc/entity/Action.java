@@ -8,31 +8,32 @@ public class Action {
     enum Act {
         RAISE,
         CHECK,
-        FOLD
+        FOLD,
+        CALL,
     }
     private User user;
     private Act act;
-    private int raise_amount = 0;
+    private int amount = 0;
 
     public Action(User user, Act act){
         this.user = user;
         this.act = act;
 
     }
-    public Action(User user, Act act, int raise_amount){
+    public Action(User user, Act act, int amount){
         this(user, act);
-        this.raise_amount = raise_amount;
+        this.amount = amount;
     }
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
     public Act getAct() {
-        return act;
+        return this.act;
     }
 
-    public int getRaise_amount() {
-        return raise_amount;
+    public int getAmount() {
+        return this.amount;
     }
 }
