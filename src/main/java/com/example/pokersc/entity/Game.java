@@ -30,4 +30,13 @@ public class Game {
             this.posArr[i] &= 8;
         }
     }
+
+    public void deleteUser(int user_id){
+        for(int i = 0; i < userArr.length; i++){
+            if (userArr[i].getUserId()==user_id){
+                userArr[i]=null;
+            }
+        }
+        //TODO Update the pos array.
+    }
 }
