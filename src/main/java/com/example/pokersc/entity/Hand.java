@@ -25,7 +25,7 @@ public class Hand {
     }
 
     public void startHand() {
-        //shuffle the deck
+        //shuffle the deck.
         this.deck.shuffle();
         //start dealing hand to players and the board
         this.dealCardsToPlayers(dealerPos);
