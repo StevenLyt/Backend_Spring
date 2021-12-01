@@ -7,37 +7,79 @@ import java.util.concurrent.Executors;
 public class Hand {
 
     private User[] playerArr;
-    private int[] posArr;
+    private int [] remainingStack;
+    private int dealerPos;
     private int numPlayers;
     private PlayerCards[] playerCards;
+    private boolean[] active;
+    private int[] betInThisPhase;
+    private int pot;
     private Deck deck;
     private Card[] flop;
     private Card turn;
     private Card river;
+    private int actionOnWhichPlayer;
+    private Action currentAction = null;
 
-    public Hand(User[] uL, int[] pL, int nP){
-        this.playerArr = uL;
-        this.posArr = pL;
-        this.numPlayers = nP;
+    public Hand(User[] userList, int[] chips, int dPos, int numP){
+        this.playerArr = userList;
+        this.remainingStack = chips;
+        this.dealerPos = dPos;
+        this.numPlayers = numP;
         this.playerCards = new PlayerCards[8];
+        this.active = new boolean[8];
+        this.pot = 0;
+        for(int i = 0; i < 8; i++){
+            betInThisPhase[i] = 0;
+            if(playerArr[i] != null) {
+                active[i] = true;
+            }
+            else {
+                active[i] = false;
+            }
+        }
         this.deck = new Deck();
         this.flop = new Card[3];
+        actionOnWhichPlayer = dealerPos + 3; //first action on UTG;
+        actionOnWhichPlayer %= 8;
+        while(playerArr[actionOnWhichPlayer] == null){
+            actionOnWhichPlayer ++;
+            actionOnWhichPlayer &= 8;
+        }
     }
 
     public void startHand() {
-        //shuffle the deck
+        //shuffle the deck.
         this.deck.shuffle();
         //start dealing hand to players and the board
-        for(int i = 0; i < 8; i++){
-            if(posArr[i] == 0){
-                this.dealCardsToPlayers(i);
-            }
-        }
+        this.dealCardsToPlayers(dealerPos);
         this.dealCommunityCards();
+
+        //flop
+        int numActionLeft = numPlayers;
+        while(numActionLeft > 0){
+            while (true){
+                if(currentAction != null){
+                    break;
+                }
+            }
+            doAction(actionOnWhichPlayer);
+            actionOnWhichPlayer ++; //first action on UTG;
+            actionOnWhichPlayer %= 8;
+            while(playerArr[actionOnWhichPlayer] == null){
+                actionOnWhichPlayer ++;
+                actionOnWhichPlayer &= 8;
+            }
+            this.currentAction = null;
+        }
+
     }
 
+    public void doAction(int pos){
+
+    }
     // deal cards given the position of button
-    public void dealCardsToPlayers(int buttonPos) {
+    private void dealCardsToPlayers(int buttonPos) {
         int start = (buttonPos + 2) % 8;
         int numCardsDealt = 0;
         while(numCardsDealt != 2*numPlayers){
@@ -49,7 +91,7 @@ public class Hand {
     }
 
     // deal the board
-    public void dealCommunityCards(){
+    private void dealCommunityCards(){
         //burn one card before flop
         this.deck.dealCard();
         //deal flop
@@ -66,6 +108,18 @@ public class Hand {
         river = this.deck.dealCard();
     }
 
+    public void addAction(Action action) {
+        try {
+            while (currentAction != null) {
+                Thread.sleep(1000);
+            }
+            this.currentAction = action;
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Above is written by Jason
     // Below is written by Peter
     public void startUserThread() {
@@ -76,6 +130,8 @@ public class Hand {
         exec.shutdown();
         while(!exec.isTerminated()){Thread.yield();}
     }
+
+
 
     public Action getRecentAction() {
         return new Action(playerArr[0], Action.Act.CHECK);

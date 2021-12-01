@@ -7,10 +7,21 @@ public class GameThread extends Thread{
     public GameThread(){
         this.game = new Game();
     }
+
     public void run(){
-        while(game.numPlayers > 1){
-            game.updatePos();
-            Hand hand = new Hand(game.userArr, game.posArr, game.numPlayers);
+        try {
+            while (true) {
+                if (game.numPlayers < 3) {
+                    Thread.sleep(1000);
+                } else {
+                    game.updatePos();
+                    Hand hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
+                    hand.startHand();
+                }
+            }
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
