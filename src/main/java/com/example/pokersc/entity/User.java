@@ -66,7 +66,7 @@ public class User {
         this.total_round = total_round;
     }
 
-    public double getBuyin() {
+    public int getBuyin() {
         return buyin;
     }
 
