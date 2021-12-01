@@ -10,17 +10,32 @@ public class Hand {
     private int dealerPos;
     private int numPlayers;
     private PlayerCards[] playerCards;
+    private boolean[] active;
+    private int[] betInThisPhase;
+    private int pot;
     private Deck deck;
     private Card[] flop;
     private Card turn;
     private Card river;
     private int actionOnWhichPlayer;
+    private Action currentAction = null;
 
     public Hand(User[] userList, int dPos, int numP){
         this.playerArr = userList;
         this.dealerPos = dPos;
         this.numPlayers = numP;
         this.playerCards = new PlayerCards[8];
+        this.active = new boolean[8];
+        this.pot = 0;
+        for(int i = 0; i < 8; i++){
+            betInThisPhase[i] = 0;
+            if(playerArr[i] != null) {
+                active[i] = true;
+            }
+            else {
+                active[i] = false;
+            }
+        }
         this.deck = new Deck();
         this.flop = new Card[3];
         actionOnWhichPlayer = dealerPos + 3; //first action on UTG;
@@ -41,10 +56,20 @@ public class Hand {
         //flop
         int numActionLeft = numPlayers;
         while(numActionLeft > 0){
-
+            while (true){
+                if(currentAction != null){
+                    break;
+                }
+            }
+            doAction();
+            this.currentAction = null;
         }
+
     }
 
+    public void doAction(){
+
+    }
     // deal cards given the position of button
     private void dealCardsToPlayers(int buttonPos) {
         int start = (buttonPos + 2) % 8;
@@ -75,6 +100,18 @@ public class Hand {
         river = this.deck.dealCard();
     }
 
+    public void addAction(Action action) {
+        try {
+            while (currentAction != null) {
+                Thread.sleep(1000);
+            }
+            this.currentAction = action;
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Above is written by Jason
     // Below is written by Peter
     public void startUserThread() {
@@ -85,6 +122,8 @@ public class Hand {
         exec.shutdown();
         while(!exec.isTerminated()){Thread.yield();}
     }
+
+
 
     public Action getRecentAction() {
         return new Action(playerArr[0], Action.Act.CHECK);
