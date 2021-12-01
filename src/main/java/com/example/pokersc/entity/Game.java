@@ -1,10 +1,5 @@
 package com.example.pokersc.entity;
 
-
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Game {
 
     private int id;

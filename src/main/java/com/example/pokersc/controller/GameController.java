@@ -22,8 +22,8 @@ public class GameController {
 
     // a user creates a game
     @PostMapping("/games")
-    public Game createGame() {
-        //TODO join after creating game
+    public Game getGameState() {
+        //TODO return a json that represent the whole game
         return null;
     }
 
@@ -32,6 +32,11 @@ public class GameController {
         //TODO
         // call something like addUser();
         return null;
+    }
+
+    @PostMapping("/games/{user_id}/buyin")
+    public void userBuyin(@PathVariable int user_id, @RequestParam int amount) {
+        // TODO buyin during game
     }
 
     @PostMapping("/games/{user_id}/leave")
