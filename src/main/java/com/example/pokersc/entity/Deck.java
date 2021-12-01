@@ -2,6 +2,7 @@ package com.example.pokersc.entity;
 
 import java.util.Arrays;
 import java.util.Collections;
+import static com.example.pokersc.entity.Card.*;
 
 public class Deck {
 	
@@ -11,11 +12,11 @@ public class Deck {
 	public Deck() {
 		deck = new Card[52];
 		int index = 0;
-		for(int i = 0; i < 4; i++) {
-			for(int j = 1; j < 14; j++) {
-				deck[index] = new Card(j, i);
-				index ++;
- 			}
+		for (SUIT suit : SUIT.values()) {
+			for (RANK rank : RANK.values()) {
+				deck[index] = new Card(rank, suit);
+				index++;
+			}
 		}
 		numCardsUsed = 0;
 	}
