@@ -213,6 +213,7 @@ public class Hand {
     private void dealCommunityCards(){
         //burn one card before flop
         this.deck.dealCard();
+
         //deal flop
         for(int i = 0; i < 3; i++){
             this.communityCards[i] = this.deck.dealCard();
