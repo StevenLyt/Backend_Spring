@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 public class Hand {
 
     private User[] playerArr;
-    private int[] posArr;
+    private int dealerPos;
     private int numPlayers;
     private PlayerCards[] playerCards;
     private Deck deck;
@@ -15,9 +15,9 @@ public class Hand {
     private Card turn;
     private Card river;
 
-    public Hand(User[] uL, int[] pL, int nP){
+    public Hand(User[] uL, int dP, int nP){
         this.playerArr = uL;
-        this.posArr = pL;
+        this.dealerPos = dP;
         this.numPlayers = nP;
         this.playerCards = new PlayerCards[8];
         this.deck = new Deck();
@@ -28,16 +28,13 @@ public class Hand {
         //shuffle the deck
         this.deck.shuffle();
         //start dealing hand to players and the board
-        for(int i = 0; i < 8; i++){
-            if(posArr[i] == 0){
-                this.dealCardsToPlayers(i);
-            }
-        }
+
+        this.dealCardsToPlayers(dealerPos);
         this.dealCommunityCards();
     }
 
     // deal cards given the position of button
-    public void dealCardsToPlayers(int buttonPos) {
+    private void dealCardsToPlayers(int buttonPos) {
         int start = (buttonPos + 2) % 8;
         int numCardsDealt = 0;
         while(numCardsDealt != 2*numPlayers){
@@ -49,7 +46,7 @@ public class Hand {
     }
 
     // deal the board
-    public void dealCommunityCards(){
+    private void dealCommunityCards(){
         //burn one card before flop
         this.deck.dealCard();
         //deal flop

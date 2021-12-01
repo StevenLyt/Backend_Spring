@@ -10,7 +10,8 @@ public class GameThread extends Thread{
     public void run(){
         while(game.numPlayers > 1){
             game.updatePos();
-            Hand hand = new Hand(game.userArr, game.posArr, game.numPlayers);
+            Hand hand = new Hand(game.userArr, game.dealerPos, game.numPlayers);
+            hand.startHand();
         }
     }
 

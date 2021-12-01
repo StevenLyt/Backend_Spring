@@ -10,25 +10,25 @@ public class Game {
     private int id;
     public int numPlayers;
     public User[] userArr;
-    public int[] posArr;
+    public int dealerPos;
 
     public Game(){
-        this.userArr = new User[8];
-        this.posArr = new int[8];
+
         this.numPlayers = 0;
+        this.userArr = new User[8];
+        this.dealerPos = 0;
     }
     public void addUser(User user) {
         this.userArr[numPlayers] = user;
         this.numPlayers++;
-        for(int i = 0 ; i < 8; i++){
-            this.posArr[i] = i;
-        }
     }
     public void updatePos(){
-        for(int i = 0 ; i < 8; i++){
-            this.posArr[i]++;
-            this.posArr[i] &= 8;
-        }
+       dealerPos ++;
+       dealerPos &= 8;
+       while(userArr[dealerPos] == null){
+           dealerPos ++;
+           dealerPos &= 8;
+       }
     }
 
     public void deleteUser(int user_id){
