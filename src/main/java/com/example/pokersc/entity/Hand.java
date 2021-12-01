@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 public class Hand {
 
     private User[] playerArr;
+    private int [] remainingStack;
     private int dealerPos;
     private int numPlayers;
     private PlayerCards[] playerCards;
@@ -20,8 +21,9 @@ public class Hand {
     private int actionOnWhichPlayer;
     private Action currentAction = null;
 
-    public Hand(User[] userList, int dPos, int numP){
+    public Hand(User[] userList, int[] chips, int dPos, int numP){
         this.playerArr = userList;
+        this.remainingStack = chips;
         this.dealerPos = dPos;
         this.numPlayers = numP;
         this.playerCards = new PlayerCards[8];
@@ -61,13 +63,19 @@ public class Hand {
                     break;
                 }
             }
-            doAction();
+            doAction(actionOnWhichPlayer);
+            actionOnWhichPlayer ++; //first action on UTG;
+            actionOnWhichPlayer %= 8;
+            while(playerArr[actionOnWhichPlayer] == null){
+                actionOnWhichPlayer ++;
+                actionOnWhichPlayer &= 8;
+            }
             this.currentAction = null;
         }
 
     }
 
-    public void doAction(){
+    public void doAction(int pos){
 
     }
     // deal cards given the position of button

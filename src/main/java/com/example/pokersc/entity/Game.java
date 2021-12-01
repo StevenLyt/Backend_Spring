@@ -26,10 +26,10 @@ public class Game {
 
     }
 
-    public void addUser(User user, int buyin) {
-        this.userArr[numPlayers] = user;
-        this.remainingChips[numPlayers] = buyin;
-        this.totalBuyin[numPlayers] = buyin;
+    public void addUser(User user, int buyin, int pos) {
+        this.userArr[pos] = user;
+        this.remainingChips[pos] = buyin;
+        this.totalBuyin[pos] = buyin;
         this.numPlayers++;
     }
 

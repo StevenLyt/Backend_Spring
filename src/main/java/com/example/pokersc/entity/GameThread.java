@@ -15,7 +15,7 @@ public class GameThread extends Thread{
                     Thread.sleep(1000);
                 } else {
                     game.updatePos();
-                    Hand hand = new Hand(game.userArr, game.dealerPos, game.numPlayers);
+                    Hand hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
                     hand.startHand();
                 }
             }
