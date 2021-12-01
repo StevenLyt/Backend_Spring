@@ -1,13 +1,69 @@
 package com.example.pokersc.entity;
 
-public class Card {
+public class Card implements Comparable {
+    public static enum SUIT {
+        SPADES,
+        HEARTS,
+        CLUBS,
+        DIAMONDS
+    }
 
-    public final static int SPADES = 0;   // Codes for the 4 suits
+    public static enum RANK {
+        TWO(2), THREE(3), FOUR(4), FIVE(5),
+        SIX(6), SEVEN(7), EIGHT(8), NINE(9),
+        TEN(10), JACK(11), QUEEN(12), KING(13), ACE(14);
+
+        private final int value;
+
+        private RANK(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+    private final RANK rank;
+    private final SUIT suit;
+
+    public Card(RANK rank, SUIT suit) {
+        this.rank = rank;
+        this.suit = suit;
+    }
+
+    public RANK getRank() {
+        return rank;
+    }
+
+    public SUIT getSuit() {
+        return suit;
+    }
+    @Override
+    public String toString() {
+        return "Card{" +
+                "rank=" + rank +
+                ", suit=" + suit +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if(this == o) return 0;
+        if(o == null || getClass() != o.getClass()) return 0;
+
+        Card card = (Card) o;
+
+        if(rank.getValue() > card.rank.getValue()) return -1;
+        if(rank.getValue() < card.rank.getValue()) return 1;
+        return 0;
+    }
+    /*public final static int SPADES = 0;   // Codes for the 4 suits
     public final static int HEARTS = 1;
     public final static int DIAMONDS = 2;
     public final static int CLUBS = 3;
 
-    private final int value; // 1-13
+    private final int value; // 2-14
     private final int suit; 
     
     //constructor
@@ -20,7 +76,7 @@ public class Card {
         	this.suit = s;
         }
         
-        if (v < 1 || v > 13){
+        if (v < 2 || v > 14){
             throw new IllegalArgumentException("Illegal playing card value");
         }
         else {
@@ -39,26 +95,73 @@ public class Card {
     public String toSring() {
     	String suit_asString = "";
     	String value_asString = "";
-    	switch(this.suit) {
-    	case 0: suit_asString = "Spades";
-    	case 1: suit_asString = "Hearts";
-    	case 2: suit_asString = "Diamonds";
-    	case 3: suit_asString = "Clubs";
+    	switch (this.suit) {
+            case 0:
+                suit_asString = "Spades";
+                break;
+            case 1:
+                suit_asString = "Hearts";
+                break;
+            case 2:
+                suit_asString = "Diamonds";
+                break;
+            case 3:
+                suit_asString = "Clubs";
+                break;
     	}
     	switch (this.value) {
-        case 1:   value_asString = "Ace";
-        case 2:   value_asString = "2";
-        case 3:   value_asString = "3";
-        case 4:   value_asString = "4";
-        case 5:   value_asString = "5";
-        case 6:   value_asString = "6";
-        case 7:   value_asString = "7";
-        case 8:   value_asString = "8";
-        case 9:   value_asString = "9";
-        case 10:  value_asString = "10";
-        case 11:  value_asString = "Jack";
-        case 12:  value_asString = "Queen";
+            case 2:
+                value_asString = "2";
+                break;
+            case 3:
+                value_asString = "3";
+                break;
+            case 4:
+                value_asString = "4";
+                break;
+            case 5:
+                value_asString = "5";
+                break;
+            case 6:
+                value_asString = "6";
+                break;
+            case 7:
+                value_asString = "7";
+                break;
+            case 8:
+                value_asString = "8";
+                break;
+            case 9:
+                value_asString = "9";
+                break;
+            case 10:
+                value_asString = "10";
+                break;
+            case 11:
+                value_asString = "Jack";
+                break;
+            case 12:
+                value_asString = "Queen";
+                break;
+            case 13:
+                value_asString = "King";
+                break;
+            case 14:
+                value_asString = "Ace";
+                break;
     	}
     	return value_asString + " of " + suit_asString;
     }
+
+    @Override
+    public int compareTo(Object o) {
+        if(this == o) return 0;
+        if(o == null || getClass() != o.getClass()) return 0;
+
+        Card card = (Card) o;
+
+        if(this.value > card.getCardValue()) return -1;
+        if(this.value < card.getCardValue()) return 1;
+        return 0;
+    }*/
 }
