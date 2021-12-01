@@ -1,14 +1,14 @@
 package com.example.pokersc.entity;
 
-public class Card implements Comparable {
-    public enum SUIT {
+public class Card implements Comparable<Card> {
+    public static enum SUIT {
         SPADES,
         HEARTS,
         CLUBS,
         DIAMONDS
     }
 
-    public enum RANK {
+    public static enum RANK {
         TWO(2), THREE(3), FOUR(4), FIVE(5),
         SIX(6), SEVEN(7), EIGHT(8), NINE(9),
         TEN(10), JACK(11), QUEEN(12), KING(13), ACE(14);
@@ -48,11 +48,10 @@ public class Card implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        if(this == o) return 0;
-        if(o == null || getClass() != o.getClass()) return 0;
+    public int compareTo(Card card) {
+        if(this == card) return 0;
+        if(card == null || getClass() != card.getClass()) return 0;
 
-        Card card = (Card) o;
 
         if(rank.getValue() > card.rank.getValue()) return -1;
         if(rank.getValue() < card.rank.getValue()) return 1;

@@ -151,7 +151,7 @@ public class HandRanker {
 
     private boolean isPair(List<Card> allCards) {
         handCards = getHighestCards(allCards, PAIR);
-
+        System.out.println(handCards);
         if(handCards.size() == PAIR) {
             handCards.addAll(getMultipleHighestCards(allCards, FULL_HAND - PAIR));
             pokerHand = new PokerHand(HAND_RANK.PAIR, handCards);
@@ -162,6 +162,7 @@ public class HandRanker {
 
     private boolean isHighCard(List<Card> allCards) {
         handCards = getHighestCards(allCards, FULL_HAND);
+        System.out.println(handCards);
         pokerHand = new PokerHand(HAND_RANK.HIGH_CARD, handCards);
         return true;
     }
