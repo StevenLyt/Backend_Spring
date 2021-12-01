@@ -58,4 +58,14 @@ public class Game {
         }
         this.numPlayers --;
     }
+
+    public int getBalance(int userId){
+        int index = 0;
+        for(int i =0; i<8;i++){
+            if (userArr[i].getUserId()==userId){
+                index = i;
+            }
+        }
+        return totalBuyin[index]-remainingChips[index];
+    }
 }
