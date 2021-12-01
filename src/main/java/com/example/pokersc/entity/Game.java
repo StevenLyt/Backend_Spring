@@ -18,7 +18,6 @@ public class Game {
             userArr[i] = null;
         }
         this.dealerPos = 0;
-
     }
 
     public void addUser(User user, int buyin, int pos) {
