@@ -4,8 +4,6 @@ import com.example.pokersc.Utils;
 import com.example.pokersc.entity.User;
 import com.example.pokersc.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,23 +17,25 @@ public class UserController {
     private UsersRepository usersRepository;
 
     @PostMapping("/login")
-    public User userLogin(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<String> userLogin(@RequestParam String username, @RequestParam String password) {
         String hash = Utils.sha256(password);
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent() && hash.equals(optional.get().getPassword())) {
-            return optional.get();
+            return Utils.headerWrapper("success");
         } else {
-            return null;
+            return Utils.headerWrapper("failure");
         }
     }
 
     @PostMapping("/signup")
     public ResponseEntity<String> userSignup(@RequestParam String username, @RequestParam String password, @RequestParam String profile_url) {
+        // check if username already exists
+        if(usersRepository.findByUsername(username).isPresent()) {
+            return Utils.headerWrapper("username taken");
+        }
         User user = new User(username, Utils.sha256(password), profile_url);
         usersRepository.save(user);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Access-Control-Allow-Methods", "*");
-        return new ResponseEntity<String>("success",headers, HttpStatus.CREATED);
+        return Utils.headerWrapper("success");
     }
 
     @GetMapping("/users")
