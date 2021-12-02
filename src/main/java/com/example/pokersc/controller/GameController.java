@@ -1,6 +1,7 @@
 package com.example.pokersc.controller;
 
 import com.example.pokersc.entity.Game;
+import com.example.pokersc.entity.Reception;
 import com.example.pokersc.entity.User;
 import com.example.pokersc.repository.GameResultsRepository;
 import com.example.pokersc.repository.UsersRepository;
@@ -18,6 +19,7 @@ public class GameController {
     private GameResultsRepository gameResultsRepository;
     private UsersRepository usersRepository;
     private Game game;
+    private Reception reception = new Reception(game);
 
     @ModelAttribute
     public void setResponseHeader(HttpServletResponse response) {
@@ -28,7 +30,8 @@ public class GameController {
     @PostMapping("/games")
     public Game getGameState() {
         //TODO return a json that represent the whole game
-        return null;
+        return game;
+        //return null;
     }
 
     @PostMapping("/games/{user_id}")
@@ -37,6 +40,7 @@ public class GameController {
         if(optional.isPresent()) {
             User user = optional.get();
             //TODO: call something like addUser();
+            reception.addPlayer(user,buyin,position);
             return "success";
         } else {
             return "failure";
@@ -46,12 +50,15 @@ public class GameController {
     @PostMapping("/games/{user_id}/buyin")
     public void userBuyin(@PathVariable int user_id, @RequestParam int amount) {
         // TODO buyin during game
+        game.rebuy(user_id,amount);
     }
 
     @PostMapping("/games/{user_id}/leave")
     public Game leaveGameById(@PathVariable int user_id) {
         //TODO
         // call something like deleteUser();
+        User user = game.getUserById(user_id);
+        reception.removePlayer(user);
         return null;
     }
 
