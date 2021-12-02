@@ -12,6 +12,7 @@ public class User {
     private String username;
     private String password;
     private String profile_url;
+    private int total_win;
     private int total_round;
     private int buyin;
 
