@@ -12,10 +12,12 @@ public class Game {
     public Game(){
         this.numPlayers = 0;
         this.userArr = new User[8];
+        this.remainingChips = new int[8];
+        this.totalBuyin = new int[8];
         for(int i = 0; i < 8; i++){
             this.totalBuyin[i] = 0;
-            remainingChips[i] = 0;
-            userArr[i] = null;
+            this.remainingChips[i] = 0;
+            this.userArr[i] = null;
         }
         this.dealerPos = 0;
     }
