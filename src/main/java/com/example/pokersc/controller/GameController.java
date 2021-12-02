@@ -1,6 +1,7 @@
 package com.example.pokersc.controller;
 
 import com.example.pokersc.entity.Game;
+import com.example.pokersc.entity.Reception;
 import com.example.pokersc.repository.GameResultsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ public class GameController {
     @Autowired
     private GameResultsRepository gameResultsRepository;
     private Game game;
+    private Reception reception;
 
     @ModelAttribute
     public void setResponseHeader(HttpServletResponse response) {
@@ -24,7 +26,7 @@ public class GameController {
     @PostMapping("/games")
     public Game getGameState() {
         //TODO return a json that represent the whole game
-        return null;
+        return game;
     }
 
     @PostMapping("/games/{user_id}")
