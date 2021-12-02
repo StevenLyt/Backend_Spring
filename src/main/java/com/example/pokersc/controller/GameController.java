@@ -1,14 +1,11 @@
 package com.example.pokersc.controller;
 
 import com.example.pokersc.entity.Game;
-import com.example.pokersc.entity.User;
 import com.example.pokersc.repository.GameResultsRepository;
-import com.example.pokersc.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(name ="/api")
@@ -16,7 +13,6 @@ public class GameController {
 
     @Autowired
     private GameResultsRepository gameResultsRepository;
-    private UsersRepository usersRepository;
     private Game game;
 
     @ModelAttribute
@@ -32,15 +28,10 @@ public class GameController {
     }
 
     @PostMapping("/games/{user_id}")
-    public String joinGameById(@PathVariable int user_id, @RequestParam int position, @RequestParam int buyin) {
-        Optional<User> optional = usersRepository.findById(user_id);
-        if(optional.isPresent()) {
-            User user = optional.get();
-            //TODO: call something like addUser();
-            return "success";
-        } else {
-            return "failure";
-        }
+    public Game joinGameById(@PathVariable int user_id, @RequestParam int position, @RequestParam int buyin) {
+        //TODO
+        // call something like addUser();
+        return null;
     }
 
     @PostMapping("/games/{user_id}/buyin")
