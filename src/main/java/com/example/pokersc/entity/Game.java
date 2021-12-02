@@ -31,7 +31,7 @@ public class Game {
 
     public void rebuy(int user_id, int amount){
         for(int i = 0; i < userArr.length; i++){
-            if (userArr[i].getUserId() == user_id){
+            if (userArr[i].getId() == user_id){
                 totalBuyin[i] += amount;
             }
         }
@@ -48,7 +48,7 @@ public class Game {
 
     public void deleteUser(int user_id){
         for(int i = 0; i < userArr.length; i++){
-            if (userArr[i].getUserId()==user_id){
+            if (userArr[i].getId()==user_id){
                 userArr[i] = null;
             }
         }
@@ -58,10 +58,19 @@ public class Game {
     public int getBalance(int userId){
         int index = 0;
         for(int i =0; i<8;i++){
-            if (userArr[i].getUserId()==userId){
+            if (userArr[i].getId()==userId){
                 index = i;
             }
         }
         return totalBuyin[index]-remainingChips[index];
+    }
+
+    public User getUserById(int id){
+        for(User user: userArr){
+            if (user.getId()==id){
+                return user;
+            }
+        }
+        return null;
     }
 }

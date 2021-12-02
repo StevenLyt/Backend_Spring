@@ -10,8 +10,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String username;
-    private String password;
+    private String passwordHash;
     private String profile_url;
+    private int total_win;  //TODO: store total win round
     private int total_round;
     private int buyin;
 
@@ -35,11 +36,11 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        return passwordHash;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.passwordHash = password;
     }
 
     public String getUsername() {
@@ -80,7 +81,7 @@ public class User {
 
     public User(String username, String password, String profile_url) {
         this.username = username;
-        this.password = password;
+        this.passwordHash = password;
         this.profile_url = profile_url;
         this.buyin = 0;
         this.total_round = 0;

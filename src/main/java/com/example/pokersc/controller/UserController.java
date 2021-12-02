@@ -26,7 +26,7 @@ public class UserController {
         String hash = Utils.sha256(password);
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent() && hash.equals(optional.get().getPassword())) {
-            return "success";
+            return hash;
         } else {
             return "failure";
         }

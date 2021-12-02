@@ -9,10 +9,10 @@ public class Test {
         firstHand.add(new Card(Card.RANK.TWO, Card.SUIT.CLUBS));
         firstHand.add(new Card(Card.RANK.KING, Card.SUIT.DIAMONDS));
         firstHand.add(new Card(Card.RANK.QUEEN, Card.SUIT.DIAMONDS));
-        firstHand.add(new Card(Card.RANK.JACK, Card.SUIT.CLUBS));
         firstHand.add(new Card(Card.RANK.TEN, Card.SUIT.CLUBS));
-        firstHand.add(new Card(Card.RANK.SEVEN, Card.SUIT.CLUBS));
-        firstHand.add(new Card(Card.RANK.TWO, Card.SUIT.SPADES));
+        firstHand.add(new Card(Card.RANK.FOUR, Card.SUIT.CLUBS));
+        firstHand.add(new Card(Card.RANK.THREE, Card.SUIT.CLUBS));
+        firstHand.add(new Card(Card.RANK.ACE, Card.SUIT.SPADES));
 //        List<Card> secondHand = new ArrayList<>();
 //        secondHand.add(new Card(Card.RANK.QUEEN, Card.SUIT.DIAMONDS));
 //        secondHand.add(new Card(Card.RANK.JACK, Card.SUIT.CLUBS));
