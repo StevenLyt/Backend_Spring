@@ -28,10 +28,17 @@ public class GameController {
 
     // a user creates a game
     @PostMapping("/games")
-    public Game getGameState() {
+    public String getGameState(@RequestParam String username, @RequestParam String passwordHash) {
         //TODO return a json that represent the whole game
-        return game;
-        //return null;
+        Optional<User> optional = usersRepository.findByUsername(username);
+        if(optional.isEmpty()) {
+            return "no user found";
+        } else if(!optional.get().getPassword().equals(passwordHash)) {
+            return "password incorrect";
+        } else {
+            return "yees";
+        }
+
     }
 
     @PostMapping("/games/{user_id}")
