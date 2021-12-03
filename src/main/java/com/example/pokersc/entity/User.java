@@ -26,7 +26,9 @@ public class User {
 
     private int total_profit;
 
-    protected User(){}
+    protected User() {
+    }
+
     public int getId() {
         return id;
     }
@@ -87,6 +89,4 @@ public class User {
         this.total_round = 0;
         this.total_profit = 0;
     }
-
-
 }

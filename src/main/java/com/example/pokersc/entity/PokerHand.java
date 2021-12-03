@@ -30,7 +30,7 @@ public class PokerHand implements Comparable {
     private final List<Card> cards;
 
     public PokerHand(HAND_RANK handRank, List<Card> cards) {
-        if(cards.size() != HandRanker.FULL_HAND) throw new IllegalArgumentException("You have to pass five cards");
+        if (cards.size() != HandRanker.FULL_HAND) throw new IllegalArgumentException("You have to pass five cards");
         this.handRank = handRank;
         this.cards = cards;
         Collections.sort(this.cards); //sorts for compareTo method
@@ -43,19 +43,20 @@ public class PokerHand implements Comparable {
                 ", allCards=" + cards +
                 '}';
     }
+
     @Override
     public int compareTo(Object o) {
-        if(this == o) return 0;
-        if(o == null || getClass() != o.getClass()) return 0;
+        if (this == o) return 0;
+        if (o == null || getClass() != o.getClass()) return 0;
 
         PokerHand pokerHand = (PokerHand) o;
 
-        if(handRank.getValue() > pokerHand.handRank.getValue()) return 1;
-        if(handRank.getValue() < pokerHand.handRank.getValue()) return -1;
+        if (handRank.getValue() > pokerHand.handRank.getValue()) return 1;
+        if (handRank.getValue() < pokerHand.handRank.getValue()) return -1;
 
-        for(int index = 0; index < cards.size(); index++) {
-            if(cards.get(index).getRank().getValue() > pokerHand.cards.get(index).getRank().getValue()) return 1;
-            if(cards.get(index).getRank().getValue() < pokerHand.cards.get(index).getRank().getValue()) return -1;
+        for (int index = 0; index < cards.size(); index++) {
+            if (cards.get(index).getRank().getValue() > pokerHand.cards.get(index).getRank().getValue()) return 1;
+            if (cards.get(index).getRank().getValue() < pokerHand.cards.get(index).getRank().getValue()) return -1;
         }
         return 0;
     }

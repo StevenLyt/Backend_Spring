@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(name ="/api")
+@RequestMapping(name = "/api")
 public class UserController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class UserController {
     public String userLogin(@RequestParam String username, @RequestParam String password) {
         String hash = Utils.sha256(password);
         Optional<User> optional = usersRepository.findByUsername(username);
-        if(optional.isPresent() && hash.equals(optional.get().getPassword())) {
+        if (optional.isPresent() && hash.equals(optional.get().getPassword())) {
             return hash;
         } else {
             return "failure";
@@ -35,7 +35,7 @@ public class UserController {
     @PostMapping("/signup")
     public String userSignup(@RequestParam String username, @RequestParam String password, @RequestParam String profile_url) {
         // check if username already exists
-        if(usersRepository.findByUsername(username).isPresent()) {
+        if (usersRepository.findByUsername(username).isPresent()) {
             return "failure";
         }
         String hash =  Utils.sha256(password);

@@ -23,7 +23,8 @@ public class Test {
 //        secondHand.add(new Card(Card.RANK.QUEEN, Card.SUIT.HEARTS));
 
         PokerHand result1 = HandRanker.getInstance().getRank(firstHand);
+        System.out.println(result1);
         //PokerHand result2 = HandRanker.getInstance().getRank(secondHand);
-       // System.out.println(result1.compareTo(result2));
+        // System.out.println(result1.compareTo(result2));
     }
 }

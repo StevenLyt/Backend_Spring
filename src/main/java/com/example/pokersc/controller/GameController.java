@@ -16,9 +16,8 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(name ="/api")
+@RequestMapping(name = "/api")
 public class GameController {
-
     @Autowired
     private GameResultsRepository gameResultsRepository;
     @Autowired
@@ -39,9 +38,9 @@ public class GameController {
     public String getGameState(@RequestParam String username, @RequestParam String passwordHash) throws JsonProcessingException {
         //TODO return a json that represent the whole game
         Optional<User> optional = usersRepository.findByUsername(username);
-        if(optional.isEmpty()) {
+        if (optional.isEmpty()) {
             return "no user found";
-        } else if(!optional.get().getPassword().equals(passwordHash)) {
+        } else if (!optional.get().getPassword().equals(passwordHash)) {
             return "password incorrect" + "\n correct is:"+optional.get().getPassword() +" real:"+passwordHash;
         } else {
             int position = 0;
@@ -74,10 +73,10 @@ public class GameController {
     @PostMapping("/games/{user_id}")
     public String joinGameById(@PathVariable int user_id, @RequestParam int position, @RequestParam int buyin) {
         Optional<User> optional = usersRepository.findById(user_id);
-        if(optional.isPresent()) {
+        if (optional.isPresent()) {
             User user = optional.get();
             //TODO: call something like addUser();
-            reception.addPlayer(user,buyin,position);
+            reception.addPlayer(user, buyin, position);
             return "success";
         } else {
             return "failure";
@@ -87,7 +86,7 @@ public class GameController {
     @PostMapping("/games/{user_id}/buyin")
     public void userBuyin(@PathVariable int user_id, @RequestParam int amount) {
         // TODO buyin during game
-        game.rebuy(user_id,amount);
+        game.rebuy(user_id, amount);
     }
 
     @PostMapping("/games/{user_id}/leave")
@@ -112,7 +111,7 @@ public class GameController {
     }
 
     @PostMapping("/games/{user_id}/call")
-    public GameController userCall( @PathVariable int user_id, @RequestParam int amount) {
+    public GameController userCall(@PathVariable int user_id, @RequestParam int amount) {
         //TODO
         return null;
     }

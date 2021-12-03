@@ -1,14 +1,14 @@
 package com.example.pokersc.entity;
 
-public class GameThread extends Thread{
+public class GameThread extends Thread {
 
     private Game game;
 
-    public GameThread(){
+    public GameThread() {
         this.game = new Game();
     }
 
-    public void run(){
+    public void run() {
         try {
             while (true) {
                 if (game.numPlayers < 3) {
@@ -19,13 +19,12 @@ public class GameThread extends Thread{
                     hand.startHand();
                 }
             }
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void main(){
+    public void main() {
         GameThread gameThread = new GameThread();
         gameThread.start();
     }

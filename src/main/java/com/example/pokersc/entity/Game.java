@@ -9,12 +9,12 @@ public class Game {
     public int[] remainingChips;
     public int[] totalBuyin;
 
-    public Game(){
+    public Game() {
         this.numPlayers = 0;
         this.userArr = new User[8];
         this.remainingChips = new int[8];
         this.totalBuyin = new int[8];
-        for(int i = 0; i < 8; i++){
+        for (int i = 0; i < 8; i++) {
             this.totalBuyin[i] = 0;
             this.remainingChips[i] = 0;
             this.userArr[i] = null;
@@ -29,45 +29,45 @@ public class Game {
         this.numPlayers++;
     }
 
-    public void rebuy(int user_id, int amount){
-        for(int i = 0; i < userArr.length; i++){
-            if (userArr[i].getId() == user_id){
+    public void rebuy(int user_id, int amount) {
+        for (int i = 0; i < userArr.length; i++) {
+            if (userArr[i].getId() == user_id) {
                 totalBuyin[i] += amount;
             }
         }
     }
 
-    public void updatePos(){
-       this.dealerPos ++;
-       this.dealerPos &= 8;
-       while(userArr[dealerPos] == null){
-           this.dealerPos ++;
-           this.dealerPos &= 8;
-       }
+    public void updatePos() {
+        this.dealerPos++;
+        this.dealerPos &= 8;
+        while (userArr[dealerPos] == null) {
+            this.dealerPos++;
+            this.dealerPos &= 8;
+        }
     }
 
-    public void deleteUser(int user_id){
-        for(int i = 0; i < userArr.length; i++){
-            if (userArr[i].getId()==user_id){
+    public void deleteUser(int user_id) {
+        for (int i = 0; i < userArr.length; i++) {
+            if (userArr[i].getId() == user_id) {
                 userArr[i] = null;
             }
         }
-        this.numPlayers --;
+        this.numPlayers--;
     }
 
-    public int getBalance(int userId){
+    public int getBalance(int userId) {
         int index = 0;
-        for(int i =0; i<8;i++){
-            if (userArr[i].getId()==userId){
+        for (int i = 0; i < 8; i++) {
+            if (userArr[i].getId() == userId) {
                 index = i;
             }
         }
-        return totalBuyin[index]-remainingChips[index];
+        return totalBuyin[index] - remainingChips[index];
     }
 
-    public User getUserById(int id){
-        for(User user: userArr){
-            if (user.getId()==id){
+    public User getUserById(int id) {
+        for (User user : userArr) {
+            if (user.getId() == id) {
                 return user;
             }
         }
