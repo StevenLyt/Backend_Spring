@@ -223,13 +223,13 @@ public class Hand {
     }
 
     // initialize phase (flop, turn, river);
-
     public void initializePhase(){
         for(int i = 0; i < 8; i++){
             this.chipPutInThisPhase[i] = 0;
         }
         this.maxBetInThisPhase = 0;
     }
+
     // check if every player puts same amount or folds
     public boolean readyForNextRound(){
         int amount = 0;

@@ -93,15 +93,13 @@ public class GameController {
     }
 
     @PostMapping("/games/{user_id}/buyin")
-    public void userBuyin(@PathVariable int user_id, @RequestParam int amount) {
+    public void userBuyin(@PathVariable String username, @RequestParam int amount) {
         // TODO buyin during game
-        game.rebuy(user_id,amount);
+        game.rebuy(username,amount);
     }
 
     @PostMapping("/games/leave")
-    public String leaveGameById(@RequestParam String username) {
-        //TODO
-        // call something like deleteUser();
+    public String leaveGameByUsername(@RequestParam String username) {
         User user = game.getUserByUsername(username);
         reception.removePlayer(user);
         return "success";

@@ -29,10 +29,11 @@ public class Game {
         this.numPlayers++;
     }
 
-    public void rebuy(int user_id, int amount){
+    public void rebuy(String username, int amount){
         for(int i = 0; i < userArr.length; i++){
-            if (userArr[i].getId() == user_id){
+            if (userArr[i].getUsername().equals(username)){
                 totalBuyin[i] += amount;
+                remainingChips[i] += amount;
             }
         }
     }
@@ -46,19 +47,22 @@ public class Game {
        }
     }
 
-    public void deleteUser(int user_id){
+    public void deleteUser(String username){
         for(int i = 0; i < userArr.length; i++){
-            if (userArr[i].getId()==user_id){
+            if (userArr[i].getUsername().equals(username))
+            {
                 userArr[i] = null;
+                totalBuyin[i] = 0;
+                remainingChips[i] = 0;
             }
         }
         this.numPlayers --;
     }
 
-    public int getBalance(int userId){
+    public int getBalance(String username){
         int index = 0;
         for(int i =0; i<8;i++){
-            if (userArr[i].getId()==userId){
+            if (userArr[i].getUsername().equals(username)){
                 index = i;
             }
         }

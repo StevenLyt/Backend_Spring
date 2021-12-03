@@ -34,9 +34,9 @@ public class Reception extends Thread {
             }
             while (!usersToLeave.isEmpty()){
                 User temp = usersToLeave.pop();
-                int balance = currentGame.getBalance(temp.getId()) + temp.getBuyin();
+                int balance = currentGame.getBalance(temp.getUsername()) + temp.getBuyin();
                 temp.setBuyin(balance);
-                currentGame.deleteUser(temp.getId());
+                currentGame.deleteUser(temp.getUsername());
             }
 
 
