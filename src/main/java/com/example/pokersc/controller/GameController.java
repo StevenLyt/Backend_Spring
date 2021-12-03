@@ -79,9 +79,9 @@ public class GameController {
 
     }
 
-    @PostMapping("/games/{user_id}")
-    public String joinGameById(@PathVariable int user_id, @RequestParam int position, @RequestParam int buyin) {
-        Optional<User> optional = usersRepository.findById(user_id);
+    @PostMapping("/games/join")
+    public String joinGameById(@RequestParam String username, @RequestParam int position, @RequestParam int buyin) {
+        Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent()) {
             User user = optional.get();
             //TODO: call something like addUser();
@@ -92,8 +92,8 @@ public class GameController {
         }
     }
 
-    @PostMapping("/games/{user_id}/buyin")
-    public void userBuyin(@PathVariable String username, @RequestParam int amount) {
+    @PostMapping("/games/buyin")
+    public void userBuyin(@RequestParam String username, @RequestParam int amount) {
         // TODO buyin during game
         game.rebuy(username,amount);
     }
