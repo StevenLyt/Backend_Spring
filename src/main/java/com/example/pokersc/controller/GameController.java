@@ -98,37 +98,60 @@ public class GameController {
         game.rebuy(user_id,amount);
     }
 
-    @PostMapping("/games/{user_id}/leave")
-    public Game leaveGameById(@PathVariable int user_id) {
+    @PostMapping("/games/leave")
+    public String leaveGameById(@RequestParam String username) {
         //TODO
         // call something like deleteUser();
-        User user = game.getUserById(user_id);
+        User user = game.getUserByUsername(username);
         reception.removePlayer(user);
-        return null;
+        return "success";
     }
 
-    @PostMapping("/games/{user_id}/fold")
-    public Game userFold(@PathVariable int username) {
-        //TODO
-        return null;
+    @PostMapping("/games/fold")
+    public String userFold(@RequestParam String username) {
+        int pos = hand.getActionOnWhichPlayer();
+        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
+            Action action = new Action(Action.Act.FOLD);
+            hand.addAction(action);
+            return "success";
+        } else {
+            return "failure";
+        }
     }
 
-    @PostMapping("/games/{user_id}/check")
-    public Game userCheck(@PathVariable int username) {
-        //TODO
-        return null;
+    @PostMapping("/games/check")
+    public String userCheck(@RequestParam String username) {
+        int pos = hand.getActionOnWhichPlayer();
+        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
+            Action action = new Action(Action.Act.CHECK);
+            hand.addAction(action);
+            return "success";
+        } else {
+            return "failure";
+        }
     }
 
-    @PostMapping("/games/{user_id}/call")
-    public GameController userCall( @PathVariable int username, @RequestParam int amount) {
-        //TODO
-        return null;
+    @PostMapping("/games/call")
+    public String userCall( @RequestParam String username) {
+        int pos = hand.getActionOnWhichPlayer();
+        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
+            Action action = new Action(Action.Act.CALL);
+            hand.addAction(action);
+            return "success";
+        } else {
+            return "failure";
+        }
     }
 
-    @PostMapping("games/{user_id}/raise")
-    public GameController userRaise(@PathVariable int username, @RequestParam int amount) {
-        //TODO
-        Action action = new Action(Action.Act.RAISE, amount);
-        return null;
+    @PostMapping("games/raise")
+    public String userRaise(@RequestParam String username, @RequestParam int amount) {
+        int pos = hand.getActionOnWhichPlayer();
+        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
+            Action action = new Action(Action.Act.RAISE, amount);
+            hand.addAction(action);
+            return "success";
+        } else {
+            return "failure";
+        }
     }
 }

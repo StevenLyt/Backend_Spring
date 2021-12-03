@@ -65,9 +65,9 @@ public class Game {
         return totalBuyin[index]-remainingChips[index];
     }
 
-    public User getUserById(int id){
+    public User getUserByUsername(String username){
         for(User user: userArr){
-            if (user.getId()==id){
+            if (user != null && user.getUsername().equals(username)){
                 return user;
             }
         }
