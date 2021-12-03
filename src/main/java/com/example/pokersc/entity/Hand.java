@@ -13,6 +13,67 @@ public class Hand {
     private int numPlayers;
     private PlayerCards[] playerCards;
     private Deck deck;
+
+    public User[] getPlayerArr() {
+        return playerArr;
+    }
+
+    public boolean[] getActive() {
+        return active;
+    }
+
+    public int[] getRemainingStack() {
+        return remainingStack;
+    }
+
+    public int getDealerPos() {
+        return dealerPos;
+    }
+
+    public int getNumPlayers() {
+        return numPlayers;
+    }
+
+    public PlayerCards[] getPlayerCards() {
+        return playerCards;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public Card[] getCommunityCards() {
+        return communityCards;
+    }
+
+    public int getPot() {
+        return pot;
+    }
+
+    public int getActionOnWhichPlayer() {
+        return actionOnWhichPlayer;
+    }
+
+    public int getSmallBlind() {
+        return smallBlind;
+    }
+
+    public int getBigBlind() {
+        return bigBlind;
+    }
+
+    public int[] getChipPutInThisPhase() {
+        return chipPutInThisPhase;
+    }
+
+    public int getMaxBetInThisPhase() {
+        return maxBetInThisPhase;
+    }
+
+    public Action getCurrentAction() {
+        return currentAction;
+    }
+
     private Card[] communityCards;
     private int pot;
     private int actionOnWhichPlayer;

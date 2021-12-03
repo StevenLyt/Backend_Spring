@@ -1,14 +1,18 @@
 package com.example.pokersc.controller;
 
 import com.example.pokersc.entity.Game;
+import com.example.pokersc.entity.Hand;
 import com.example.pokersc.entity.Reception;
 import com.example.pokersc.entity.User;
 import com.example.pokersc.repository.GameResultsRepository;
 import com.example.pokersc.repository.UsersRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+//
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.Optional;
 
 @RestController
@@ -17,9 +21,13 @@ public class GameController {
 
     @Autowired
     private GameResultsRepository gameResultsRepository;
+    @Autowired
     private UsersRepository usersRepository;
     private Game game;
+    private Hand hand;
     private Reception reception = new Reception(game);
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @ModelAttribute
     public void setResponseHeader(HttpServletResponse response) {
@@ -28,15 +36,37 @@ public class GameController {
 
     // a user creates a game
     @PostMapping("/games")
-    public String getGameState(@RequestParam String username, @RequestParam String passwordHash) {
+    public String getGameState(@RequestParam String username, @RequestParam String passwordHash) throws JsonProcessingException {
         //TODO return a json that represent the whole game
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isEmpty()) {
             return "no user found";
         } else if(!optional.get().getPassword().equals(passwordHash)) {
-            return "password incorrect";
+            return "password incorrect" + "\n correct is:"+optional.get().getPassword() +" real:"+passwordHash;
         } else {
-            return "yees";
+            int position = 0;
+            for(User user: hand.getPlayerArr()) {
+                if(user.getUsername().equals(username)) {
+                    break;
+                }
+                position++;
+            }
+            StringBuilder gameString = new StringBuilder("{\n" +
+                    "    users: [");
+            for(User user: game.getAllUsers()) {
+                gameString.append(objectMapper.writeValueAsString(user));
+            }
+            gameString.append("],\n" + "    profits: {\"test1\":\"+100\"},");
+            gameString.append("communityCards: [").append(Arrays.toString(hand.getCommunityCards()));
+            gameString.append("],\n" + "    pot: ").append(hand.getPot());
+            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[position].getPlayerHand()[0]).append((hand.getPlayerCards()[position].getPlayerHand()[1]));
+            gameString.append("],\n" + "    selfPosition:").append(position);
+            gameString.append(",\n" + "    minimumRaiseAmount:").append(hand.getMaxBetInThisPhase()*2);
+            gameString.append(",\n" + "    actionPosition:").append(hand.getActionOnWhichPlayer()); // TODO
+            gameString.append(",\n" + "    dealerPosition:").append(game.dealerPos);
+
+            gameString.append("\n}");
+            return gameString.toString();
         }
 
     }

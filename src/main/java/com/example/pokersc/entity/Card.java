@@ -7,7 +7,6 @@ public class Card implements Comparable<Card> {
         CLUBS,
         DIAMONDS
     }
-
     public static enum RANK {
         TWO(2), THREE(3), FOUR(4), FIVE(5),
         SIX(6), SEVEN(7), EIGHT(8), NINE(9),
@@ -41,10 +40,9 @@ public class Card implements Comparable<Card> {
     }
     @Override
     public String toString() {
-        return "Card{" +
-                "rank=" + rank +
-                ", suit=" + suit +
-                '}';
+        String[] suit = {"s","h","c","d"};
+        String[] rank = {"","","2","3","4","5","6","7","8","9","10","j","q","k","a"};
+        return suit[this.suit.ordinal()]+rank[this.rank.ordinal()];
     }
 
     @Override

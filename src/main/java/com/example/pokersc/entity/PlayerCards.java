@@ -2,6 +2,10 @@ package com.example.pokersc.entity;
 
 public class PlayerCards {
 
+    public Card[] getPlayerHand() {
+        return playerHand;
+    }
+
     private Card[] playerHand;
     private int numCard;
 

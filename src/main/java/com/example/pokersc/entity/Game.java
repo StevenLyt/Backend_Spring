@@ -73,4 +73,8 @@ public class Game {
         }
         return null;
     }
+
+    public User[] getAllUsers() {
+        return userArr;
+    }
 }
