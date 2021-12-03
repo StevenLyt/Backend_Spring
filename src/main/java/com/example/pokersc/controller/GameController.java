@@ -79,7 +79,7 @@ public class GameController {
     }
 
     @PostMapping("/games/join")
-    public String joinGameById(@RequestParam String username, @RequestParam int position, @RequestParam int buyin) {
+    public String joinGame(@RequestParam String username, @RequestParam int position, @RequestParam int buyin) {
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent()) {
             User user = optional.get();

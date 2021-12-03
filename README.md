@@ -27,25 +27,24 @@ GET /users/username
 // returns a single user resource with the specified username
 ```
 
+## Game
+
 - Buy-in
 
 ```
-POST /user/id/buyin?amount={}
+POST /games/username/buyin?amount={}
 ```
 
-## Game
-
-- A user creates a room
+- Get current game state for a specific user. This person can only see his/her own cards.
 
 ```
-POST /games
-// not sure if we need more details in the url
+POST /games?username={}&passwordHash={}
 ```
 
-- Join game with game_id
+- Join game
 
 ```
-POST /games/{game_id}/{user_id}
+POST /games?username={}&
 ```
 
 - Leave game
