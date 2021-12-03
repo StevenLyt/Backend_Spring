@@ -1,5 +1,8 @@
 package com.example.pokersc.entity;
 
+import com.example.pokersc.repository.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,6 +16,9 @@ public class Hand {
     private int numPlayers;
     private PlayerCards[] playerCards;
     private Deck deck;
+
+    @Autowired
+    private UsersRepository usersRepository;
 
     public User[] getPlayerArr() {
         return playerArr;
@@ -220,6 +226,14 @@ public class Hand {
             this.currentAction = null;
         }
         //end river
+    }
+
+    public void saveStats(){
+        for(User user: playerArr) {
+            if(user!=null) {
+                usersRepository.save(user);
+            }
+        }
     }
 
     // initialize phase (flop, turn, river);

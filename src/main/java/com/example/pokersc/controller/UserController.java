@@ -38,7 +38,7 @@ public class UserController {
         if(usersRepository.findByUsername(username).isPresent()) {
             return "failure";
         }
-        String hash =  Utils.sha256(password);
+        String hash = Utils.sha256(password);
         User user = new User(username, hash, profile_url);
         usersRepository.save(user);
         return hash;
