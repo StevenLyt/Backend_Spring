@@ -309,5 +309,15 @@ public class Hand {
     }
 
     // Above is written by Jason
-
+    private boolean checkAction(int pos) {
+        if (this.currentAction.getAct() == Action.Act.CHECK) {
+            if (this.chipPutInThisPhase[pos] != this.maxBetInThisPhase)
+                return false;
+        }
+        if (this.currentAction.getAct() == Action.Act.RAISE) {
+            if (this.currentAction.getAmount() < 2 * this.maxBetInThisPhase)
+                return false;
+        }
+        return true;
+    }
 }
