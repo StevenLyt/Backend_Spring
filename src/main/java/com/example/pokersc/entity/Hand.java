@@ -3,9 +3,11 @@ package com.example.pokersc.entity;
 import com.example.pokersc.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Hand {
 
@@ -327,11 +329,25 @@ public class Hand {
         if (this.currentAction.getAct() == Action.Act.CHECK) {
             if (this.chipPutInThisPhase[pos] != this.maxBetInThisPhase)
                 return false;
-        }
-        if (this.currentAction.getAct() == Action.Act.RAISE) {
+        } else if (this.currentAction.getAct() == Action.Act.RAISE) {
             if (this.currentAction.getAmount() < 2 * this.maxBetInThisPhase)
+                return false;
+            else if (this.remainingStack[pos] < this.currentAction.getAmount())
+                return false;
+        } else if (this.currentAction.getAct() == Action.Act.CALL) {
+            if (this.remainingStack[pos] < this.maxBetInThisPhase - this.chipPutInThisPhase[pos])
                 return false;
         }
         return true;
+    }
+
+    private int getWinner() {
+        int winner = 0;
+        for (int i = 1; i < 8; i++) {
+            if (playerCards[i].getPlayerHand().length == 0)
+                continue;
+            winner = HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[winner].getPlayerHand()).stream()).collect(Collectors.toList())).compareTo(HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[i].getPlayerHand()).stream()).collect(Collectors.toList()))) == -1 ? i : winner;
+        }
+        return winner;
     }
 }
