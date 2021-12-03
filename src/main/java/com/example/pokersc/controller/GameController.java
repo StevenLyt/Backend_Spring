@@ -34,7 +34,6 @@ public class GameController {
     // a user creates a game
     @PostMapping("/games")
     public String getGameState(@RequestParam String username, @RequestParam String passwordHash) throws JsonProcessingException {
-        //TODO return a json that represent the whole game
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isEmpty()) {
             return "no user found";
@@ -70,7 +69,7 @@ public class GameController {
             gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[0].getPlayerHand()[0]).append(",").append((hand.getPlayerCards()[0].getPlayerHand()[1]));
             gameString.append("],\n" + "    selfPosition:").append(position);
             gameString.append(",\n" + "    minimumRaiseAmount:").append(hand.getMaxBetInThisPhase()*2);
-            gameString.append(",\n" + "    actionPosition:").append(hand.getActionOnWhichPlayer()); // TODO
+            gameString.append(",\n" + "    actionPosition:").append(hand.getActionOnWhichPlayer());
             gameString.append(",\n" + "    dealerPosition:").append(game.dealerPos);
 
             gameString.append("\n}");
@@ -84,7 +83,6 @@ public class GameController {
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent()) {
             User user = optional.get();
-            //TODO: call something like addUser();
             reception.addPlayer(user,buyin,position);
             return "success";
         } else {
@@ -94,7 +92,6 @@ public class GameController {
 
     @PostMapping("/games/buyin")
     public void userBuyin(@RequestParam String username, @RequestParam int amount) {
-        // TODO buyin during game
         game.rebuy(username,amount);
     }
 
