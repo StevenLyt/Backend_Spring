@@ -36,11 +36,12 @@ public class UserController {
     public String userSignup(@RequestParam String username, @RequestParam String password, @RequestParam String profile_url) {
         // check if username already exists
         if(usersRepository.findByUsername(username).isPresent()) {
-            return "username taken";
+            return "failure";
         }
-        User user = new User(username, Utils.sha256(password), profile_url);
+        String hash =  Utils.sha256(password);
+        User user = new User(username, hash, profile_url);
         usersRepository.save(user);
-        return "success";
+        return hash;
     }
 
     @GetMapping("/users")
