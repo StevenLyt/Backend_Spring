@@ -59,7 +59,6 @@ public class Game {
         this.numPlayers --;
     }
 
-    //get the chips lost/won at a game
     public int getBalance(String username){
         int index = 0;
         for(int i =0; i<8;i++){

@@ -17,6 +17,8 @@ public class GameThread extends Thread{
                     game.updatePos();
                     Hand hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
                     hand.startHand();
+                    // function call to end hand
+                    game.remainingChips = hand.getRemainingStack();
                 }
             }
         }
