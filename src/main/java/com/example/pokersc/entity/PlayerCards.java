@@ -9,7 +9,7 @@ public class PlayerCards {
     private Card[] playerHand;
     private int numCard;
 
-    public PlayerCards(Card c1, Card c2){
+    public PlayerCards(){
         this.playerHand = new Card[2];
         this.numCard = 0;
     }

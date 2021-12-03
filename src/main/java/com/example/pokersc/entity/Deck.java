@@ -2,7 +2,9 @@ package com.example.pokersc.entity;
 
 import java.util.Arrays;
 import java.util.Collections;
-import static com.example.pokersc.entity.Card.*;
+
+import static com.example.pokersc.entity.Card.RANK;
+import static com.example.pokersc.entity.Card.SUIT;
 
 public class Deck {
 	

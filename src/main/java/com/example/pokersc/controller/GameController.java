@@ -20,11 +20,23 @@ public class GameController {
     private GameResultsRepository gameResultsRepository;
     @Autowired
     private UsersRepository usersRepository;
-    private Game game = new Game();
-    private Hand hand = new Hand();
-    private Reception reception = new Reception(game);
+    private Game game;
+    private Reception reception;
+    private GameThread gameThread = new GameThread();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public GameController(){
+        this.gameThread.start();
+        game = gameThread.game;
+        reception = new Reception(game);
+        this.reception.start();
+        //game.addUser(usersRepository.findByUsername("gyx").get(), 100,0);
+
+        //game.addUser(usersRepository.findByUsername("gyx2").get(), 100,1);
+        //game.addUser(usersRepository.findByUsername("gyx3").get(), 100,2);
+
+    }
 
     @ModelAttribute
     public void setResponseHeader(HttpServletResponse response) {
@@ -35,6 +47,7 @@ public class GameController {
     @PostMapping("/games")
     public String getGameState(@RequestParam String username, @RequestParam String passwordHash) throws JsonProcessingException {
         //TODO return a json that represent the whole game
+        Hand hand = this.gameThread.hand;
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isEmpty()) {
             return "no user found";
@@ -59,7 +72,7 @@ public class GameController {
             gameString.append("],\n" + "    profits: {");
             for(int i=0; i<8; i++) {
                 if(game.getAllUsers()[i]!=null) {
-                    gameString.append(username).append(":").append(game.remainingChips[i] - game.totalBuyin[i]).append(",");
+                    gameString.append(game.getAllUsers()[i].getUsername()).append(":").append(game.remainingChips[i] - game.totalBuyin[i]).append(",");
                 }
             }
             if(gameString.charAt(gameString.length()-1) == ',') {
@@ -67,12 +80,13 @@ public class GameController {
             }
             gameString.append("},\n    communityCards: ").append(Arrays.toString(hand.getCommunityCards()));
             gameString.append(",\n" + "    pot: ").append(hand.getPot());
-            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[0].getPlayerHand()[0]).append(",").append((hand.getPlayerCards()[0].getPlayerHand()[1]));
+            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[position].getPlayerHand()[0]).append(",").append((hand.getPlayerCards()[position].getPlayerHand()[1]));
             gameString.append("],\n" + "    selfPosition:").append(position);
             gameString.append(",\n" + "    minimumRaiseAmount:").append(hand.getMaxBetInThisPhase()*2);
             gameString.append(",\n" + "    actionPosition:").append(hand.getActionOnWhichPlayer()); // TODO
             gameString.append(",\n" + "    dealerPosition:").append(game.dealerPos);
-
+            gameString.append(",\n" + "    state:").append(hand.getState());
+            gameString.append(",\n" + "    numActionLeft:").append(hand.numActionLeft);
             gameString.append("\n}");
             return gameString.toString();
         }
@@ -107,6 +121,7 @@ public class GameController {
 
     @PostMapping("/games/fold")
     public String userFold(@RequestParam String username) {
+        Hand hand = this.gameThread.hand;
         int pos = hand.getActionOnWhichPlayer();
         if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
             Action action = new Action(Action.Act.FOLD);
@@ -119,6 +134,7 @@ public class GameController {
 
     @PostMapping("/games/check")
     public String userCheck(@RequestParam String username) {
+        Hand hand = this.gameThread.hand;
         int pos = hand.getActionOnWhichPlayer();
         if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
             Action action = new Action(Action.Act.CHECK);
@@ -131,6 +147,7 @@ public class GameController {
 
     @PostMapping("/games/call")
     public String userCall( @RequestParam String username) {
+        Hand hand = this.gameThread.hand;
         int pos = hand.getActionOnWhichPlayer();
         if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
             Action action = new Action(Action.Act.CALL);
@@ -143,6 +160,7 @@ public class GameController {
 
     @PostMapping("games/raise")
     public String userRaise(@RequestParam String username, @RequestParam int amount) {
+        Hand hand = this.gameThread.hand;
         int pos = hand.getActionOnWhichPlayer();
         if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
             Action action = new Action(Action.Act.RAISE, amount);

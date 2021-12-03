@@ -14,6 +14,7 @@ public class Reception extends Thread {
 
     public Reception(Game game){
         usersToAdd = new LinkedList<>();
+        usersToLeave = new LinkedList<>();
         currentGame = game;
     }
 

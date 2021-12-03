@@ -2,10 +2,12 @@ package com.example.pokersc.entity;
 
 public class GameThread extends Thread{
 
-    private Game game;
+    public Game game;
+    public Hand hand;
 
     public GameThread(){
         this.game = new Game();
+        this.hand = null;
     }
 
     public void run(){
@@ -15,10 +17,11 @@ public class GameThread extends Thread{
                     Thread.sleep(1000);
                 } else {
                     game.updatePos();
-                    Hand hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
+                    hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
                     hand.startHand();
                     // function call to end hand
                     game.remainingChips = hand.getRemainingStack();
+                    hand.saveStats();
                 }
             }
         }
@@ -27,8 +30,4 @@ public class GameThread extends Thread{
         }
     }
 
-    public void main(){
-        GameThread gameThread = new GameThread();
-        gameThread.start();
-    }
 }
