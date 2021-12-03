@@ -56,10 +56,15 @@ public class GameController {
             for(User user: game.getAllUsers()) {
                 gameString.append(objectMapper.writeValueAsString(user));
             }
-            gameString.append("],\n" + "    profits: {\"test1\":\"+100\"},");
-            gameString.append("communityCards: [").append(Arrays.toString(hand.getCommunityCards()));
-            gameString.append("],\n" + "    pot: ").append(hand.getPot());
-            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[position].getPlayerHand()[0]).append((hand.getPlayerCards()[position].getPlayerHand()[1]));
+            gameString.append("],\n" + "    profits: {");
+            for(int i=0; i<8; i++) {
+                if(game.getAllUsers()[i]!=null) {
+                    gameString.append(username).append(":").append(game.remainingChips[i] - game.totalBuyin[i]).append(",");
+                }
+            }
+            gameString.append("},\n    communityCards: ").append(Arrays.toString(hand.getCommunityCards()));
+            gameString.append(",\n" + "    pot: ").append(hand.getPot());
+            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[0].getPlayerHand()[0]).append((hand.getPlayerCards()[0].getPlayerHand()[1]));
             gameString.append("],\n" + "    selfPosition:").append(position);
             gameString.append(",\n" + "    minimumRaiseAmount:").append(hand.getMaxBetInThisPhase()*2);
             gameString.append(",\n" + "    actionPosition:").append(hand.getActionOnWhichPlayer()); // TODO

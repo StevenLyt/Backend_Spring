@@ -91,7 +91,8 @@ public class Hand {
         int [] remainingStack = new int[8];
         int dealerPos = 0;
         int numPlayers = 3;
-        PlayerCards[] playerCards = new PlayerCards[8];
+        playerCards = new PlayerCards[8];
+        playerCards[0] = new PlayerCards(new Card(Card.RANK.ACE, Card.SUIT.SPADES),new Card(Card.RANK.TWO, Card.SUIT.DIAMONDS));
         Deck deck = new Deck();
         communityCards = new Card[5];
         pot = 100;
