@@ -1,9 +1,6 @@
 package com.example.pokersc.controller;
 
-import com.example.pokersc.entity.Game;
-import com.example.pokersc.entity.Hand;
-import com.example.pokersc.entity.Reception;
-import com.example.pokersc.entity.User;
+import com.example.pokersc.entity.*;
 import com.example.pokersc.repository.GameResultsRepository;
 import com.example.pokersc.repository.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -131,7 +128,7 @@ public class GameController {
     @PostMapping("games/{user_id}/raise")
     public GameController userRaise(@PathVariable int username, @RequestParam int amount) {
         //TODO
-
+        Action action = new Action(Action.Act.RAISE, amount);
         return null;
     }
 }
