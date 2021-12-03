@@ -111,26 +111,27 @@ public class GameController {
     }
 
     @PostMapping("/games/{user_id}/fold")
-    public Game userFold(@PathVariable int user_id) {
+    public Game userFold(@PathVariable int username) {
         //TODO
         return null;
     }
 
     @PostMapping("/games/{user_id}/check")
-    public Game userCheck(@PathVariable int user_id) {
+    public Game userCheck(@PathVariable int username) {
         //TODO
         return null;
     }
 
     @PostMapping("/games/{user_id}/call")
-    public GameController userCall( @PathVariable int user_id, @RequestParam int amount) {
+    public GameController userCall( @PathVariable int username, @RequestParam int amount) {
         //TODO
         return null;
     }
 
     @PostMapping("games/{user_id}/raise")
-    public GameController userRaise(@PathVariable int user_id, @RequestParam int amount) {
+    public GameController userRaise(@PathVariable int username, @RequestParam int amount) {
         //TODO
+
         return null;
     }
 }
