@@ -1,9 +1,6 @@
 package com.example.pokersc.controller;
 
-import com.example.pokersc.entity.Game;
-import com.example.pokersc.entity.Hand;
-import com.example.pokersc.entity.Reception;
-import com.example.pokersc.entity.User;
+import com.example.pokersc.entity.*;
 import com.example.pokersc.repository.GameResultsRepository;
 import com.example.pokersc.repository.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,8 +13,9 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(name = "/api")
+@RequestMapping(name ="/api")
 public class GameController {
+
     @Autowired
     private GameResultsRepository gameResultsRepository;
     @Autowired
@@ -38,9 +36,9 @@ public class GameController {
     public String getGameState(@RequestParam String username, @RequestParam String passwordHash) throws JsonProcessingException {
         //TODO return a json that represent the whole game
         Optional<User> optional = usersRepository.findByUsername(username);
-        if (optional.isEmpty()) {
+        if(optional.isEmpty()) {
             return "no user found";
-        } else if (!optional.get().getPassword().equals(passwordHash)) {
+        } else if(!optional.get().getPassword().equals(passwordHash)) {
             return "password incorrect" + "\n correct is:"+optional.get().getPassword() +" real:"+passwordHash;
         } else {
             int position = 0;
@@ -53,12 +51,23 @@ public class GameController {
             StringBuilder gameString = new StringBuilder("{\n" +
                     "    users: [");
             for(User user: game.getAllUsers()) {
-                gameString.append(objectMapper.writeValueAsString(user));
+                gameString.append(objectMapper.writeValueAsString(user)).append(",");
             }
-            gameString.append("],\n" + "    profits: {\"test1\":\"+100\"},");
-            gameString.append("communityCards: [").append(Arrays.toString(hand.getCommunityCards()));
-            gameString.append("],\n" + "    pot: ").append(hand.getPot());
-            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[position].getPlayerHand()[0]).append((hand.getPlayerCards()[position].getPlayerHand()[1]));
+            if(gameString.charAt(gameString.length()-1) == ',') {
+                gameString.deleteCharAt(gameString.length() - 1);
+            }
+            gameString.append("],\n" + "    profits: {");
+            for(int i=0; i<8; i++) {
+                if(game.getAllUsers()[i]!=null) {
+                    gameString.append(username).append(":").append(game.remainingChips[i] - game.totalBuyin[i]).append(",");
+                }
+            }
+            if(gameString.charAt(gameString.length()-1) == ',') {
+                gameString.deleteCharAt(gameString.length() - 1);
+            }
+            gameString.append("},\n    communityCards: ").append(Arrays.toString(hand.getCommunityCards()));
+            gameString.append(",\n" + "    pot: ").append(hand.getPot());
+            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[0].getPlayerHand()[0]).append(",").append((hand.getPlayerCards()[0].getPlayerHand()[1]));
             gameString.append("],\n" + "    selfPosition:").append(position);
             gameString.append(",\n" + "    minimumRaiseAmount:").append(hand.getMaxBetInThisPhase()*2);
             gameString.append(",\n" + "    actionPosition:").append(hand.getActionOnWhichPlayer()); // TODO
@@ -73,10 +82,10 @@ public class GameController {
     @PostMapping("/games/{user_id}")
     public String joinGameById(@PathVariable int user_id, @RequestParam int position, @RequestParam int buyin) {
         Optional<User> optional = usersRepository.findById(user_id);
-        if (optional.isPresent()) {
+        if(optional.isPresent()) {
             User user = optional.get();
             //TODO: call something like addUser();
-            reception.addPlayer(user, buyin, position);
+            reception.addPlayer(user,buyin,position);
             return "success";
         } else {
             return "failure";
@@ -86,7 +95,7 @@ public class GameController {
     @PostMapping("/games/{user_id}/buyin")
     public void userBuyin(@PathVariable int user_id, @RequestParam int amount) {
         // TODO buyin during game
-        game.rebuy(user_id, amount);
+        game.rebuy(user_id,amount);
     }
 
     @PostMapping("/games/{user_id}/leave")
@@ -99,26 +108,27 @@ public class GameController {
     }
 
     @PostMapping("/games/{user_id}/fold")
-    public Game userFold(@PathVariable int user_id) {
+    public Game userFold(@PathVariable int username) {
         //TODO
         return null;
     }
 
     @PostMapping("/games/{user_id}/check")
-    public Game userCheck(@PathVariable int user_id) {
+    public Game userCheck(@PathVariable int username) {
         //TODO
         return null;
     }
 
     @PostMapping("/games/{user_id}/call")
-    public GameController userCall(@PathVariable int user_id, @RequestParam int amount) {
+    public GameController userCall( @PathVariable int username, @RequestParam int amount) {
         //TODO
         return null;
     }
 
     @PostMapping("games/{user_id}/raise")
-    public GameController userRaise(@PathVariable int user_id, @RequestParam int amount) {
+    public GameController userRaise(@PathVariable int username, @RequestParam int amount) {
         //TODO
+        Action action = new Action(Action.Act.RAISE, amount);
         return null;
     }
 }

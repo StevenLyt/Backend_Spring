@@ -1,30 +1,26 @@
 package com.example.pokersc.entity;
 
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Action {
-    enum Act {
+    public enum Act {
         RAISE,
         CHECK,
         FOLD,
         CALL,
     }
-
-    private User user;
-    private Act act;
+    private final Act act;
     private int amount = 0;
 
-    public Action(User user, Act act) {
-        this.user = user;
+    public Action(Act act){
         this.act = act;
 
     }
-
-    public Action(User user, Act act, int amount) {
-        this(user, act);
+    public Action(Act act, int amount){
+        this.act = act;
         this.amount = amount;
-    }
-
-    public User getUser() {
-        return this.user;
     }
 
     public Act getAct() {
