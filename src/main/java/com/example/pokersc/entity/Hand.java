@@ -315,8 +315,7 @@ public class Hand {
                 return false;
         }
         if (this.currentAction.getAct() == Action.Act.RAISE) {
-            if (this.currentAction.getAmount() < 2 * this.maxBetInThisPhase)
-                return false;
+            return this.currentAction.getAmount() >= 2 * this.maxBetInThisPhase;
         }
         return true;
     }
