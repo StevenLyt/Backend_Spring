@@ -79,11 +79,27 @@ public class Hand {
     private int actionOnWhichPlayer;
     private int smallBlind;
     private int bigBlind;
-
     private int[] chipPutInThisPhase;
     private int maxBetInThisPhase;
     private Action currentAction = null;
+    // for testing
+    public Hand(){
+        playerArr = new User[8];
+        boolean[] active = new boolean[8];
+        int [] remainingStack = new int[8];
+        int dealerPos = 0;
+        int numPlayers = 3;
+        PlayerCards[] playerCards = new PlayerCards[8];
+        Deck deck = new Deck();
+        communityCards = new Card[5];
+        pot = 100;
+        actionOnWhichPlayer = 3;
+        smallBlind = 1;
+        bigBlind = 2;
+        chipPutInThisPhase = new int[8];
+        maxBetInThisPhase = 1;
 
+    }
     public Hand(User[] userList, int[] chips, int dPos, int numP){
         this.playerArr = userList;
         this.remainingStack = chips;
