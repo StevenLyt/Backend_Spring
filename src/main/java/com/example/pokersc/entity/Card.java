@@ -42,7 +42,7 @@ public class Card implements Comparable<Card> {
     @Override
     public String toString() {
         String[] suit = {"s","h","c","d"};
-        String[] rank = {"","","2","3","4","5","6","7","8","9","10","j","q","k","a"};
+        String[] rank = {"2","3","4","5","6","7","8","9","10","j","q","k","a"};
         return suit[this.suit.ordinal()]+rank[this.rank.ordinal()];
     }
 

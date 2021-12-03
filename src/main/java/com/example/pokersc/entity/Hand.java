@@ -8,7 +8,7 @@ public class Hand {
 
     private User[] playerArr;
     private boolean[] active;
-    private int[] remainingStack;
+    private int [] remainingStack;
     private int dealerPos;
     private int numPlayers;
     private PlayerCards[] playerCards;
@@ -103,35 +103,40 @@ public class Hand {
         maxBetInThisPhase = 1;
 
     }
-    public Hand(User[] userList, int[] chips, int dPos, int numP) {
+    public Hand(User[] userList, int[] chips, int dPos, int numP){
         this.playerArr = userList;
         this.remainingStack = chips;
         this.dealerPos = dPos;
         this.numPlayers = numP;
         this.playerCards = new PlayerCards[8];
         this.active = new boolean[8];
-        for (int i = 0; i < 8; i++) {
+        for(int i = 0; i < 8; i++){
             chipPutInThisPhase[i] = 0;
-            active[i] = playerArr[i] != null;
+            if(playerArr[i] != null) {
+                active[i] = true;
+            }
+            else {
+                active[i] = false;
+            }
         }
         this.deck = new Deck();
         this.communityCards = new Card[5];
         this.smallBlind = this.dealerPos + 1;
         this.smallBlind %= 8;
-        while (!active[smallBlind]) {
-            this.smallBlind++;
+        while(!active[smallBlind]){
+            this.smallBlind ++;
             this.smallBlind %= 8;
         }
         this.bigBlind = this.smallBlind + 1;
         this.bigBlind %= 8;
-        while (!active[bigBlind]) {
-            this.bigBlind++;
+        while(!active[bigBlind]){
+            this.bigBlind ++;
             this.bigBlind %= 8;
         }
         actionOnWhichPlayer = dealerPos + 3; //first action on UTG;
         actionOnWhichPlayer %= 8;
-        while (!active[actionOnWhichPlayer]) {
-            actionOnWhichPlayer++;
+        while(!active[actionOnWhichPlayer]){
+            actionOnWhichPlayer ++;
             actionOnWhichPlayer &= 8;
         }
     }
@@ -151,17 +156,17 @@ public class Hand {
 
         //flop
         this.initializePhase();
-        while (!readyForNextRound()) {
-            while (true) {
-                if (currentAction != null) {
+        while(!readyForNextRound()){
+            while (true){
+                if(currentAction != null){
                     break;
                 }
             }
             doAction(actionOnWhichPlayer);
-            actionOnWhichPlayer++; //first action on UTG;
+            actionOnWhichPlayer ++; //first action on UTG;
             actionOnWhichPlayer %= 8;
-            while (!active[actionOnWhichPlayer]) {
-                actionOnWhichPlayer++;
+            while(!active[actionOnWhichPlayer]){
+                actionOnWhichPlayer ++;
                 actionOnWhichPlayer &= 8;
             }
             this.currentAction = null;
@@ -171,21 +176,21 @@ public class Hand {
         //turn
         this.initializePhase();
         this.actionOnWhichPlayer = smallBlind;
-        while (!active[actionOnWhichPlayer]) {
-            actionOnWhichPlayer++;
+        while(!active[actionOnWhichPlayer]){
+            actionOnWhichPlayer ++;
             actionOnWhichPlayer &= 8;
         }
-        while (!readyForNextRound()) {
-            while (true) {
-                if (currentAction != null) {
+        while(!readyForNextRound()) {
+            while (true){
+                if(currentAction != null){
                     break;
                 }
             }
             doAction(actionOnWhichPlayer);
-            actionOnWhichPlayer++; //first action on UTG;
+            actionOnWhichPlayer ++; //first action on UTG;
             actionOnWhichPlayer %= 8;
-            while (playerArr[actionOnWhichPlayer] == null) {
-                actionOnWhichPlayer++;
+            while(playerArr[actionOnWhichPlayer] == null){
+                actionOnWhichPlayer ++;
                 actionOnWhichPlayer &= 8;
             }
             this.currentAction = null;
@@ -195,21 +200,21 @@ public class Hand {
         //river
         this.initializePhase();
         this.actionOnWhichPlayer = smallBlind;
-        while (!active[actionOnWhichPlayer]) {
-            actionOnWhichPlayer++;
+        while(!active[actionOnWhichPlayer]){
+            actionOnWhichPlayer ++;
             actionOnWhichPlayer &= 8;
         }
-        while (!readyForNextRound()) {
-            while (true) {
-                if (currentAction != null) {
+        while(!readyForNextRound()) {
+            while (true){
+                if(currentAction != null){
                     break;
                 }
             }
             doAction(actionOnWhichPlayer);
-            actionOnWhichPlayer++; //first action on UTG;
+            actionOnWhichPlayer ++; //first action on UTG;
             actionOnWhichPlayer %= 8;
-            while (playerArr[actionOnWhichPlayer] == null) {
-                actionOnWhichPlayer++;
+            while(playerArr[actionOnWhichPlayer] == null){
+                actionOnWhichPlayer ++;
                 actionOnWhichPlayer &= 8;
             }
             this.currentAction = null;
@@ -218,41 +223,42 @@ public class Hand {
     }
 
     // initialize phase (flop, turn, river);
-
-    public void initializePhase() {
-        for (int i = 0; i < 8; i++) {
+    public void initializePhase(){
+        for(int i = 0; i < 8; i++){
             this.chipPutInThisPhase[i] = 0;
         }
         this.maxBetInThisPhase = 0;
     }
 
     // check if every player puts same amount or folds
-    public boolean readyForNextRound() {
+    public boolean readyForNextRound(){
         int amount = 0;
-        for (int i = 0; i < 8; i++) {
-            if (active[i]) {
+        for(int i = 0; i < 8; i++){
+            if(active[i]) {
                 amount = chipPutInThisPhase[i];
                 break;
             }
         }
-        for (int i = 0; i < 8; i++) {
-            if (active[i] && chipPutInThisPhase[i] != amount) {
-                return false;
+        for(int i = 0; i < 8; i++){
+            if(active[i] && chipPutInThisPhase[i] != amount) {
+               return false;
             }
         }
         return true;
     }
 
     // update active arr, chipPutInThisPhase arr, maxBetInThisPhase, pot, numPlayer
-    public void doAction(int pos) {
-        if (currentAction.getAct() == Action.Act.FOLD) {
+    public void doAction(int pos){
+        if(currentAction.getAct() == Action.Act.FOLD){
             this.active[pos] = false;
-            this.numPlayers--;
-        } else if (currentAction.getAct() == Action.Act.CALL) {
+            this.numPlayers --;
+        }
+        else if(currentAction.getAct() == Action.Act.CALL){
             this.chipPutInThisPhase[pos] = maxBetInThisPhase;
             this.pot += maxBetInThisPhase;
             this.remainingStack[pos] -= maxBetInThisPhase;
-        } else if (currentAction.getAct() == Action.Act.RAISE) {
+        }
+        else if(currentAction.getAct() == Action.Act.RAISE){
             maxBetInThisPhase = currentAction.getAmount();
             this.chipPutInThisPhase[pos] = maxBetInThisPhase;
             this.remainingStack[pos] -= maxBetInThisPhase;
@@ -265,7 +271,8 @@ public class Hand {
                 Thread.sleep(1000);
             }
             this.currentAction = action;
-        } catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -274,7 +281,7 @@ public class Hand {
     private void dealCardsToPlayers(int buttonPos) {
         int start = (buttonPos + 2) % 8;
         int numCardsDealt = 0;
-        while (numCardsDealt != 2 * numPlayers) {
+        while(numCardsDealt != 2*numPlayers){
             this.playerCards[start].receiveCard(deck.dealCard());
             numCardsDealt++;
             start++;
@@ -283,12 +290,12 @@ public class Hand {
     }
 
     // deal the board
-    private void dealCommunityCards() {
+    private void dealCommunityCards(){
         //burn one card before flop
         this.deck.dealCard();
 
         //deal flop
-        for (int i = 0; i < 3; i++) {
+        for(int i = 0; i < 3; i++){
             this.communityCards[i] = this.deck.dealCard();
         }
         //burn one card before turn
@@ -302,5 +309,15 @@ public class Hand {
     }
 
     // Above is written by Jason
-
+    private boolean checkAction(int pos) {
+        if (this.currentAction.getAct() == Action.Act.CHECK) {
+            if (this.chipPutInThisPhase[pos] != this.maxBetInThisPhase)
+                return false;
+        }
+        if (this.currentAction.getAct() == Action.Act.RAISE) {
+            if (this.currentAction.getAmount() < 2 * this.maxBetInThisPhase)
+                return false;
+        }
+        return true;
+    }
 }
