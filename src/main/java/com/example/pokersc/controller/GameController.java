@@ -23,8 +23,8 @@ public class GameController {
     private GameResultsRepository gameResultsRepository;
     @Autowired
     private UsersRepository usersRepository;
-    private Game game;
-    private Hand hand;
+    private Game game = new Game();
+    private Hand hand = new Hand();
     private Reception reception = new Reception(game);
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -46,7 +46,7 @@ public class GameController {
         } else {
             int position = 0;
             for(User user: hand.getPlayerArr()) {
-                if(user.getUsername().equals(username)) {
+                if(user!=null && user.getUsername().equals(username)) {
                     break;
                 }
                 position++;
