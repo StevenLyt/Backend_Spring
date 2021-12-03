@@ -54,7 +54,10 @@ public class GameController {
             StringBuilder gameString = new StringBuilder("{\n" +
                     "    users: [");
             for(User user: game.getAllUsers()) {
-                gameString.append(objectMapper.writeValueAsString(user));
+                gameString.append(objectMapper.writeValueAsString(user)).append(",");
+            }
+            if(gameString.charAt(gameString.length()-1) == ',') {
+                gameString.deleteCharAt(gameString.length() - 1);
             }
             gameString.append("],\n" + "    profits: {");
             for(int i=0; i<8; i++) {
@@ -62,9 +65,12 @@ public class GameController {
                     gameString.append(username).append(":").append(game.remainingChips[i] - game.totalBuyin[i]).append(",");
                 }
             }
+            if(gameString.charAt(gameString.length()-1) == ',') {
+                gameString.deleteCharAt(gameString.length() - 1);
+            }
             gameString.append("},\n    communityCards: ").append(Arrays.toString(hand.getCommunityCards()));
             gameString.append(",\n" + "    pot: ").append(hand.getPot());
-            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[0].getPlayerHand()[0]).append((hand.getPlayerCards()[0].getPlayerHand()[1]));
+            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[0].getPlayerHand()[0]).append(",").append((hand.getPlayerCards()[0].getPlayerHand()[1]));
             gameString.append("],\n" + "    selfPosition:").append(position);
             gameString.append(",\n" + "    minimumRaiseAmount:").append(hand.getMaxBetInThisPhase()*2);
             gameString.append(",\n" + "    actionPosition:").append(hand.getActionOnWhichPlayer()); // TODO
