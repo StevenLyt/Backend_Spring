@@ -84,7 +84,9 @@ public class Hand {
     private Action currentAction = null;
     // for testing
     public Hand(){
+        User user = new User("a","b", "c");
         playerArr = new User[8];
+        playerArr[0] = user;
         boolean[] active = new boolean[8];
         int [] remainingStack = new int[8];
         int dealerPos = 0;
