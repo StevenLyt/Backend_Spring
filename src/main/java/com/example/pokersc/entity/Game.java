@@ -58,7 +58,7 @@ public class Game {
         }
         this.numPlayers --;
     }
-    
+
     public int getBalance(String username){
         int index = 0;
         for(int i =0; i<8;i++){
