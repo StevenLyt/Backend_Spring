@@ -48,6 +48,10 @@ public class GameController {
     public String getGameState(@RequestParam String username, @RequestParam String passwordHash) throws JsonProcessingException {
         //TODO return a json that represent the whole game
         Hand hand = this.gameThread.hand;
+        // Game is not running due to lacking of players
+        if(hand == null){
+            return "only "+ game.numPlayers + " players. " +"less than 3 pLayers on the table";
+        }
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isEmpty()) {
             return "no user found";
