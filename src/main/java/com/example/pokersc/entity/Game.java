@@ -8,6 +8,7 @@ public class Game {
     public int dealerPos;
     public int[] remainingChips;
     public int[] totalBuyin;
+    public boolean ongoing;
     public Game(){
         this.numPlayers = 0;
         this.userArr = new User[8];
@@ -19,6 +20,7 @@ public class Game {
             this.userArr[i] = null;
         }
         this.dealerPos = 0;
+        this.ongoing = false;
     }
 
     public void addUser(User user, int buyin, int pos) {

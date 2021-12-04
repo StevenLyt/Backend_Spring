@@ -48,9 +48,9 @@ public class GameController {
     public String getGameState(@RequestParam String username, @RequestParam String passwordHash) throws JsonProcessingException {
         //TODO return a json that represent the whole game
         Hand hand = this.gameThread.hand;
-        if(hand == null){
-            return String.valueOf(game.numPlayers);
-        }
+       // if(hand == null){
+        //    return String.valueOf(game.numPlayers);
+       // }
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isEmpty()) {
             return "no user found";
@@ -58,46 +58,64 @@ public class GameController {
             return "password incorrect" + "\n correct is:"+optional.get().getPassword() +" real:"+passwordHash;
         } else {
             int position = 0;
-            for(User user: hand.getPlayerArr()) {
+            for(User user: game.userArr) {
                 if(user!=null && user.getUsername().equals(username)) {
                     break;
                 }
                 position++;
             }
+            if(position == 8){
+                return "player is not in the game";
+            }
             StringBuilder gameString = new StringBuilder("{\n" +
-                    "    users: [");
+                    "    \"users\": [");
             for(User user: game.getAllUsers()) {
                 gameString.append(objectMapper.writeValueAsString(user)).append(",");
             }
             if(gameString.charAt(gameString.length()-1) == ',') {
                 gameString.deleteCharAt(gameString.length() - 1);
             }
-            gameString.append("],\n" + "    profits: {");
+            gameString.append("],\n" + "    \"profits\": {");
             for(int i=0; i<8; i++) {
                 if(game.getAllUsers()[i]!=null) {
-                    gameString.append(game.getAllUsers()[i].getUsername()).append(":").append(game.remainingChips[i] - game.totalBuyin[i]).append(",");
+                    gameString.append("\"").append(game.getAllUsers()[i].getUsername()).append("\":").append(game.remainingChips[i] - game.totalBuyin[i]).append(",");
                 }
             }
             if(gameString.charAt(gameString.length()-1) == ',') {
                 gameString.deleteCharAt(gameString.length() - 1);
             }
-            gameString.append("},\n    communityCards: ").append(Arrays.toString(hand.getCommunityCards()));
-            gameString.append(",\n" + "    pot: ").append(hand.getPot());
-            gameString.append(",\n" + "    selfHand: [").append(hand.getPlayerCards()[position].getPlayerHand()[0]).append(",").append((hand.getPlayerCards()[position].getPlayerHand()[1]));
-            gameString.append("],\n" + "    selfPosition:").append(position);
-            gameString.append(",\n" + "    minimumRaiseAmount:").append(hand.getMaxBetInThisPhase()*2);
-            gameString.append(",\n" + "    actionPosition:").append(hand.getActionOnWhichPlayer()); // TODO
-            gameString.append(",\n" + "    dealerPosition:").append(game.dealerPos);
-            gameString.append(",\n" + "    state:").append(hand.getState());
-            gameString.append(",\n" + "    numActionLeft:").append(hand.numActionLeft);
-            gameString.append("\n}");
+            gameString.append("},\n    \"gameOn\": ").append(String.valueOf(game.ongoing));
+            if(game.ongoing) {
+                gameString.append(",\n    \"communityCards\": ").append(Arrays.toString(hand.getCommunityCards()));
+                gameString.append(",\n" + "    \"pot\": ").append(hand.getPot());
+                gameString.append(",\n" + "    \"selfHand\": [").append(hand.getPlayerCards()[position].getPlayerHand()[0]).append(",").append((hand.getPlayerCards()[position].getPlayerHand()[1]));
+                gameString.append("],\n" + "    \"selfPosition\":").append(position);
+                gameString.append(",\n" + "    \"minimumRaiseAmount\":").append(hand.getMaxBetInThisPhase() * 2);
+                gameString.append(",\n" + "    \"actionPosition\":").append(hand.getActionOnWhichPlayer());
+                gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
+                gameString.append(",\n" + "    \"state\":").append(hand.getState());
+                gameString.append(",\n" + "    \"numActionLeft\":").append(hand.numActionLeft);
+                gameString.append("\n}");
+            }
+            else{
+                gameString.append(",\n    \"communityCards\": ").append("\"\"");
+                gameString.append(",\n" + "    \"pot\": ").append("\"\"");
+                gameString.append(",\n" + "    \"selfHand\": [").append("\"\"");
+                gameString.append("],\n" + "    \"selfPosition\":").append(position);
+                gameString.append(",\n" + "    \"minimumRaiseAmount\":").append("\"\"");
+                gameString.append(",\n" + "    \"actionPosition\":").append("\"\"");
+                gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
+                gameString.append(",\n" + "    \"state\":").append("\"\"");
+                gameString.append(",\n" + "    \"numActionLeft\":").append("\"\"");
+                gameString.append("\n}");
+            }
             return gameString.toString();
         }
 
     }
 
     @PostMapping("/games/join")
-    public String joinGameById(@RequestParam String username, @RequestParam int position, @RequestParam int buyin) {
+    public String joinGameByUsername(@RequestParam String username, @RequestParam int position, @RequestParam int buyin) {
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent()) {
             User user = optional.get();
