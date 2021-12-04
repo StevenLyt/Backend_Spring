@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 //
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 @RestController
 @RequestMapping(name ="/api")
@@ -76,6 +78,10 @@ public class GameController {
                 gameString.deleteCharAt(gameString.length() - 1);
             }
             gameString.append("],\n" + "    \"profits\": {");
+            
+            Map<String,Integer> map= new TreeMap<>();
+
+
             for(int i=0; i<8; i++) {
                 if(game.getAllUsers()[i]!=null) {
                     gameString.append("\"").append(game.getAllUsers()[i].getUsername()).append("\":").append(game.remainingChips[i] - game.totalBuyin[i]).append(",");
