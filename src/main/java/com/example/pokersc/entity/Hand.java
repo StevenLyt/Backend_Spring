@@ -255,6 +255,7 @@ public class Hand {
             this.currentAction = null;
             numActionLeft --;
         }
+        int winnerPos = getWinner();
         //end river
     }
 
