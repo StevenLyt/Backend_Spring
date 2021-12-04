@@ -39,10 +39,10 @@ public class Game {
 
     public void updatePos(){
        this.dealerPos ++;
-       this.dealerPos &= 8;
+       this.dealerPos %= 8;
        while(userArr[dealerPos] == null){
            this.dealerPos ++;
-           this.dealerPos &= 8;
+           this.dealerPos %= 8;
        }
     }
 

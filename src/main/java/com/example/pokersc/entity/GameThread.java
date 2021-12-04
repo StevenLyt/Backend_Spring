@@ -11,10 +11,10 @@ public class GameThread extends Thread{
     }
 
     public void run(){
-        try {
+        //try {
             while (true) {
                 if (game.numPlayers < 3) {
-                    Thread.sleep(1000);
+                    continue;
                 } else {
                     game.updatePos();
                     hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
@@ -24,10 +24,10 @@ public class GameThread extends Thread{
                     hand.saveStats();
                 }
             }
-        }
-        catch (InterruptedException e) {
+        //}
+        /*catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 }

@@ -387,4 +387,16 @@ public class Hand {
     public int getState() {
         return state;
     }
+
+
+    private int getWinner() {
+        int winner = 0;
+        for (int i = 1; i < 8; i++) {
+            if (playerCards[i].getPlayerHand().length == 0)
+                continue;
+            winner = HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[winner].getPlayerHand()).stream()).collect(Collectors.toList())).compareTo(HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[i].getPlayerHand()).stream()).collect(Collectors.toList()))) == -1 ? i : winner;
+        }
+        return winner;
+    }
 }
+
