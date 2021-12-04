@@ -8,11 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 //
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
 @RestController
 @RequestMapping(name ="/api")
@@ -27,6 +25,31 @@ public class GameController {
     private GameThread gameThread = new GameThread();
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public class Struct{
+        String username;
+        int profit;
+        public Struct(String s, int p){
+            username = s;
+            profit = p;
+        }
+    }
+    class StructComparator implements Comparator<Struct>{
+        @Override
+        public int compare(Struct o1, Struct o2) {
+            int result;
+            if(o1.profit == o2.profit){
+                result = 0;
+            }
+            else if(o1.profit < o2.profit){
+                result = 1;
+            }
+            else {
+                result = -1;
+            }
+            return result;
+        }
+    }
 
     public GameController(){
         this.gameThread.start();
@@ -77,22 +100,30 @@ public class GameController {
             if(gameString.charAt(gameString.length()-1) == ',') {
                 gameString.deleteCharAt(gameString.length() - 1);
             }
-            gameString.append("],\n" + "    \"profits\": {");
-            
-            Map<String,Integer> map= new TreeMap<>();
+            gameString.append("],\n" + "    \"profits\": [");
 
-
+            ArrayList<Struct> profitList = new ArrayList<>();
             for(int i=0; i<8; i++) {
                 if(game.getAllUsers()[i]!=null) {
-                    gameString.append("\"").append(game.getAllUsers()[i].getUsername()).append("\":").append(game.remainingChips[i] - game.totalBuyin[i]).append(",");
+                    Struct s = new Struct(game.getAllUsers()[i].getUsername(), game.remainingChips[i] - game.totalBuyin[i]);
+                    profitList.add(s);
                 }
+            }
+            Collections.sort(profitList, new StructComparator());
+            for(Struct struct : profitList){
+                gameString.append("\"").append(struct.username).append(":").append(struct.profit).append("\",");
             }
             if(gameString.charAt(gameString.length()-1) == ',') {
                 gameString.deleteCharAt(gameString.length() - 1);
             }
-            gameString.append("},\n    \"gameOn\": ").append(String.valueOf(game.ongoing));
+            gameString.append("],\n    \"gameOn\": ").append(String.valueOf(game.ongoing));
             if(game.ongoing) {
-                gameString.append(",\n    \"communityCards\": ").append(Arrays.toString(hand.getCommunityCards()));
+                gameString.append(",\n    \"remainingChips\": ").append(Arrays.toString(hand.getRemainingStack()));
+                Card[] temp = new Card[5];
+                for(int i = 0; i < hand.getState(); i++){
+                    temp[i] = hand.getCommunityCards()[i];
+                }
+                gameString.append(",\n    \"communityCards\": ").append(Arrays.toString(temp));
                 gameString.append(",\n" + "    \"pot\": ").append(hand.getPot());
                 gameString.append(",\n" + "    \"selfHand\": [").append(hand.getPlayerCards()[position].getPlayerHand()[0]).append(",").append((hand.getPlayerCards()[position].getPlayerHand()[1]));
                 gameString.append("],\n" + "    \"selfPosition\":").append(position);
@@ -104,6 +135,7 @@ public class GameController {
                 gameString.append("\n}");
             }
             else{
+                gameString.append(",\n    \"remainingChips\": ").append(Arrays.toString(game.remainingChips));
                 gameString.append(",\n    \"communityCards\": ").append("\"\"");
                 gameString.append(",\n" + "    \"pot\": ").append("\"\"");
                 gameString.append(",\n" + "    \"selfHand\": [").append("\"\"");
