@@ -44,13 +44,19 @@ POST /games?username={}&passwordHash={}
 - Join game
 
 ```
-POST /games?username={}&position={}&buyin={}
+POST /games?username={}&
 ```
 
 - Leave game
 
 ```
-POST /games/leave?username={}
+POST /games/{game_id}/{user_id}/leave
+```
+
+- Request info of a single game
+
+```
+GET /games/{room_id/game_id}
 ```
 
 - User in-game actions
