@@ -11,11 +11,13 @@ public class GameThread extends Thread{
     }
 
     public void run(){
-        //try {
+        try {
             while (true) {
                 if (game.numPlayers < 3) {
-                    continue;
+                    game.ongoing = false;
+                    Thread.sleep(1000);
                 } else {
+                    game.ongoing = true;
                     game.updatePos();
                     hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
                     hand.startHand();
@@ -24,10 +26,10 @@ public class GameThread extends Thread{
                     hand.saveStats();
                 }
             }
-        //}
-        /*catch (InterruptedException e) {
+        }
+        catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
 }
