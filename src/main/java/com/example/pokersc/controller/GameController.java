@@ -102,6 +102,12 @@ public class GameController {
         if(optional.isPresent()) {
             User user = optional.get();
             //TODO: call something like addUser();
+            if(game.userArr[position]!=null){
+                return "failure";
+            }
+            if (position<0 || position >7){
+                return "failure";
+            }
             reception.addPlayer(user,buyin,position);
             return "success";
         } else {
@@ -118,6 +124,7 @@ public class GameController {
     @PostMapping("/games/leave")
     public String leaveGameByUsername(@RequestParam String username) {
         User user = game.getUserByUsername(username);
+        if(user==null){return "failure";}
         reception.removePlayer(user);
         return "success";
     }
