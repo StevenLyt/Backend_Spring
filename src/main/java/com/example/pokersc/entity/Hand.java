@@ -153,7 +153,7 @@ public class Hand {
         this.chipPutInThisPhase[bigBlind] = 2;
         this.maxBetInThisPhase = 2;
         numActionLeft = numPlayers;
-        while(!readyForNextRound() && numActionLeft != 0){
+        while(!readyForNextRound() || numActionLeft != 0){
             while (true){
                 if(currentAction != null){
                     break;
