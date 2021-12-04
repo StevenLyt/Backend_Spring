@@ -1,4 +1,4 @@
-# Front-Back interation API
+# Front-Back interaction API
 
 - Log in
 
