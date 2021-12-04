@@ -139,8 +139,8 @@ public class GameController {
     public String userCheck(@RequestParam String username) {
         Hand hand = this.gameThread.hand;
         int pos = hand.getActionOnWhichPlayer();
-        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
-            Action action = new Action(Action.Act.CHECK);
+        Action action = new Action(Action.Act.CHECK);
+        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username) && hand.checkAction(pos,action)) {
             hand.addAction(action);
             return "success";
         } else {
@@ -152,8 +152,8 @@ public class GameController {
     public String userCall( @RequestParam String username) {
         Hand hand = this.gameThread.hand;
         int pos = hand.getActionOnWhichPlayer();
-        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
-            Action action = new Action(Action.Act.CALL);
+        Action action = new Action(Action.Act.CALL);
+        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username) && hand.checkAction(pos,action)) {
             hand.addAction(action);
             return "success";
         } else {
@@ -165,8 +165,8 @@ public class GameController {
     public String userRaise(@RequestParam String username, @RequestParam int amount) {
         Hand hand = this.gameThread.hand;
         int pos = hand.getActionOnWhichPlayer();
-        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
-            Action action = new Action(Action.Act.RAISE, amount);
+        Action action = new Action(Action.Act.RAISE, amount);
+        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username) && hand.checkAction(pos,action)) {
             hand.addAction(action);
             return "success";
         } else {

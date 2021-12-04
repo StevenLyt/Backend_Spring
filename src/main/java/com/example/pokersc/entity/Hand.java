@@ -158,7 +158,7 @@ public class Hand {
         this.remainingStack[bigBlind] -= 2;
         this.maxBetInThisPhase = 2;
         numActionLeft = numPlayers;
-        while(!readyForNextRound() || numActionLeft != 0){
+        while(!readyForNextRound() || numActionLeft > 0){
             while (true){
                 if(currentAction != null){
                     break;
@@ -185,7 +185,7 @@ public class Hand {
             actionOnWhichPlayer ++;
             actionOnWhichPlayer %= 8;
         }
-        while(!readyForNextRound() || numActionLeft != 0) {
+        while(!readyForNextRound() || numActionLeft > 0) {
             while (true){
                 if(currentAction != null){
                     break;
@@ -212,7 +212,7 @@ public class Hand {
             actionOnWhichPlayer ++;
             actionOnWhichPlayer %= 8;
         }
-        while(!readyForNextRound() || numActionLeft != 0) {
+        while(!readyForNextRound() || numActionLeft > 0) {
             while (true){
                 if(currentAction != null){
                     break;
@@ -239,7 +239,7 @@ public class Hand {
             actionOnWhichPlayer ++;
             actionOnWhichPlayer %= 8;
         }
-        while(!readyForNextRound() || numActionLeft != 0) {
+        while(!readyForNextRound() || numActionLeft > 0) {
             while (true){
                 if(currentAction != null){
                     break;
@@ -360,16 +360,16 @@ public class Hand {
     }
 
     // Above is written by Jason
-    private boolean checkAction(int pos) {
-        if (this.currentAction.getAct() == Action.Act.CHECK) {
+    public boolean checkAction(int pos, Action action) {
+        if (action.getAct() == Action.Act.CHECK) {
             if (this.chipPutInThisPhase[pos] != this.maxBetInThisPhase)
                 return false;
-        } else if (this.currentAction.getAct() == Action.Act.RAISE) {
-            if (this.currentAction.getAmount() < 2 * this.maxBetInThisPhase)
+        } else if (action.getAct() == Action.Act.RAISE) {
+            if (action.getAmount() < 2 * this.maxBetInThisPhase)
                 return false;
-            else if (this.remainingStack[pos] < this.currentAction.getAmount())
+            else if (this.remainingStack[pos] < action.getAmount())
                 return false;
-        } else if (this.currentAction.getAct() == Action.Act.CALL) {
+        } else if (action.getAct() == Action.Act.CALL) {
             if (this.remainingStack[pos] < this.maxBetInThisPhase - this.chipPutInThisPhase[pos])
                 return false;
         }
