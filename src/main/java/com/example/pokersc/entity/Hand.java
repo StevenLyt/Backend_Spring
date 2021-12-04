@@ -153,7 +153,9 @@ public class Hand {
             this.chipPutInThisPhase[i] = 0;
         }
         this.chipPutInThisPhase[smallBlind] = 1;
+        this.remainingStack[smallBlind] -= 1;
         this.chipPutInThisPhase[bigBlind] = 2;
+        this.remainingStack[bigBlind] -= 2;
         this.maxBetInThisPhase = 2;
         numActionLeft = numPlayers;
         while(!readyForNextRound() || numActionLeft != 0){
@@ -299,15 +301,15 @@ public class Hand {
             this.numPlayers --;
         }
         else if(currentAction.getAct() == Action.Act.CALL){
+            this.pot += (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
+            this.remainingStack[pos] -= (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
             this.chipPutInThisPhase[pos] = maxBetInThisPhase;
-            this.pot += maxBetInThisPhase;
-            this.remainingStack[pos] -= maxBetInThisPhase;
         }
         else if(currentAction.getAct() == Action.Act.RAISE){
             maxBetInThisPhase = currentAction.getAmount();
-            this.pot +=  maxBetInThisPhase;
+            this.remainingStack[pos] -= (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
+            this.pot += (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
             this.chipPutInThisPhase[pos] = maxBetInThisPhase;
-            this.remainingStack[pos] -= maxBetInThisPhase;
         }
     }
 
