@@ -78,9 +78,9 @@ public class GameController {
        // }
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isEmpty()) {
-            return "no user found";
+            return "user not found";
         } else if(!optional.get().getPassword().equals(passwordHash)) {
-            return "password incorrect" + "\n correct is:"+optional.get().getPassword() +" real:"+passwordHash;
+            return "password incorrect";
         } else {
             int position = 0;
             for(User user: game.userArr) {
@@ -90,7 +90,87 @@ public class GameController {
                 position++;
             }
             if(position == 8){
-                return "player is not in the game";
+                StringBuilder gameString = new StringBuilder("{\n" +
+                        "    \"users\": [");
+                int userPos = 0;
+                for(User user: game.userArr) {
+                    if(user == null){
+                        gameString.append("null,");
+                        userPos ++;
+                        continue;
+                    }
+                    gameString.append("{");
+                    gameString.append("\"username\": \"").append(user.getUsername()).append("\",");
+                    gameString.append("\"currentAction\": \"").append(game.ongoing ? hand.getPlayerActions()[userPos] : "").append("\",");
+                    gameString.append("\"currentBet\": ").append(game.ongoing ? hand.getChipPutInThisPhase()[userPos] : 0).append(",");
+                    gameString.append("\"remainingChips\": ").append(game.ongoing ? hand.getRemainingStack()[userPos] : game.remainingChips[userPos]).append(",");
+                    gameString.append("\"totalProfit\": ").append(user.getTotal_profit()).append(",");
+                    gameString.append("\"currentProfit\": ").append(game.ongoing ? hand.getRemainingStack()[userPos] - game.totalBuyin[userPos] : game.remainingChips[userPos] - game.totalBuyin[userPos]).append(",");
+                    gameString.append("\"winRate\": ").append((double) user.getTotal_win()/(user.getTotal_round()+1)).append(",");
+                    gameString.append("\"hand\": ").append(game.ongoing ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
+                    gameString.append("\"profileUrl\": \"").append(user.getProfile_url()).append("\",");
+                    gameString.append("\"ifFold\": ").append(game.ongoing ? !hand.getActive()[userPos] : false).append(",");
+                    gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
+                    gameString.append("\"isSelf\": ").append(false).append(",");
+                    gameString.append("\"isActive\": ").append(game.ongoing ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
+                    gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
+                    gameString.append("},");
+                    userPos++;
+                }
+                if(gameString.charAt(gameString.length()-1) == ',') {
+                    gameString.deleteCharAt(gameString.length() - 1);
+                }
+                gameString.append("],\n" + "    \"playersProfits\": [");
+                ArrayList<Struct> profitList = new ArrayList<>();
+                for(int i=0; i<8; i++) {
+                    if(game.getAllUsers()[i]!=null) {
+                        Struct s = new Struct(game.getAllUsers()[i].getUsername(), game.remainingChips[i] - game.totalBuyin[i]);
+                        profitList.add(s);
+                    }
+                }
+                Collections.sort(profitList, new StructComparator());
+                for(Struct struct : profitList){
+                    gameString.append("\"").append(struct.username).append(":").append(struct.profit).append("\",");
+                }
+                if(gameString.charAt(gameString.length()-1) == ',') {
+                    gameString.deleteCharAt(gameString.length() - 1);
+                }
+                gameString.append("],\n    \"selfProfit\": ").append(0);
+                gameString.append(",\n    \"gameOn\": ").append(String.valueOf(game.ongoing));
+                if(game.ongoing) {
+                    gameString.append(",\n    \"remainingChips\": ").append(Arrays.toString(hand.getRemainingStack()));
+                    Card[] temp = new Card[5];
+                    for(int i = 0; i < hand.getState(); i++){
+                        temp[i] = hand.getCommunityCards()[i];
+                    }
+                    gameString.append(",\n    \"communityCards\": ").append(Arrays.toString(temp));
+                    gameString.append(",\n" + "    \"pot\": ").append(hand.getPot());
+                    gameString.append(",\n" + "    \"selfHand\": [").append("\"\",\"\"]");
+                    gameString.append("],\n" + "    \"selfPosition\":").append(5);
+                    gameString.append(",\n" + "    \"minimumRaiseAmount\":").append(hand.getMaxBetInThisPhase() * 2);
+                    gameString.append(",\n" + "    \"actionPosition\":").append(hand.getActionOnWhichPlayer());
+                    gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
+                    gameString.append(",\n" + "    \"state\":").append(hand.getState());
+                    gameString.append(",\n" + "    \"winner\":").append(hand.getWinnerPos());
+                    gameString.append(",\n" + "    \"numActionLeft\":").append(hand.numActionLeft);
+                    gameString.append("\n}");
+                }
+                else{
+                    gameString.append(",\n    \"remainingChips\": ").append(Arrays.toString(game.remainingChips));
+                    gameString.append(",\n    \"communityCards\": ").append("\"\"");
+                    gameString.append(",\n" + "    \"pot\": ").append("\"\"");
+                    gameString.append(",\n" + "    \"selfHand\": [").append("\"\"");
+                    gameString.append("],\n" + "    \"selfPosition\":").append(5);
+                    gameString.append(",\n" + "    \"minimumRaiseAmount\":").append("\"\"");
+                    gameString.append(",\n" + "    \"actionPosition\":").append("\"\"");
+                    gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
+                    gameString.append(",\n" + "    \"state\":").append("\"\"");
+                    gameString.append(",\n" + "    \"numActionLeft\":").append("\"\"");
+                    gameString.append("\n}");
+                }
+                return gameString.toString();
+        
+            
             }
             StringBuilder gameString = new StringBuilder("{\n" +
                     "    \"users\": [");

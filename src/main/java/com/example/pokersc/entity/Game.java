@@ -34,7 +34,7 @@ public class Game {
     public boolean rebuy(String username, int amount){
         while(ongoing){}
         for(int i = 0; i < userArr.length; i++){
-            if (userArr[i].getUsername().equals(username)){
+            if (userArr[i]!=null && userArr[i].getUsername().equals(username)){
                 totalBuyin[i] += amount;
                 remainingChips[i] += amount;
                 return true;
@@ -63,7 +63,7 @@ public class Game {
 
     public void deleteUser(String username){
         for(int i = 0; i < userArr.length; i++){
-            if (userArr[i].getUsername().equals(username))
+            if (userArr[i]!=null && userArr[i].getUsername().equals(username))
             {
                 userArr[i] = null;
                 totalBuyin[i] = 0;
@@ -76,7 +76,7 @@ public class Game {
     public int getBalance(String username){
         int index = 0;
         for(int i =0; i<8;i++){
-            if (userArr[i].getUsername().equals(username)){
+            if (userArr[i]!=null && userArr[i].getUsername().equals(username)){
                 index = i;
             }
         }
