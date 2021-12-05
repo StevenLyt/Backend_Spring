@@ -94,6 +94,8 @@ public class HandRanker {
             if(ranks.containsAll(straight))  {
                 handCards = allCards.stream()
                         .filter(c -> straight.contains(c.getRank()))
+                        .sorted()
+                        .limit(FULL_HAND)
                         .collect(toList());
 
                 pokerHand = new PokerHand(HAND_RANK.STRAIGHT, handCards);

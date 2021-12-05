@@ -174,6 +174,40 @@ public class Hand {
         }
     }
 
+    private void runPhase(){
+        this.initializePhase();
+        numActionLeft = numPlayers;
+        this.actionOnWhichPlayer = smallBlind;
+        while (!active[actionOnWhichPlayer]) {
+            actionOnWhichPlayer++;
+            actionOnWhichPlayer %= 8;
+        }
+        while (numActionLeft > 0 && numPlayers > 1) {
+            this.timeLeft = 60;
+            boolean didAction = false;
+            long timestamp = System.currentTimeMillis() / 1000;
+            while (this.timeLeft > 0){
+                if (currentAction != null) {
+                    didAction = true;
+                    break;
+                }
+                timeLeft = 60 - (System.currentTimeMillis() / 1000 - timestamp);
+            }
+            if(didAction == false){
+                Action action = this.maxBetInThisPhase == 0 ? new Action(Action.Act.CHECK) : new Action(Action.Act.FOLD);
+                addAction(action);
+            }
+            doAction(actionOnWhichPlayer);
+            actionOnWhichPlayer++; //first action on UTG;
+            actionOnWhichPlayer %= 8;
+            while (playerArr[actionOnWhichPlayer] == null || !active[actionOnWhichPlayer]) {
+                actionOnWhichPlayer++;
+                actionOnWhichPlayer %= 8;
+            }
+            this.currentAction = null;
+        }
+    }
+
     public void startHand() {
         //shuffle the deck.
         this.deck.shuffle();
@@ -199,7 +233,7 @@ public class Hand {
         this.potForEachPlayer[bigBlind] += 2;
         this.maxBetInThisPhase = 2;
         numActionLeft = numPlayers;
-        while(numActionLeft > 0){
+        while(numActionLeft > 0 && !(numPlayers == 1 && actionOnWhichPlayer == bigBlind && maxBetInThisPhase == 2)){
             this.timeLeft = 60;
             boolean didAction = false;
             long timestamp = System.currentTimeMillis() / 1000;
@@ -228,96 +262,36 @@ public class Hand {
         state = 3;
         //flop
         if(!isFinished()) {
-            this.initializePhase();
-            numActionLeft = numPlayers;
-            this.actionOnWhichPlayer = smallBlind;
-            while (!active[actionOnWhichPlayer]) {
-                actionOnWhichPlayer++;
-                actionOnWhichPlayer %= 8;
-            }
-            while (numActionLeft > 0) {
-                while (true) {
-                    if (currentAction != null) {
-                        break;
-                    }
-                }
-                doAction(actionOnWhichPlayer);
-                actionOnWhichPlayer++; //first action on UTG;
-                actionOnWhichPlayer %= 8;
-                while (playerArr[actionOnWhichPlayer] == null) {
-                    actionOnWhichPlayer++;
-                    actionOnWhichPlayer %= 8;
-                }
-                this.currentAction = null;
-            }
+            this.runPhase();
         }
         //end flop
 
         state = 4;
         //turn
         if(!isFinished()) {
-            this.initializePhase();
-            numActionLeft = numPlayers;
-            this.actionOnWhichPlayer = smallBlind;
-            while (!active[actionOnWhichPlayer]) {
-                actionOnWhichPlayer++;
-                actionOnWhichPlayer %= 8;
-            }
-            while (numActionLeft > 0) {
-                while (true) {
-                    if (currentAction != null) {
-                        break;
-                    }
-                }
-                doAction(actionOnWhichPlayer);
-                actionOnWhichPlayer++; //first action on UTG;
-                actionOnWhichPlayer %= 8;
-                while (playerArr[actionOnWhichPlayer] == null) {
-                    actionOnWhichPlayer++;
-                    actionOnWhichPlayer %= 8;
-                }
-                this.currentAction = null;
-            }
+            this.runPhase();
         }
         // end turn
 
         state = 5;
         //river
         if(!isFinished()) {
-            this.initializePhase();
-            numActionLeft = numPlayers;
-            this.actionOnWhichPlayer = smallBlind;
-            while (!active[actionOnWhichPlayer]) {
-                actionOnWhichPlayer++;
-                actionOnWhichPlayer %= 8;
-            }
-            while (numActionLeft > 0) {
-                while (true) {
-                    if (currentAction != null) {
-                        break;
-                    }
-                }
-                doAction(actionOnWhichPlayer);
-                actionOnWhichPlayer++; //first action on UTG;
-                actionOnWhichPlayer %= 8;
-                while (playerArr[actionOnWhichPlayer] == null) {
-                    actionOnWhichPlayer++;
-                    actionOnWhichPlayer %= 8;
-                }
-                this.currentAction = null;
-            }
+            this.runPhase();
         }
         //end river
 
         int numActive = 0;
         for(int i = 0; i < 8; i++){
             if(active[i]){
-                numActive ++;
-                readyForShowDown[i] = true;
+                numActive++;
             }
         }
-
         if(numActive > 1) {
+            for(int i = 0; i < 8; i++){
+            if(active[i]){
+                readyForShowDown[i] = true;
+                }
+            }
             this.winnerPos = getWinner();
         }
         else {
@@ -404,10 +378,11 @@ public class Hand {
             this.active[pos] = false;
             numActionLeft --;
             this.numPlayers --;
+            System.out.println(Arrays.toString(this.active));
         }
         else if(currentAction.getAct() == Action.Act.CALL){
             //all in
-            if(remainingStack[pos] < maxBetInThisPhase - chipPutInThisPhase[pos]) {
+            if(remainingStack[pos] <= maxBetInThisPhase - chipPutInThisPhase[pos]) {
                 this.pot += remainingStack[pos];
                 this.potForEachPlayer[pos] = startingStack[pos];
                 this.chipPutInThisPhase[pos] += remainingStack[pos];
@@ -436,6 +411,9 @@ public class Hand {
                 numPlayers--;
                 this.isAllin[pos] = true;
             }
+        }
+        else if(currentAction.getAct() == Action.Act.CHECK){
+            numActionLeft --;
         }
     }
 
@@ -493,7 +471,7 @@ public class Hand {
         } else if (action.getAct() == Action.Act.RAISE) {
             if (action.getAmount() < 2 * this.maxBetInThisPhase) {
                 // not allin and less than mini-raise
-                if(action.getAmount() != (this.remainingStack[pos] + this.chipPutInThisPhase[pos]))
+                if(action.getAmount() != this.remainingStack[pos]+this.chipPutInThisPhase[pos])
                     return false;
             }
             else if (this.remainingStack[pos] + this.chipPutInThisPhase[pos] < action.getAmount())
@@ -515,7 +493,11 @@ public class Hand {
                 winner = i;
                 continue;
             }
-            winner = HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[winner].getPlayerHand()).stream()).collect(Collectors.toList())).compareTo(HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[i].getPlayerHand()).stream()).collect(Collectors.toList()))) == -1 ? i : winner;
+            PokerHand curWinnerHand = HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[winner].getPlayerHand()).stream()).collect(Collectors.toList()));
+            PokerHand candidateHand = HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[i].getPlayerHand()).stream()).collect(Collectors.toList()));
+            if(curWinnerHand.compareTo(candidateHand) == -1){
+                winner = i;
+            }
         }
         return winner;
     }

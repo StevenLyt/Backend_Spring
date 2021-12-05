@@ -104,9 +104,9 @@ public class GameController {
                     gameString.append("\"totalProfit\": ").append(user.getTotal_profit()).append(",");
                     gameString.append("\"currentProfit\": ").append(game.ongoing ? hand.getRemainingStack()[userPos] - game.totalBuyin[userPos] : game.remainingChips[userPos] - game.totalBuyin[userPos]).append(",");
                     gameString.append("\"winRate\": ").append((double) user.getTotal_win()/(user.getTotal_round()+1)).append(",");
-                    gameString.append("\"hand\": ").append(game.ongoing ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
+                    gameString.append("\"hand\": ").append(game.ongoing && hand.getReadyForShowDown()[userPos] ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
                     gameString.append("\"profileUrl\": \"").append(user.getProfile_url()).append("\",");
-                    gameString.append("\"ifFold\": ").append(game.ongoing ? !hand.getActive()[userPos] : false).append(",");
+                    gameString.append("\"ifFold\": ").append(game.ongoing ? (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos]) : false).append(",");
                     gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
                     gameString.append("\"isSelf\": ").append(user.getUsername() == username).append(",");
                     gameString.append("\"isActive\": ").append(false).append(",");
@@ -143,13 +143,13 @@ public class GameController {
                     gameString.append(",\n    \"communityCards\": ").append(Arrays.toString(temp));
                     gameString.append(",\n" + "    \"pot\": ").append(hand.getPot());
                     gameString.append(",\n" + "    \"selfHand\": [").append("\"\",\"\"]");
-                    gameString.append(",\n" + "    \"selfPosition\":").append(5);
+                    gameString.append(",\n" + "    \"selfPosition\":").append(-1);
                     gameString.append(",\n" + "    \"minimumRaiseAmount\":").append(hand.getMaxBetInThisPhase() * 2);
                     gameString.append(",\n" + "    \"actionPosition\":").append(hand.getActionOnWhichPlayer());
                     gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
                     gameString.append(",\n" + "    \"state\":").append(hand.getState());
                     gameString.append(",\n" + "    \"winner\":").append(hand.getWinnerPos());
-                     gameString.append(",\n" + "    \"timeLeft\":").append(hand.timeLeft);
+                    gameString.append(",\n" + "    \"timeLeft\":").append(hand.timeLeft);
                     gameString.append(",\n" + "    \"numActionLeft\":").append(hand.numActionLeft);
                     gameString.append("\n}");
                 }
@@ -158,7 +158,7 @@ public class GameController {
                     gameString.append(",\n    \"communityCards\": ").append("\"\"");
                     gameString.append(",\n" + "    \"pot\": ").append("\"\"");
                     gameString.append(",\n" + "    \"selfHand\": [").append("\"\"");
-                    gameString.append("],\n" + "    \"selfPosition\":").append(5);
+                    gameString.append("],\n" + "    \"selfPosition\":").append(-1);
                     gameString.append(",\n" + "    \"minimumRaiseAmount\":").append("\"\"");
                     gameString.append(",\n" + "    \"actionPosition\":").append("\"\"");
                     gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
@@ -191,7 +191,7 @@ public class GameController {
 
                 gameString.append("\"hand\": ").append(game.ongoing && (hand.getReadyForShowDown()[userPos] || user.getUsername().equals(username)) ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
                 gameString.append("\"profileUrl\": \"").append(user.getProfile_url()).append("\",");
-                gameString.append("\"ifFold\": ").append(game.ongoing ? !hand.getActive()[userPos] : false).append(",");
+                gameString.append("\"ifFold\": ").append(game.ongoing ? (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos]) : false).append(",");
                 gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
                 gameString.append("\"isSelf\": ").append(user.getUsername().equals(username)).append(",");
                 gameString.append("\"isActive\": ").append(!game.handend ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
@@ -239,7 +239,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"startingStack\":").append(Arrays.toString(hand.getStartingStack()));
                 gameString.append(",\n" + "    \"isAllin\":").append(Arrays.toString(hand.getIsAllin()));
                 gameString.append(",\n" + "    \"isFinished\":").append(Boolean.toString(hand.isFinished()));
-                gameString.append(",\n" + "    \"canCheck\":").append(hand.getMaxBetInThisPhase() == 0);
+                gameString.append(",\n" + "    \"canCheck\":").append(hand.getMaxBetInThisPhase() == 0 || position == hand.getBigBlind() && hand.getState() == 0 && hand.getMaxBetInThisPhase() == 2);
                 gameString.append(",\n" + "    \"timeLeft\":").append(hand.timeLeft);
                 gameString.append(",\n" + "    \"numPlayers\":").append(hand.getNumPlayers());
 
