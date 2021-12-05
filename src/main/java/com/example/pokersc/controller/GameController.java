@@ -172,9 +172,13 @@ public class GameController {
     }
 
     @PostMapping("/games/buyin")
-    public void userBuyin(@RequestParam String username, @RequestParam int amount) {
+    public String userBuyin(@RequestParam String username, @RequestParam int amount) {
         // TODO buyin during game
-        game.rebuy(username,amount);
+        boolean result = game.rebuy(username,amount);
+        if(result){
+            return "success";
+        }
+        return "failure";
     }
 
     @PostMapping("/games/leave")
