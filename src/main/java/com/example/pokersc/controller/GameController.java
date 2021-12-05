@@ -149,7 +149,7 @@ public class GameController {
                     gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
                     gameString.append(",\n" + "    \"state\":").append(hand.getState());
                     gameString.append(",\n" + "    \"winner\":").append(hand.getWinnerPos());
-                    gameString.append(",\n" + "    \"timeLeft\":").append(hand.timeLeft);
+                    gameString.append(",\n" + "    \"timeLeft\":").append(game.handend ? "\"\"": hand.timeLeft);
                     gameString.append(",\n" + "    \"numActionLeft\":").append(hand.numActionLeft);
                     gameString.append("\n}");
                 }
@@ -240,7 +240,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"isAllin\":").append(Arrays.toString(hand.getIsAllin()));
                 gameString.append(",\n" + "    \"isFinished\":").append(Boolean.toString(hand.isFinished()));
                 gameString.append(",\n" + "    \"canCheck\":").append(hand.getMaxBetInThisPhase() == 0 || position == hand.getBigBlind() && hand.getState() == 0 && hand.getMaxBetInThisPhase() == 2);
-                gameString.append(",\n" + "    \"timeLeft\":").append(hand.timeLeft);
+                gameString.append(",\n" + "    \"timeLeft\":").append(game.handend ? "\"\"":hand.timeLeft);
                 gameString.append(",\n" + "    \"numPlayers\":").append(hand.getNumPlayers());
 
                 gameString.append("\n}");
