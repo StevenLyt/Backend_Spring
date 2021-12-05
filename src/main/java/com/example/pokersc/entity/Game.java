@@ -30,13 +30,16 @@ public class Game {
         this.numPlayers++;
     }
 
-    public void rebuy(String username, int amount){
+    //return true if buyin is complete
+    public boolean rebuy(String username, int amount){
         for(int i = 0; i < userArr.length; i++){
             if (userArr[i].getUsername().equals(username)){
                 totalBuyin[i] += amount;
                 remainingChips[i] += amount;
+                return true;
             }
         }
+        return false;
     }
 
     public void updatePos(){
