@@ -94,17 +94,11 @@ public class GameController {
             }
             StringBuilder gameString = new StringBuilder("{\n" +
                     "    \"users\": [");
+            int userPos = 0;
             for(User user: game.userArr) {
                 if(user == null){
                     gameString.append("null,");
                     continue;
-                }
-                int userPos = 0;
-                for(User u: game.userArr) {
-                    if(u!=null && u.getUsername().equals(user.getUsername())) {
-                        break;
-                    }
-                    position++;
                 }
                 gameString.append("{");
                 gameString.append("\"username\": ").append(user.getUsername());
@@ -122,6 +116,7 @@ public class GameController {
                 gameString.append("\"isActive\": ").append(game.ongoing ? hand.getActionOnWhichPlayer() == userPos : false); //
                 gameString.append("\"isWinner\": ").append(userPos == hand.getWinnerPos());
                 gameString.append("},");
+                userPos++;
             }
             if(gameString.charAt(gameString.length()-1) == ',') {
                 gameString.deleteCharAt(gameString.length() - 1);
