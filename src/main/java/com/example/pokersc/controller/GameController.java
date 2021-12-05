@@ -94,8 +94,53 @@ public class GameController {
             }
             StringBuilder gameString = new StringBuilder("{\n" +
                     "    \"users\": [");
-            for(User user: game.getAllUsers()) {
-                gameString.append(objectMapper.writeValueAsString(user)).append(",");
+            for(User user: game.userArr) {
+                if(user == null){
+                    gameString.append("null,");
+                }
+                /*
+                {
+                "username": "gyx",
+                "currentAction": "",
+                "currentBet": 10,
+                "remainingChips": 2031,
+                "totalProfit": 120,
+                "currentProfit": 20,
+                "winRate": 0.5,
+                "hand": ["", ""],
+                "profileUrl": "pfps/1000.png",
+                "ifFold": true,
+                "isDealer": false,
+                "isSelf": false,
+                "isActive": true,
+                "isWinner": true
+                }
+                */
+                int position = 0;
+                for(User u: game.userArr) {
+                    if(u!=null && u.getUsername().equals(user.getUsername())) {
+                        break;
+                    }
+                    position++;
+                }
+                gameString.append("{");
+                gameString.append("\"username\": ").append(user.getUsername());
+                gameString.append("\"currentAction\": ").append();
+                gameString.append("\"currentBet\": ").append();
+                gameString.append("\"remainingChips\": ").append();
+                gameString.append("\"totalProfit\": ").append();
+                gameString.append("\"currentProfit\": ").append();
+                gameString.append("\"winRate\": ").append();
+                gameString.append("\"hand\": ").append();
+                gameString.append("\"profileUrl\": ").append();
+                gameString.append("\"ifFold\": ").append();
+                gameString.append("\"isDealer\": ").append();
+                gameString.append("\"isSelf\": ").append();
+                gameString.append("\"isActive\": ").append();
+                gameString.append("\"isWinner\": ").append();
+
+                gameString.append("},");
+                
             }
             if(gameString.charAt(gameString.length()-1) == ',') {
                 gameString.deleteCharAt(gameString.length() - 1);
