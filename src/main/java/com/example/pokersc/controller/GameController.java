@@ -97,6 +97,7 @@ public class GameController {
             for(User user: game.userArr) {
                 if(user == null){
                     gameString.append("null,");
+                    continue;
                 }
                 int userPos = 0;
                 for(User u: game.userArr) {
