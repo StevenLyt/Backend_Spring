@@ -24,8 +24,6 @@ public class GameController {
     private Reception reception;
     private GameThread gameThread = new GameThread();
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     public class Struct{
         String username;
         int profit;
@@ -57,7 +55,6 @@ public class GameController {
         reception = new Reception(game);
         this.reception.start();
         //game.addUser(usersRepository.findByUsername("gyx").get(), 100,0);
-
         //game.addUser(usersRepository.findByUsername("gyx2").get(), 100,1);
         //game.addUser(usersRepository.findByUsername("gyx3").get(), 100,2);
 
@@ -129,7 +126,7 @@ public class GameController {
                     profitList.add(s);
                 }
             }
-            Collections.sort(profitList, new StructComparator());
+            profitList.sort(new StructComparator());
             for(Struct struct : profitList){
                 gameString.append("\"").append(struct.username).append(":").append(struct.profit).append("\",");
             }

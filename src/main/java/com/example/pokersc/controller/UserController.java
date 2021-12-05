@@ -44,26 +44,10 @@ public class UserController {
         return hash;
     }
 
-    @GetMapping("/users")
-    public Iterable<User> getAllUser() {
-        return usersRepository.findAll();
-    }
 
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable int id) {
         return usersRepository.findById(id).orElse(null);
     }
-
-//    @PostMapping("/users/{id}/buyin")
-//    public User buyinByid(@PathVariable int id, @RequestParam double amount) {
-//        Optional<User> optional = usersRepository.findById(id);
-//        if(optional.isPresent()) {
-//            User user = optional.get();
-//            user.addAmount(amount);
-//            return usersRepository.save(user);
-//        }else {
-//            return null;
-//        }
-//    }
 
 }
