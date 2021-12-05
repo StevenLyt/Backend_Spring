@@ -22,6 +22,7 @@ public class Hand {
     private int state = 0; // 0 = preflop,
 
     private int winnerPos = -1;
+    public long timeLeft = 60;
     public int numActionLeft;
 
     @Autowired
@@ -199,10 +200,19 @@ public class Hand {
         this.maxBetInThisPhase = 2;
         numActionLeft = numPlayers;
         while(numActionLeft > 0){
-            while (true){
-                if(currentAction != null){
+            this.timeLeft = 60;
+            boolean didAction = false;
+            long timestamp = System.currentTimeMillis() / 1000;
+            while (this.timeLeft > 0){
+                if (currentAction != null) {
+                    didAction = true;
                     break;
                 }
+                timeLeft = 60 - (System.currentTimeMillis() / 1000 - timestamp);
+            }
+            if(didAction == false){
+                Action action = new Action(Action.Act.FOLD);
+                addAction(action);
             }
             doAction(actionOnWhichPlayer);
             actionOnWhichPlayer ++; //first action on UTG;
@@ -389,6 +399,8 @@ public class Hand {
         String[] actions = {"raise", "check", "fold", "call"};
         playerActions[pos] = actions[currentAction.getAct().ordinal()];
         if(currentAction.getAct() == Action.Act.FOLD){
+            System.out.println("folded");
+            System.out.println(pos);
             this.active[pos] = false;
             numActionLeft --;
             this.numPlayers --;

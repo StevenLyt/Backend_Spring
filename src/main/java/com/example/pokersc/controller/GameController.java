@@ -149,6 +149,7 @@ public class GameController {
                     gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
                     gameString.append(",\n" + "    \"state\":").append(hand.getState());
                     gameString.append(",\n" + "    \"winner\":").append(hand.getWinnerPos());
+                     gameString.append(",\n" + "    \"timeLeft\":").append(hand.timeLeft);
                     gameString.append(",\n" + "    \"numActionLeft\":").append(hand.numActionLeft);
                     gameString.append("\n}");
                 }
@@ -162,6 +163,7 @@ public class GameController {
                     gameString.append(",\n" + "    \"actionPosition\":").append("\"\"");
                     gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
                     gameString.append(",\n" + "    \"state\":").append("\"\"");
+                     gameString.append(",\n" + "    \"timeLeft\":").append("\"\"");
                     gameString.append(",\n" + "    \"numActionLeft\":").append("\"\"");
                     gameString.append("\n}");
                 }
@@ -238,6 +240,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"isAllin\":").append(Arrays.toString(hand.getIsAllin()));
                 gameString.append(",\n" + "    \"isFinished\":").append(Boolean.toString(hand.isFinished()));
                 gameString.append(",\n" + "    \"canCheck\":").append(hand.getMaxBetInThisPhase() == 0);
+                gameString.append(",\n" + "    \"timeLeft\":").append(hand.timeLeft);
                 gameString.append(",\n" + "    \"numPlayers\":").append(hand.getNumPlayers());
 
                 gameString.append("\n}");
@@ -253,6 +256,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
                 gameString.append(",\n" + "    \"state\":").append("\"\"");
                 gameString.append(",\n" + "    \"canCheck\":").append(false);
+                gameString.append(",\n" + "    \"timeLeft\":").append("\"\"");
                 gameString.append(",\n" + "    \"numActionLeft\":").append("\"\"");
                 gameString.append("\n}");
             }
