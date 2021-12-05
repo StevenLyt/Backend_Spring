@@ -29,6 +29,11 @@ public class GameThread extends Thread{
                     // update user stats
                     game.updateUserStats();
                     Thread.sleep(10000);
+                    for(int i = 0; i < 8; i++){
+                        if(game.remainingChips[i] < 1){
+                            game.deleteUser(game.userArr[i].getUsername());
+                        }
+                    }
                 }
             }
         }
