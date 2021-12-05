@@ -24,8 +24,6 @@ public class GameController {
     private Reception reception;
     private GameThread gameThread = new GameThread();
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     public class Struct{
         String username;
         int profit;
@@ -57,7 +55,6 @@ public class GameController {
         reception = new Reception(game);
         this.reception.start();
         //game.addUser(usersRepository.findByUsername("gyx").get(), 100,0);
-
         //game.addUser(usersRepository.findByUsername("gyx2").get(), 100,1);
         //game.addUser(usersRepository.findByUsername("gyx3").get(), 100,2);
 
@@ -189,7 +186,8 @@ public class GameController {
                 gameString.append("\"totalProfit\": ").append(user.getTotal_profit()).append(",");
                 gameString.append("\"currentProfit\": ").append(game.ongoing ? hand.getRemainingStack()[userPos] - game.totalBuyin[userPos] : game.remainingChips[userPos] - game.totalBuyin[userPos]).append(",");
                 gameString.append("\"winRate\": ").append((double) user.getTotal_win()/(user.getTotal_round()+1)).append(",");
-                gameString.append("\"hand\": ").append(game.ongoing ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
+
+                gameString.append("\"hand\": ").append(game.ongoing && hand.getReadyForShowDown()[userPos] ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
                 gameString.append("\"profileUrl\": \"").append(user.getProfile_url()).append("\",");
                 gameString.append("\"ifFold\": ").append(game.ongoing ? !hand.getActive()[userPos] : false).append(",");
                 gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
@@ -210,7 +208,7 @@ public class GameController {
                     profitList.add(s);
                 }
             }
-            Collections.sort(profitList, new StructComparator());
+            profitList.sort(new StructComparator());
             for(Struct struct : profitList){
                 gameString.append("\"").append(struct.username).append(":").append(struct.profit).append("\",");
             }
@@ -261,6 +259,11 @@ public class GameController {
         if(optional.isPresent()) {
             User user = optional.get();
             //TODO: call something like addUser();
+            for(User u: game.userArr){
+                if(u.getUsername().equals(username)){
+                    return "failure";
+                }
+            }
             if(game.userArr[position]!=null){
                 return "failure";
             }

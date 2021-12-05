@@ -1,23 +1,15 @@
 # Front-Back interaction API
 
-- Log in
-
-```
-POST /login?username={}&password={}
-// returns a User entity if user found and password matches,
-// otherwise return null
-```
-
 - Sign up
 
 ```
 POST /signup?username={}&password={}&profile_url={}
 ```
-
-- Fetch all user information 
+- User log-in. 
+- If successful, this would return the password's hash, which would be used in later information retrieval.
 
 ```
-GET /users 
+POST /login?username={}&password={}
 ```
 
 - Fetch user information and stats from database provifng its username/id (probably unnecessary, since log in would return User entity)
@@ -29,13 +21,7 @@ GET /users/username
 
 ## Game
 
-- Buy-in
-
-```
-POST /games/username/buyin?amount={}
-```
-
-- Get current game state for a specific user. This person can only see his/her own cards.
+- Get current game state for a specific user. To preveny information leak, this only returns this specific person's hand and other information that needs to be displayed.
 
 ```
 POST /games?username={}&passwordHash={}
@@ -44,26 +30,25 @@ POST /games?username={}&passwordHash={}
 - Join game
 
 ```
-POST /games?username={}&
+POST /games/join?username={}&position={}&buyin={}
+```
+- User buy-in
+
+```
+POST /games/buyin?username={}&amount={}
 ```
 
 - Leave game
 
 ```
-POST /games/{game_id}/{user_id}/leave
-```
-
-- Request info of a single game
-
-```
-GET /games/{room_id/game_id}
+POST /games/leave?username={}
 ```
 
 - User in-game actions
 
 ```
-POST /games/{room_id/game_id}/{user_id}/fold
-POST /games/{room_id/game_id}/{user_id}/check
-POST /games/{room_id/game_id}/{user_id}/call?amount={}
-POST /games/{room_id/game_id}/{user_id}/raise?amount={}
+POST /games/fold?username={}
+POST /games/check?username={}
+POST /games/call?username={}
+POST /games/raise?username={}amount={}
 ```

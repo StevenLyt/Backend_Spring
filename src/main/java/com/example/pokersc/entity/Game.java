@@ -35,9 +35,15 @@ public class Game {
         while(ongoing){}
         for(int i = 0; i < userArr.length; i++){
             if (userArr[i]!=null && userArr[i].getUsername().equals(username)){
-                totalBuyin[i] += amount;
-                remainingChips[i] += amount;
-                return true;
+                if(remainingChips[i] + amount <= 1200) {
+                    totalBuyin[i] += amount;
+                    remainingChips[i] += amount;
+                    return true;
+                }
+                else{
+                    return false;
+                }
+
             }
         }
         return false;

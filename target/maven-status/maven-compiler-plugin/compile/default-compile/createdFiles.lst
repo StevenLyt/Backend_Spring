@@ -1,13 +1,11 @@
-com/example/pokersc/entity/HandCards.class
-com/example/pokersc/controller/GameController.class
 com/example/pokersc/entity/Deck.class
 com/example/pokersc/repository/UsersRepository.class
 com/example/pokersc/entity/Game.class
 com/example/pokersc/entity/User.class
 com/example/pokersc/entity/GameResult.class
+com/example/pokersc/controller/GameController.class
 com/example/pokersc/Utils.class
 com/example/pokersc/repository/GameResultsRepository.class
 com/example/pokersc/entity/Card.class
 com/example/pokersc/PokerScApplication.class
 com/example/pokersc/controller/UserController.class
-com/example/pokersc/entity/CommunityCards.class

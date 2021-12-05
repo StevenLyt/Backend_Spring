@@ -94,6 +94,10 @@ public class Hand {
     public String[] getPlayerActions(){
         return playerActions;
     }
+
+    public boolean[] getReadyForShowDown(){
+        return readyForShowDown;
+    }
     private Card[] communityCards;
     private int pot;
     private int[] potForEachPlayer;
@@ -104,6 +108,7 @@ public class Hand {
     private int[] chipPutInThisPhase;
     private int maxBetInThisPhase;
     private String[] playerActions;
+    private boolean[] readyForShowDown;
     private Action currentAction = null;
     // for testing
 
@@ -118,10 +123,12 @@ public class Hand {
         this.chipPutInThisPhase = new int[8];
         this.playerActions = new String[8];
         this.potForEachPlayer = new int[8];
+        this.readyForShowDown = new boolean[8];
         for(int i = 0; i < 8; i++){
             playerCards[i] = new PlayerCards();
             chipPutInThisPhase[i] = 0;
             potForEachPlayer[i] = 0;
+            readyForShowDown[i] = false;
             if(playerArr[i] != null) {
                 active[i] = true;
             }
@@ -272,6 +279,7 @@ public class Hand {
             numActionLeft --;
         }
         //end river
+
         if(isFinished()){
             for(int i = 0; i < 8; i++){
                 if(active[i]){
@@ -279,6 +287,11 @@ public class Hand {
                 }
             }
         }else {
+            for(int i = 0; i < 8; i++){
+                if(active[i]){
+                   readyForShowDown[i] = true;
+                }
+            }
             this.winnerPos = getWinner();
         }
         User winner =  playerArr[this.winnerPos];
