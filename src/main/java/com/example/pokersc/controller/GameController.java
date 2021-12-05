@@ -166,8 +166,8 @@ public class GameController {
                     gameString.append("\n}");
                 }
                 return gameString.toString();
-        
-            
+
+
             }
             StringBuilder gameString = new StringBuilder("{\n" +
                     "    \"users\": [");
@@ -233,6 +233,12 @@ public class GameController {
                 gameString.append(",\n" + "    \"state\":").append(hand.getState());
                 gameString.append(",\n" + "    \"winner\":").append(hand.getWinnerPos());
                 gameString.append(",\n" + "    \"numActionLeft\":").append(hand.numActionLeft);
+                gameString.append(",\n" + "    \"potForPlayers\":").append(Arrays.toString(hand.getPotForEachPlayer()));
+                gameString.append(",\n" + "    \"startingStack\":").append(Arrays.toString(hand.getStartingStack()));
+                gameString.append(",\n" + "    \"isAllin\":").append(Arrays.toString(hand.getIsAllin()));
+                gameString.append(",\n" + "    \"isFinished\":").append(Boolean.toString(hand.isFinished()));
+                gameString.append(",\n" + "    \"numPlayers\":").append(hand.getNumPlayers());
+
                 gameString.append("\n}");
             }
             else{
@@ -299,7 +305,7 @@ public class GameController {
     public String userFold(@RequestParam String username) {
         Hand hand = this.gameThread.hand;
         int pos = hand.getActionOnWhichPlayer();
-        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username)) {
+        if(hand.getActive()[pos] && hand.getPlayerArr()[pos].getUsername().equals(username) && hand.getMaxBetInThisPhase() != 0) {
             Action action = new Action(Action.Act.FOLD);
             hand.addAction(action);
             return "success";
