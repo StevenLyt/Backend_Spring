@@ -109,7 +109,7 @@ public class GameController {
                     gameString.append("\"ifFold\": ").append(game.ongoing ? !hand.getActive()[userPos] : false).append(",");
                     gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
                     gameString.append("\"isSelf\": ").append(user.getUsername() == username).append(",");
-                    gameString.append("\"isActive\": ").append(game.handend ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
+                    gameString.append("\"isActive\": ").append(false).append(",");
                     gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
                     gameString.append("},");
                     userPos++;
