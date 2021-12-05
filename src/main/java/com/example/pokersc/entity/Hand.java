@@ -200,7 +200,7 @@ public class Hand {
             doAction(actionOnWhichPlayer);
             actionOnWhichPlayer++; //first action on UTG;
             actionOnWhichPlayer %= 8;
-            while (playerArr[actionOnWhichPlayer] == null || !active[actionOnWhichPlayer]) {
+            while (playerArr[actionOnWhichPlayer] == null || !active[actionOnWhichPlayer] || isAllin[actionOnWhichPlayer]) {
                 actionOnWhichPlayer++;
                 actionOnWhichPlayer %= 8;
             }
@@ -251,7 +251,7 @@ public class Hand {
             doAction(actionOnWhichPlayer);
             actionOnWhichPlayer ++; //first action on UTG;
             actionOnWhichPlayer %= 8;
-            while(!active[actionOnWhichPlayer]){
+            while(!active[actionOnWhichPlayer] || isAllin[actionOnWhichPlayer]){
                 actionOnWhichPlayer ++;
                 actionOnWhichPlayer %= 8;
             }
