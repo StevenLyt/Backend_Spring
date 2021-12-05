@@ -23,7 +23,9 @@ public class GameThread extends Thread{
                     hand.startHand();
                     // function call to end hand
                     game.remainingChips = hand.getRemainingStack();
-                    hand.saveStats();
+                    // update user stats
+                    game.updateUserStats();
+
                 }
             }
         }

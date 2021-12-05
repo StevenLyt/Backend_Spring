@@ -30,13 +30,16 @@ public class Game {
         this.numPlayers++;
     }
 
-    public void rebuy(String username, int amount){
+    //return true if buyin is complete
+    public boolean rebuy(String username, int amount){
         for(int i = 0; i < userArr.length; i++){
             if (userArr[i].getUsername().equals(username)){
                 totalBuyin[i] += amount;
                 remainingChips[i] += amount;
+                return true;
             }
         }
+        return false;
     }
 
     public void updatePos(){
@@ -46,6 +49,15 @@ public class Game {
            this.dealerPos ++;
            this.dealerPos %= 8;
        }
+    }
+
+    public void updateUserStats(){
+        for(int i = 0; i < 8; i++) {
+            if(userArr[i]!=null) {
+                userArr[i].setTotal_round(userArr[i].getTotal_round() + 1);
+                userArr[i].setTotal_profit(userArr[i].getTotal_profit() + (remainingChips[i] - totalBuyin[i]));
+            }
+        }
     }
 
     public void deleteUser(String username){
