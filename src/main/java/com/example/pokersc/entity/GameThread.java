@@ -25,7 +25,7 @@ public class GameThread extends Thread{
                     game.remainingChips = hand.getRemainingStack();
                     // update user stats
                     game.updateUserStats();
-
+                    Thread.sleep(3000);
                 }
             }
         }

@@ -91,6 +91,9 @@ public class Hand {
         return currentAction;
     }
 
+    public String[] getPlayerActions(){
+        return playerActions;
+    }
     private Card[] communityCards;
     private int pot;
     private int actionOnWhichPlayer;
@@ -98,6 +101,7 @@ public class Hand {
     private int bigBlind;
     private int[] chipPutInThisPhase;
     private int maxBetInThisPhase;
+    private String[] playerActions;
     private Action currentAction = null;
     // for testing
 
@@ -109,6 +113,7 @@ public class Hand {
         this.playerCards = new PlayerCards[8];
         this.active = new boolean[8];
         this.chipPutInThisPhase = new int[8];
+        this.playerActions = new String[8];
         for(int i = 0; i < 8; i++){
             playerCards[i] = new PlayerCards();
             chipPutInThisPhase[i] = 0;
@@ -296,6 +301,8 @@ public class Hand {
 
     // update active arr, chipPutInThisPhase arr, maxBetInThisPhase, pot, numPlayer
     public void doAction(int pos){
+        String[] actions = {"raise", "check", "fold", "call"};
+        playerActions[pos] = actions[currentAction.getAct().ordinal()];
         if(currentAction.getAct() == Action.Act.FOLD){
             this.active[pos] = false;
             this.numPlayers --;
