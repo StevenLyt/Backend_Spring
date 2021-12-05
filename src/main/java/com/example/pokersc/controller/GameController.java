@@ -228,7 +228,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"selfHand\": [").append(hand.getPlayerCards()[position].getPlayerHand()[0]).append(",").append((hand.getPlayerCards()[position].getPlayerHand()[1]));
                 gameString.append("],\n" + "    \"selfPosition\":").append(position);
                 gameString.append(",\n" + "    \"minimumRaiseAmount\":").append(hand.getMaxBetInThisPhase() * 2);
-                gameString.append(",\n" + "    \"actionPosition\":").append(hand.getActionOnWhichPlayer());
+                gameString.append(",\n" + "    \"actionPosition\":").append(game.handend ? -1 : hand.getActionOnWhichPlayer());
                 gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
                 gameString.append(",\n" + "    \"state\":").append(hand.getState());
                 gameString.append(",\n" + "    \"winner\":").append(hand.getWinnerPos());
