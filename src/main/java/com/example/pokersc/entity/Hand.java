@@ -96,6 +96,8 @@ public class Hand {
     }
     private Card[] communityCards;
     private int pot;
+    private int[] potForEachPlayer;
+    private int[] startingStack;
     private int actionOnWhichPlayer;
     private int smallBlind;
     private int bigBlind;
@@ -108,15 +110,18 @@ public class Hand {
     public Hand(User[] userList, int[] chips, int dPos, int numP){
         this.playerArr = userList;
         this.remainingStack = chips;
+        this.startingStack = chips;
         this.dealerPos = dPos;
         this.numPlayers = numP;
         this.playerCards = new PlayerCards[8];
         this.active = new boolean[8];
         this.chipPutInThisPhase = new int[8];
         this.playerActions = new String[8];
+        this.potForEachPlayer = new int[8];
         for(int i = 0; i < 8; i++){
             playerCards[i] = new PlayerCards();
             chipPutInThisPhase[i] = 0;
+            potForEachPlayer[i] = 0;
             if(playerArr[i] != null) {
                 active[i] = true;
             }
@@ -282,7 +287,7 @@ public class Hand {
 
     }
 
-    public boolean isFinished(){
+    private boolean isFinished(){
         int num = 0;
         for(boolean bool : active){
             if(bool){
@@ -293,15 +298,16 @@ public class Hand {
     }
 
     // initialize phase (flop, turn, river);
-    public void initializePhase(){
+    private void initializePhase(){
         for(int i = 0; i < 8; i++){
             this.chipPutInThisPhase[i] = 0;
+            this.playerActions[i] = null;
         }
         this.maxBetInThisPhase = 0;
     }
 
     // check if every player puts same amount or folds
-    public boolean readyForNextRound(){
+    private boolean readyForNextRound(){
         int amount = 0;
         for(int i = 0; i < 8; i++){
             if(active[i]) {
@@ -315,6 +321,9 @@ public class Hand {
             }
         }
         return true;
+    }
+    private void updatePlayerPot(int pos){
+
     }
 
     // update active arr, chipPutInThisPhase arr, maxBetInThisPhase, pot, numPlayer
@@ -395,6 +404,7 @@ public class Hand {
             else if (this.remainingStack[pos] < action.getAmount())
                 return false;
         } else if (action.getAct() == Action.Act.CALL) {
+            // all in
             if (this.remainingStack[pos] < this.maxBetInThisPhase - this.chipPutInThisPhase[pos])
                 return false;
         }

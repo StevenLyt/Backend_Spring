@@ -32,6 +32,7 @@ public class Game {
 
     //return true if buyin is complete
     public boolean rebuy(String username, int amount){
+        while(ongoing){}
         for(int i = 0; i < userArr.length; i++){
             if (userArr[i].getUsername().equals(username)){
                 totalBuyin[i] += amount;
