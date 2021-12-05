@@ -20,6 +20,7 @@ public class GameThread extends Thread{
                     Thread.sleep(1000);
                 } else {
                     game.ongoing = true;
+                    game.handend = false;
                     game.updatePos();
                     hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
                     hand.startHand();
@@ -28,9 +29,10 @@ public class GameThread extends Thread{
                     //game.remainingChips = hand.getRemainingStack();
                     // update user stats
                     game.updateUserStats();
+                    game.handend = true;
                     Thread.sleep(10000);
                     for(int i = 0; i < 8; i++){
-                        if(game.remainingChips[i] < 1){
+                        if(game.remainingChips[i] < 1 && game.userArr[i] != null){
                             game.deleteUser(game.userArr[i].getUsername());
                         }
                     }

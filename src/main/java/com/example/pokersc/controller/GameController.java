@@ -109,7 +109,7 @@ public class GameController {
                     gameString.append("\"ifFold\": ").append(game.ongoing ? !hand.getActive()[userPos] : false).append(",");
                     gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
                     gameString.append("\"isSelf\": ").append(user.getUsername() == username).append(",");
-                    gameString.append("\"isActive\": ").append(game.ongoing ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
+                    gameString.append("\"isActive\": ").append(game.handend ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
                     gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
                     gameString.append("},");
                     userPos++;
@@ -143,7 +143,7 @@ public class GameController {
                     gameString.append(",\n    \"communityCards\": ").append(Arrays.toString(temp));
                     gameString.append(",\n" + "    \"pot\": ").append(hand.getPot());
                     gameString.append(",\n" + "    \"selfHand\": [").append("\"\",\"\"]");
-                    gameString.append("],\n" + "    \"selfPosition\":").append(5);
+                    gameString.append(",\n" + "    \"selfPosition\":").append(5);
                     gameString.append(",\n" + "    \"minimumRaiseAmount\":").append(hand.getMaxBetInThisPhase() * 2);
                     gameString.append(",\n" + "    \"actionPosition\":").append(hand.getActionOnWhichPlayer());
                     gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
@@ -192,7 +192,7 @@ public class GameController {
                 gameString.append("\"ifFold\": ").append(game.ongoing ? !hand.getActive()[userPos] : false).append(",");
                 gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
                 gameString.append("\"isSelf\": ").append(user.getUsername().equals(username)).append(",");
-                gameString.append("\"isActive\": ").append(game.ongoing ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
+                gameString.append("\"isActive\": ").append(!game.handend ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
                 gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
                 gameString.append("},");
                 userPos++;
@@ -237,6 +237,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"startingStack\":").append(Arrays.toString(hand.getStartingStack()));
                 gameString.append(",\n" + "    \"isAllin\":").append(Arrays.toString(hand.getIsAllin()));
                 gameString.append(",\n" + "    \"isFinished\":").append(Boolean.toString(hand.isFinished()));
+                gameString.append(",\n" + "    \"canCheck\":").append(hand.getMaxBetInThisPhase() == 0);
                 gameString.append(",\n" + "    \"numPlayers\":").append(hand.getNumPlayers());
 
                 gameString.append("\n}");
@@ -251,6 +252,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"actionPosition\":").append("\"\"");
                 gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
                 gameString.append(",\n" + "    \"state\":").append("\"\"");
+                gameString.append(",\n" + "    \"canCheck\":").append(false);
                 gameString.append(",\n" + "    \"numActionLeft\":").append("\"\"");
                 gameString.append("\n}");
             }

@@ -9,6 +9,7 @@ public class Game {
     public int[] remainingChips;
     public int[] totalBuyin;
     public boolean ongoing;
+    public boolean handend;
     public Game(){
         this.numPlayers = 0;
         this.userArr = new User[8];
@@ -21,6 +22,7 @@ public class Game {
         }
         this.dealerPos = 0;
         this.ongoing = false;
+        this.handend = true;
     }
 
     public void addUser(User user, int buyin, int pos) {
@@ -32,7 +34,7 @@ public class Game {
 
     //return true if buyin is complete
     public boolean rebuy(String username, int amount){
-        while(ongoing){}
+        while(!handend){}
         for(int i = 0; i < userArr.length; i++){
             if (userArr[i]!=null && userArr[i].getUsername().equals(username)){
                 if(remainingChips[i] + amount <= 1200) {
