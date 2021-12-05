@@ -178,6 +178,11 @@ public class GameController {
         if(optional.isPresent()) {
             User user = optional.get();
             //TODO: call something like addUser();
+            for(User u: game.userArr){
+                if(u.getUsername().equals(username)){
+                    return "failure";
+                }
+            }
             if(game.userArr[position]!=null){
                 return "failure";
             }
