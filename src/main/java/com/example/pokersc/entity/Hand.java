@@ -94,6 +94,10 @@ public class Hand {
     public String[] getPlayerActions(){
         return playerActions;
     }
+
+    public boolean[] getReadyForShowDown(){
+        return readyForShowDown;
+    }
     private Card[] communityCards;
     private int pot;
     private int[] potForEachPlayer;
