@@ -105,14 +105,14 @@ public class GameController {
                 gameString.append("\"currentAction\": ").append(game.ongoing ? hand.getPlayerActions()[userPos] : "\"\"").append(",");
                 gameString.append("\"currentBet\": ").append(game.ongoing ? hand.getChipPutInThisPhase()[userPos] : 0).append(",");
                 gameString.append("\"remainingChips\": ").append(game.ongoing ? hand.getRemainingStack()[userPos] : game.remainingChips[userPos]).append(",");
-                gameString.append("\"totalProfit\": ").append(user.getTotal_profit());.append(",");
+                gameString.append("\"totalProfit\": ").append(user.getTotal_profit()).append(",");
                 gameString.append("\"currentProfit\": ").append(game.ongoing ? hand.getRemainingStack()[userPos] - game.totalBuyin[userPos] : game.remainingChips[userPos] - game.totalBuyin[userPos]).append(",");
-                gameString.append("\"winRate\": ").append((double) user.getTotal_win()/user.getTotal_round());.append(",");
+                gameString.append("\"winRate\": ").append((double) user.getTotal_win()/user.getTotal_round()).append(",");
                 gameString.append("\"hand\": ").append(game.ongoing ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
-                gameString.append("\"profileUrl\": ").append(user.getProfile_url());.append(",");
+                gameString.append("\"profileUrl\": ").append(user.getProfile_url()).append(",");
                 gameString.append("\"ifFold\": ").append(game.ongoing ? !hand.getActive()[userPos] : false).append(",");
                 gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
-                gameString.append("\"isSelf\": ").append(user.getUsername() == username);.append(",");
+                gameString.append("\"isSelf\": ").append(user.getUsername() == username).append(",");
                 gameString.append("\"isActive\": ").append(game.ongoing ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
                 gameString.append("\"isWinner\": ").append(userPos == hand.getWinnerPos());
                 gameString.append("},");
