@@ -169,7 +169,7 @@ public class Hand {
         this.remainingStack[bigBlind] -= 2;
         this.maxBetInThisPhase = 2;
         numActionLeft = numPlayers;
-        while(!readyForNextRound() || numActionLeft > 0){
+        while(!isFinished() && (!readyForNextRound() || numActionLeft > 0)){
             while (true){
                 if(currentAction != null){
                     break;
@@ -196,7 +196,7 @@ public class Hand {
             actionOnWhichPlayer ++;
             actionOnWhichPlayer %= 8;
         }
-        while(!readyForNextRound() || numActionLeft > 0) {
+        while(!isFinished() && (!readyForNextRound() || numActionLeft > 0)){
             while (true){
                 if(currentAction != null){
                     break;
@@ -223,7 +223,7 @@ public class Hand {
             actionOnWhichPlayer ++;
             actionOnWhichPlayer %= 8;
         }
-        while(!readyForNextRound() || numActionLeft > 0) {
+        while(!isFinished() && (!readyForNextRound() || numActionLeft > 0)){
             while (true){
                 if(currentAction != null){
                     break;
@@ -250,7 +250,7 @@ public class Hand {
             actionOnWhichPlayer ++;
             actionOnWhichPlayer %= 8;
         }
-        while(!readyForNextRound() || numActionLeft > 0) {
+        while(!isFinished() && (!readyForNextRound() || numActionLeft > 0)){
             while (true){
                 if(currentAction != null){
                     break;
@@ -267,11 +267,29 @@ public class Hand {
             numActionLeft --;
         }
         //end river
-        this.winnerPos = getWinner();
+        if(isFinished()){
+            for(int i = 0; i < 8; i++){
+                if(active[i]){
+                    this.winnerPos = i;
+                }
+            }
+        }else {
+            this.winnerPos = getWinner();
+        }
         User winner =  playerArr[this.winnerPos];
         winner.setTotal_win(winner.getTotal_win() + 1);
         this.remainingStack[winnerPos] += pot;
 
+    }
+
+    public boolean isFinished(){
+        int num = 0;
+        for(boolean bool : active){
+            if(bool){
+                num ++;
+            }
+        }
+        return num <= 1;
     }
 
     // initialize phase (flop, turn, river);

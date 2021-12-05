@@ -98,6 +98,7 @@ public class GameController {
             for(User user: game.userArr) {
                 if(user == null){
                     gameString.append("null,");
+                    userPos ++;
                     continue;
                 }
                 gameString.append("{");
