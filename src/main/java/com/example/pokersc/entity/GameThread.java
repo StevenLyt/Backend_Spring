@@ -1,5 +1,7 @@
 package com.example.pokersc.entity;
 
+import java.util.Arrays;
+
 public class GameThread extends Thread{
 
     public Game game;
@@ -21,12 +23,12 @@ public class GameThread extends Thread{
                     game.updatePos();
                     hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
                     hand.startHand();
+                    System.out.println(Arrays.toString(hand.getRemainingStack()));
                     // function call to end hand
-                    game.remainingChips = hand.getRemainingStack();
+                    //game.remainingChips = hand.getRemainingStack();
                     // update user stats
                     game.updateUserStats();
-                    game.ongoing = false;
-                    Thread.sleep(3000);
+                    Thread.sleep(10000);
                 }
             }
         }

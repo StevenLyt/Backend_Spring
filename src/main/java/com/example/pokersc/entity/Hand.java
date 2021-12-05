@@ -323,25 +323,26 @@ public class Hand {
     }
 
     private void distributePotToWinners(int pos){
+        System.out.println(pos);
         if(pos == -1){
             return;
         }
         User winner =  playerArr[pos];
-        winner.setTotal_win(winner.getTotal_win() + 1);
         int maxWinFromEachPlayer = potForEachPlayer[pos];
         int potForPlayer = 0;
+        System.out.println(Arrays.toString(potForEachPlayer));
         for(int i = 0; i < 8; i++){
             if(potForEachPlayer[i] <= maxWinFromEachPlayer){
+                potForPlayer += potForEachPlayer[i];
                 potForEachPlayer[i] = 0;
-                potForPlayer +=  potForEachPlayer[i];
             }
             else{
+                potForPlayer += maxWinFromEachPlayer;
                 potForEachPlayer[i] -= maxWinFromEachPlayer;
-                potForPlayer += potForEachPlayer[pos];
             }
         }
-
-        this.remainingStack[winnerPos] += potForPlayer;
+        System.out.println(Arrays.toString(potForEachPlayer));
+        this.remainingStack[pos] += potForPlayer;
         this.active[pos] = false;
         distributePotToWinners(getWinner());
     }
@@ -494,10 +495,14 @@ public class Hand {
     }
 
     private int getWinner() {
-        int winner = 0;
+        int winner = -1;
         for (int i = 1; i < 8; i++) {
             if (!active[i])
                 continue;
+            if (winner == -1){
+                winner = i;
+                continue;
+            }
             winner = HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[winner].getPlayerHand()).stream()).collect(Collectors.toList())).compareTo(HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[i].getPlayerHand()).stream()).collect(Collectors.toList()))) == -1 ? i : winner;
         }
         return winner;
