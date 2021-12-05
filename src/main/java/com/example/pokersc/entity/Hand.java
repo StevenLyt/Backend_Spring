@@ -20,10 +20,16 @@ public class Hand {
     private PlayerCards[] playerCards;
     private Deck deck;
     private int state = 0; // 0 = preflop,
+
+    private int winnerPos = -1;
     public int numActionLeft;
 
     @Autowired
     private UsersRepository usersRepository;
+
+    public int getWinnerPos() {
+        return winnerPos;
+    }
 
     public User[] getPlayerArr() {
         return playerArr;
@@ -255,19 +261,12 @@ public class Hand {
             this.currentAction = null;
             numActionLeft --;
         }
-        int winnerPos = getWinner();
         //end river
-    }
+        this.winnerPos = getWinner();
+        User winner =  playerArr[this.winnerPos];
+        winner.setTotal_win(winner.getTotal_win() + 1);
+        this.remainingStack[winnerPos] += pot;
 
-
-
-    public void saveStats(){
-        for(User user: playerArr) {
-            if(user!=null) {
-                //user.setTotal_round(user.getTotal_round() + 1);
-                usersRepository.save(user);
-            }
-        }
     }
 
     // initialize phase (flop, turn, river);
@@ -380,7 +379,7 @@ public class Hand {
     private int getWinner() {
         int winner = 0;
         for (int i = 1; i < 8; i++) {
-            if (playerCards[i].getPlayerHand().length == 0)
+            if (!active[i])
                 continue;
             winner = HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[winner].getPlayerHand()).stream()).collect(Collectors.toList())).compareTo(HandRanker.getInstance().getRank(Stream.concat(Arrays.asList(this.communityCards).stream(), Arrays.asList(playerCards[i].getPlayerHand()).stream()).collect(Collectors.toList()))) == -1 ? i : winner;
         }

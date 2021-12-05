@@ -100,8 +100,7 @@ public class GameController {
             if(gameString.charAt(gameString.length()-1) == ',') {
                 gameString.deleteCharAt(gameString.length() - 1);
             }
-            gameString.append("],\n" + "    \"profits\": [");
-
+            gameString.append("],\n" + "    \"playersProfits\": [");
             ArrayList<Struct> profitList = new ArrayList<>();
             for(int i=0; i<8; i++) {
                 if(game.getAllUsers()[i]!=null) {
@@ -116,7 +115,8 @@ public class GameController {
             if(gameString.charAt(gameString.length()-1) == ',') {
                 gameString.deleteCharAt(gameString.length() - 1);
             }
-            gameString.append("],\n    \"gameOn\": ").append(String.valueOf(game.ongoing));
+            gameString.append("],\n    \"selfProfit\": ").append(game.remainingChips[position] - game.totalBuyin[position]);
+            gameString.append(",\n    \"gameOn\": ").append(String.valueOf(game.ongoing));
             if(game.ongoing) {
                 gameString.append(",\n    \"remainingChips\": ").append(Arrays.toString(hand.getRemainingStack()));
                 Card[] temp = new Card[5];
@@ -131,6 +131,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"actionPosition\":").append(hand.getActionOnWhichPlayer());
                 gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
                 gameString.append(",\n" + "    \"state\":").append(hand.getState());
+                gameString.append(",\n" + "    \"winner\":").append(hand.getWinnerPos());
                 gameString.append(",\n" + "    \"numActionLeft\":").append(hand.numActionLeft);
                 gameString.append("\n}");
             }

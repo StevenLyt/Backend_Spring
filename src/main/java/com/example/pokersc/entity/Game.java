@@ -51,6 +51,15 @@ public class Game {
        }
     }
 
+    public void updateUserStats(){
+        for(int i = 0; i < 8; i++) {
+            if(userArr[i]!=null) {
+                userArr[i].setTotal_round(userArr[i].getTotal_round() + 1);
+                userArr[i].setTotal_profit(userArr[i].getTotal_profit() + (remainingChips[i] - totalBuyin[i]));
+            }
+        }
+    }
+
     public void deleteUser(String username){
         for(int i = 0; i < userArr.length; i++){
             if (userArr[i].getUsername().equals(username))
