@@ -103,7 +103,7 @@ public class GameController {
                 }
                 gameString.append("{");
                 gameString.append("\"username\": \"").append(user.getUsername()).append("\",");
-                gameString.append("\"currentAction\": \"").append(game.ongoing ? hand.getPlayerActions()[userPos] : "\"\"").append("\",");
+                gameString.append("\"currentAction\": ").append(game.ongoing ? hand.getPlayerActions()[userPos] : "\"\"").append(",");
                 gameString.append("\"currentBet\": ").append(game.ongoing ? hand.getChipPutInThisPhase()[userPos] : 0).append(",");
                 gameString.append("\"remainingChips\": ").append(game.ongoing ? hand.getRemainingStack()[userPos] : game.remainingChips[userPos]).append(",");
                 gameString.append("\"totalProfit\": ").append(user.getTotal_profit()).append(",");
