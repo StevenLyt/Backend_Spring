@@ -183,7 +183,7 @@ public class Hand {
             actionOnWhichPlayer++;
             actionOnWhichPlayer %= 8;
         }
-        while (numActionLeft > 0 && numPlayers > 1) {
+        while (numActionLeft > 0) {
             this.timeLeft = 60;
             boolean didAction = false;
             long timestamp = System.currentTimeMillis() / 1000;
@@ -200,6 +200,15 @@ public class Hand {
             }
             doAction(actionOnWhichPlayer);
             if(numActionLeft == 0){
+                break;
+            }
+            int numActive = 0;
+            for(int i = 0; i < 8; i++){
+                if(active[i]){
+                    numActive++;
+                }
+            }
+            if(numActive <= 1){
                 break;
             }
             actionOnWhichPlayer++; //first action on UTG;
@@ -257,6 +266,15 @@ public class Hand {
             }
             doAction(actionOnWhichPlayer);
             if(numActionLeft == 0){
+                break;
+            }
+            int numActive = 0;
+            for(int i = 0; i < 8; i++){
+                if(active[i]){
+                    numActive++;
+                }
+            }
+            if(numActive <= 1){
                 break;
             }
             actionOnWhichPlayer ++; //first action on UTG;
@@ -317,14 +335,12 @@ public class Hand {
     }
 
     private void distributePotToWinners(int pos){
-        System.out.println(pos);
         if(pos == -1){
             return;
         }
         User winner =  playerArr[pos];
         int maxWinFromEachPlayer = potForEachPlayer[pos];
         int potForPlayer = 0;
-        System.out.println(Arrays.toString(potForEachPlayer));
         for(int i = 0; i < 8; i++){
             if(potForEachPlayer[i] <= maxWinFromEachPlayer){
                 potForPlayer += potForEachPlayer[i];
@@ -335,7 +351,6 @@ public class Hand {
                 potForEachPlayer[i] -= maxWinFromEachPlayer;
             }
         }
-        System.out.println(Arrays.toString(potForEachPlayer));
         this.remainingStack[pos] += potForPlayer;
         this.active[pos] = false;
         distributePotToWinners(getWinner());
@@ -359,7 +374,6 @@ public class Hand {
             this.chipPutInThisPhase[i] = 0;
             this.playerActions[i] = null;
         }
-        System.out.println(Arrays.toString(playerActions));
         this.maxBetInThisPhase = 0;
     }
 
@@ -386,12 +400,9 @@ public class Hand {
         String[] actions = {"raise", "check", "fold", "call"};
         playerActions[pos] = actions[currentAction.getAct().ordinal()];
         if(currentAction.getAct() == Action.Act.FOLD){
-            System.out.println("folded");
-            System.out.println(pos);
             this.active[pos] = false;
             numActionLeft --;
             this.numPlayers --;
-            System.out.println(Arrays.toString(this.active));
         }
         else if(currentAction.getAct() == Action.Act.CALL){
             //all in
@@ -418,22 +429,27 @@ public class Hand {
 
         }
         else if(currentAction.getAct() == Action.Act.RAISE){
-            System.out.print(pos);
-            System.out.println("raise allin");
             maxBetInThisPhase = currentAction.getAmount();
-            this.remainingStack[pos] -= (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
-            this.pot += (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
-            this.potForEachPlayer[pos] += (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
-            this.chipPutInThisPhase[pos] = maxBetInThisPhase;
+            this.remainingStack[pos] -= (currentAction.getAmount() - this.chipPutInThisPhase[pos]);
+            this.pot += (currentAction.getAmount() - this.chipPutInThisPhase[pos]);
+            this.potForEachPlayer[pos] += (currentAction.getAmount() - this.chipPutInThisPhase[pos]);
+            this.chipPutInThisPhase[pos] = currentAction.getAmount();
             numActionLeft = numPlayers - 1;
             if(this.remainingStack[pos] == 0){
+                System.out.print(pos);
+                System.out.println("raise allin");
                 numPlayers--;
                 this.isAllin[pos] = true;
+            }
+            else{
+                System.out.print(pos);
+                System.out.println("raise not allin");
             }
         }
         else if(currentAction.getAct() == Action.Act.CHECK){
             numActionLeft --;
         }
+        System.out.print(maxBetInThisPhase);
     }
 
     public void addAction(Action action) {
@@ -441,7 +457,15 @@ public class Hand {
             while (currentAction != null) {
                 Thread.sleep(1000);
             }
-            this.currentAction = action;
+            System.out.println(action.getAct());
+            System.out.println(action.getAmount());
+            System.out.println(maxBetInThisPhase);
+            if(action.getAct() == Action.Act.RAISE && action.getAmount() <= maxBetInThisPhase){
+                this.currentAction = new Action(Action.Act.CALL, remainingStack[actionOnWhichPlayer] + chipPutInThisPhase[actionOnWhichPlayer]);
+            }
+            else{
+                this.currentAction = action;
+            }
         }
         catch (InterruptedException e) {
             e.printStackTrace();
