@@ -54,6 +54,10 @@ public class GameController {
         game = gameThread.game;
         reception = new Reception(game);
         this.reception.start();
+        //game.addUser(usersRepository.findByUsername("gyx").get(), 100,0);
+        //game.addUser(usersRepository.findByUsername("gyx2").get(), 100,1);
+        //game.addUser(usersRepository.findByUsername("gyx3").get(), 100,2);
+
     }
 
     @ModelAttribute
@@ -64,11 +68,15 @@ public class GameController {
     // a user creates a game
     @PostMapping("/games")
     public String getGameState(@RequestParam String username, @RequestParam String passwordHash) throws JsonProcessingException {
-        //TODO return a json that represent the whole game
+        // return a json that represent the whole game
         Hand hand = this.gameThread.hand;
-       // if(hand == null){
-        //    return String.valueOf(game.numPlayers);
-       // }
+
+        for(User user: game.userArr) {
+            if(user != null){
+                usersRepository.save(user);
+            }
+        }
+
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isEmpty()) {
             return "user not found";
@@ -102,11 +110,11 @@ public class GameController {
                     gameString.append("\"winRate\": ").append((double) user.getTotal_win()/(user.getTotal_round()+1)).append(",");
                     gameString.append("\"hand\": ").append(game.ongoing && hand.getReadyForShowDown()[userPos] ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
                     gameString.append("\"profileUrl\": \"").append(user.getProfile_url()).append("\",");
-                    gameString.append("\"ifFold\": ").append(game.ongoing && (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos])).append(",");
-                    gameString.append("\"isDealer\": ").append(game.ongoing && userPos == hand.getDealerPos()).append(",");
+                    gameString.append("\"ifFold\": ").append(game.ongoing ? (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos]) : false).append(",");
+                    gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
                     gameString.append("\"isSelf\": ").append(user.getUsername() == username).append(",");
                     gameString.append("\"isActive\": ").append(false).append(",");
-                    gameString.append("\"isWinner\": ").append(game.ongoing && userPos == hand.getWinnerPos());
+                    gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
                     gameString.append("},");
                     userPos++;
                 }
@@ -146,6 +154,7 @@ public class GameController {
                     gameString.append(",\n" + "    \"state\":").append(hand.getState());
                     gameString.append(",\n" + "    \"winner\":").append(hand.getWinnerPos());
                     gameString.append(",\n" + "    \"timeLeft\":").append(game.handend ? "\"\"": hand.timeLeft);
+                    gameString.append(",\n" + "    \"canLeave\":").append(true);
                     gameString.append(",\n" + "    \"numActionLeft\":").append(hand.numActionLeft);
                     gameString.append("\n}");
                 }
@@ -159,8 +168,9 @@ public class GameController {
                     gameString.append(",\n" + "    \"actionPosition\":").append("\"\"");
                     gameString.append(",\n" + "    \"dealerPosition\":").append(game.dealerPos);
                     gameString.append(",\n" + "    \"state\":").append("\"\"");
-                     gameString.append(",\n" + "    \"timeLeft\":").append("\"\"");
+                    gameString.append(",\n" + "    \"timeLeft\":").append("\"\"");
                     gameString.append(",\n" + "    \"numActionLeft\":").append("\"\"");
+                    gameString.append(",\n" + "    \"canLeave\":").append(true);
                     gameString.append("\n}");
                 }
                 return gameString.toString();
@@ -237,6 +247,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"isFinished\":").append(Boolean.toString(hand.isFinished()));
                 gameString.append(",\n" + "    \"canCheck\":").append(hand.getMaxBetInThisPhase() == 0 || position == hand.getBigBlind() && hand.getState() == 0 && hand.getMaxBetInThisPhase() == 2);
                 gameString.append(",\n" + "    \"timeLeft\":").append(game.handend ? "\"\"":hand.timeLeft);
+                gameString.append(",\n" + "    \"canLeave\":").append(game.handend ? true: false);
                 gameString.append(",\n" + "    \"numPlayers\":").append(hand.getNumPlayers());
 
                 gameString.append("\n}");
@@ -253,6 +264,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"state\":").append("\"\"");
                 gameString.append(",\n" + "    \"canCheck\":").append(false);
                 gameString.append(",\n" + "    \"timeLeft\":").append("\"\"");
+                gameString.append(",\n" + "    \"canLeave\":").append(true);
                 gameString.append(",\n" + "    \"numActionLeft\":").append("\"\"");
                 gameString.append("\n}");
             }
@@ -266,6 +278,7 @@ public class GameController {
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent()) {
             User user = optional.get();
+            //TODO: call something like addUser();
             for(User u: game.userArr){
                 if(u!=null && u.getUsername().equals(username)){
                     return "failure";
@@ -286,11 +299,9 @@ public class GameController {
 
     @PostMapping("/games/buyin")
     public String userBuyin(@RequestParam String username, @RequestParam int amount) {
-        boolean result = game.rebuy(username,amount);
-        if(result){
-            return "success";
-        }
-        return "failure";
+        // TODO buyin during game
+        String result = game.rebuy(username,amount);
+        return result;
     }
 
     @PostMapping("/games/leave")

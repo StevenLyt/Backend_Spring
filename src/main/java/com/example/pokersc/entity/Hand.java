@@ -176,9 +176,10 @@ public class Hand {
 
     private void runPhase(){
         this.initializePhase();
+        this.currentAction = null;
         numActionLeft = numPlayers;
         this.actionOnWhichPlayer = smallBlind;
-        while (!active[actionOnWhichPlayer]) {
+        while (!active[actionOnWhichPlayer] || isAllin[actionOnWhichPlayer]) {
             actionOnWhichPlayer++;
             actionOnWhichPlayer %= 8;
         }
@@ -198,6 +199,9 @@ public class Hand {
                 addAction(action);
             }
             doAction(actionOnWhichPlayer);
+            if(numActionLeft == 0){
+                break;
+            }
             actionOnWhichPlayer++; //first action on UTG;
             actionOnWhichPlayer %= 8;
             while (playerArr[actionOnWhichPlayer] == null || !active[actionOnWhichPlayer] || isAllin[actionOnWhichPlayer]) {
@@ -246,9 +250,15 @@ public class Hand {
             }
             if(didAction == false){
                 Action action = new Action(Action.Act.FOLD);
+                if(actionOnWhichPlayer == bigBlind && maxBetInThisPhase == 2){
+                    action = new Action(Action.Act.CHECK);
+                }
                 addAction(action);
             }
             doAction(actionOnWhichPlayer);
+            if(numActionLeft == 0){
+                break;
+            }
             actionOnWhichPlayer ++; //first action on UTG;
             actionOnWhichPlayer %= 8;
             while(!active[actionOnWhichPlayer] || isAllin[actionOnWhichPlayer]){
@@ -343,10 +353,13 @@ public class Hand {
 
     // initialize phase (flop, turn, river);
     private void initializePhase(){
+        System.out.println("phase "+String.valueOf(this.state)+" initialized");
+
         for(int i = 0; i < 8; i++){
             this.chipPutInThisPhase[i] = 0;
             this.playerActions[i] = null;
         }
+        System.out.println(Arrays.toString(playerActions));
         this.maxBetInThisPhase = 0;
     }
 
@@ -383,6 +396,8 @@ public class Hand {
         else if(currentAction.getAct() == Action.Act.CALL){
             //all in
             if(remainingStack[pos] <= maxBetInThisPhase - chipPutInThisPhase[pos]) {
+                System.out.print(pos);
+                System.out.println("call allin");
                 this.pot += remainingStack[pos];
                 this.potForEachPlayer[pos] = startingStack[pos];
                 this.chipPutInThisPhase[pos] += remainingStack[pos];
@@ -392,6 +407,8 @@ public class Hand {
                 this.numPlayers --;
             }
             else{
+                System.out.print(pos);
+                System.out.println("call not allin");
                 this.pot += (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
                 this.potForEachPlayer[pos] += (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
                 this.remainingStack[pos] -= (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
@@ -401,6 +418,8 @@ public class Hand {
 
         }
         else if(currentAction.getAct() == Action.Act.RAISE){
+            System.out.print(pos);
+            System.out.println("raise allin");
             maxBetInThisPhase = currentAction.getAmount();
             this.remainingStack[pos] -= (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
             this.pot += (maxBetInThisPhase - this.chipPutInThisPhase[pos]);
