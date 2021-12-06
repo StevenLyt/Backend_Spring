@@ -35,7 +35,7 @@ public class Game {
     //return true if buyin is complete
     public String rebuy(String username, int amount){
         if(!handend){
-            return "not handend"
+            return "not handend";
         }
         for(int i = 0; i < userArr.length; i++){
             if (userArr[i]!=null && userArr[i].getUsername().equals(username)){
