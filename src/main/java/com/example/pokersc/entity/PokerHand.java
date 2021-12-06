@@ -33,7 +33,7 @@ public class PokerHand implements Comparable {
         if(cards.size() != HandRanker.FULL_HAND) throw new IllegalArgumentException("You have to pass five cards");
         this.handRank = handRank;
         this.cards = cards;
-        Collections.sort(this.cards); //sorts for compareTo method
+        //sorts for compareTo method
     }
 
     @Override
@@ -54,6 +54,11 @@ public class PokerHand implements Comparable {
         if(handRank.getValue() < pokerHand.handRank.getValue()) return -1;
 
         for(int index = 0; index < cards.size(); index++) {
+            System.out.println(cards.get(index).getRank().getValue());
+            System.out.println(pokerHand.cards.get(index).getRank().getValue());
+            System.out.println(cards);
+            System.out.println(pokerHand.cards);
+
             if(cards.get(index).getRank().getValue() > pokerHand.cards.get(index).getRank().getValue()) return 1;
             if(cards.get(index).getRank().getValue() < pokerHand.cards.get(index).getRank().getValue()) return -1;
         }

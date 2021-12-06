@@ -440,6 +440,7 @@ public class Hand {
                 System.out.println("raise allin");
                 numPlayers--;
                 this.isAllin[pos] = true;
+
             }
             else{
                 System.out.print(pos);

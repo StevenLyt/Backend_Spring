@@ -78,6 +78,7 @@ public class HandRanker {
             } else {
                 handCards = allCards.stream()
                         .filter(c -> c.getSuit() == popularSuit)
+                        .sorted()
                         .collect(toList());
             }
             return true;
