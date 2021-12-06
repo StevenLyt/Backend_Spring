@@ -43,11 +43,4 @@ public class UserController {
         usersRepository.save(user);
         return hash;
     }
-
-
-    @GetMapping("/users/{id}")
-    public User getUserById(@PathVariable int id) {
-        return usersRepository.findById(id).orElse(null);
-    }
-
 }
