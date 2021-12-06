@@ -30,7 +30,7 @@ public class GameThread extends Thread{
                     //game.remainingChips = hand.getRemainingStack();
                     // update user stats
                     for(int i = 0; i < 8; i++) {
-                        if(game.userArr[i]!=null && hand.getStartingStack()[i] == 0) {
+                        if(game.userArr[i]!=null && hand.getStartingStack()[i] != 0) {
                             game.userArr[i].setTotal_round(game.userArr[i].getTotal_round() + 1);
                             game.userArr[i].setTotal_profit(game.userArr[i].getTotal_profit() + (game.remainingChips[i] - hand.getStartingStack()[i]));
                         }
