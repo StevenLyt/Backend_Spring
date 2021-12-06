@@ -176,9 +176,10 @@ public class Hand {
 
     private void runPhase(){
         this.initializePhase();
+        this.currentAction = null;
         numActionLeft = numPlayers;
         this.actionOnWhichPlayer = smallBlind;
-        while (!active[actionOnWhichPlayer]) {
+        while (!active[actionOnWhichPlayer] || isAllin[actionOnWhichPlayer]) {
             actionOnWhichPlayer++;
             actionOnWhichPlayer %= 8;
         }
@@ -352,10 +353,13 @@ public class Hand {
 
     // initialize phase (flop, turn, river);
     private void initializePhase(){
+        System.out.println("phase "+String.valueOf(this.state)+" initialized");
+
         for(int i = 0; i < 8; i++){
             this.chipPutInThisPhase[i] = 0;
             this.playerActions[i] = null;
         }
+        System.out.println(Arrays.toString(playerActions));
         this.maxBetInThisPhase = 0;
     }
 

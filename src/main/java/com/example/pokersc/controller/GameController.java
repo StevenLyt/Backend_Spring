@@ -68,11 +68,15 @@ public class GameController {
     // a user creates a game
     @PostMapping("/games")
     public String getGameState(@RequestParam String username, @RequestParam String passwordHash) throws JsonProcessingException {
-        //TODO return a json that represent the whole game
+        // return a json that represent the whole game
         Hand hand = this.gameThread.hand;
-       // if(hand == null){
-        //    return String.valueOf(game.numPlayers);
-       // }
+
+        for(User user: game.userArr) {
+            if(user != null){
+                usersRepository.save(user);
+            }
+        }
+
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isEmpty()) {
             return "user not found";
