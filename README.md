@@ -35,7 +35,34 @@ public String userLogin(@RequestParam String username, @RequestParam String pass
 
 - Get current game state for a specific user. To preveny information leak, returned string would only include this specific person's hand and other information that needs to be displayed. This function will return a json of the following info.
 ```
-sdsds
+{
+    "users": [
+        null,
+        null,
+        null,
+        {"username": "1","currentAction": "null","currentBet": 2,"remainingChips": 298,"totalProfit": -212,"currentProfit": -2,"winRate": 0.36363636363636365,"hand": ["",""],"profileUrl": "pfps/6039.png","ifFold": false,"isDealer": false,"isSelf": false,"isActive": false,"isWinner": false},
+        {"username": "reza","currentAction": "null","currentBet": 0,"remainingChips": 1000,"totalProfit": -200,"currentProfit": -200,"winRate": 0.0,"hand": ["",""],"profileUrl": "pfps/1295.png","ifFold": false,"isDealer": true,"isSelf": false,"isActive": false,"isWinner": false},
+        null,
+        {"username": "Thomas","currentAction": "null","currentBet": 0,"remainingChips": 1200,"totalProfit": -419,"currentProfit": 0,"winRate": 0.0,"hand": ["",""],"profileUrl": "pfps/2031.png","ifFold": true,"isDealer": false,"isSelf": false,"isActive": false,"isWinner": false},
+        {"username": "Jason","currentAction": "null","currentBet": 1,"remainingChips": 631,"totalProfit": -396,"currentProfit": 431,"winRate": 0.3333333333333333,"hand": ["",""],"profileUrl": "pfps/7246.png","ifFold": false,"isDealer": false,"isSelf": false,"isActive": false,"isWinner": false}
+    ],
+    "playersProfits": ["Jason:431","Thomas:0","1:-2","reza:-200"],
+    "selfProfit": 0,
+    "gameOn": true,
+    "remainingChips": [0, 0, 0, 298, 1000, 0, 1200, 631],
+    "communityCards": [d3, d6, sk, sj, d9],
+    "pot": 3,
+    "selfHand": ["h5","hK"],
+    "selfPosition":3,
+    "minimumRaiseAmount":4,
+    "actionPosition":4,
+    "dealerPosition":4,
+    "state":0,
+    "winner":-1,
+    "timeLeft":15,
+    "canLeave":true,
+    "numActionLeft":3
+}
 ```
 ```
 POST /api/games?username={}&passwordHash={}
