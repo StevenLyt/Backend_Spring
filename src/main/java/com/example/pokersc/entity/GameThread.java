@@ -28,7 +28,14 @@ public class GameThread extends Thread{
                     // function call to end hand
                     //game.remainingChips = hand.getRemainingStack();
                     // update user stats
-                    game.updateUserStats();
+                    for(int i = 0; i < 8; i++) {
+                        if(game.userArr[i]!=null) {
+                            game.userArr[i].setTotal_round(game.userArr[i].getTotal_round() + 1);
+                            game.userArr[i].setTotal_profit(game.userArr[i].getTotal_profit() + (game.remainingChips[i] - hand.getStartingStack()[i]));
+                        }
+                    }
+                    
+
                     game.handend = true;
                     Thread.sleep(10000);
                     for(int i = 0; i < 8; i++){
