@@ -10,6 +10,7 @@ public class Game {
     public int[] totalBuyin;
     public boolean ongoing;
     public boolean handend;
+    public Hand hand = null;
     public Game(){
         this.numPlayers = 0;
         this.userArr = new User[8];
@@ -33,25 +34,33 @@ public class Game {
     }
 
     //return true if buyin is complete
-    public String rebuy(String username, int amount){
-        if(!handend){
-            return "not handend";
-        }
-        for(int i = 0; i < userArr.length; i++){
-            if (userArr[i]!=null && userArr[i].getUsername().equals(username)){
-                if(remainingChips[i] + amount <= 1200) {
-                    totalBuyin[i] += amount;
-                    remainingChips[i] += amount;
-                    return "success";
-                }
-                else{
-                    return "chips exceeded";
-                }
-
+    public String rebuy(String username, int amount) {
+        int pos = -1;
+        for (int i = 0; i < userArr.length; i++) {
+            if (userArr[i] != null && userArr[i].getUsername().equals(username)) {
+                pos = i;
             }
         }
-        return "user not found";
+        if (pos == -1) {
+            return "user not found";
+        }
+
+        if (!handend) {
+            if (hand.getActive()[pos]) {
+                return "player is active";
+            }
+        }
+
+        if (remainingChips[pos] + amount <= 1200) {
+            totalBuyin[pos] += amount;
+            remainingChips[pos] += amount;
+            return "success";
+        } else {
+            return "chips exceeded";
+        }
     }
+
+
 
     public void updatePos(){
        this.dealerPos ++;

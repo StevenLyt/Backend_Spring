@@ -23,6 +23,7 @@ public class GameThread extends Thread{
                     game.handend = false;
                     game.updatePos();
                     hand = new Hand(game.userArr, game.remainingChips, game.dealerPos, game.numPlayers);
+                    game.hand = hand;
                     hand.startHand();
                     System.out.println(Arrays.toString(hand.getRemainingStack()));
                     // function call to end hand
@@ -37,6 +38,7 @@ public class GameThread extends Thread{
                     
 
                     game.handend = true;
+                    game.hand = null;
                     Thread.sleep(10000);
                     for(int i = 0; i < 8; i++){
                         if(game.remainingChips[i] < 1 && game.userArr[i] != null){
