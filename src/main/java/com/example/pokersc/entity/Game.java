@@ -54,6 +54,9 @@ public class Game {
         if (remainingChips[pos] + amount <= 1200) {
             totalBuyin[pos] += amount;
             remainingChips[pos] += amount;
+            if (!handend) {
+                hand.startingStack[pos] += amount;
+            }
             return "success";
         } else {
             return "chips exceeded";

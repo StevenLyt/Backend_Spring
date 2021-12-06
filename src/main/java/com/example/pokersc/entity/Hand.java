@@ -114,7 +114,7 @@ public class Hand {
     private Card[] communityCards;
     private int pot;
     private int[] potForEachPlayer;
-    private int[] startingStack;
+    public int[] startingStack;
     private int actionOnWhichPlayer;
     private int smallBlind;
     private int bigBlind;
