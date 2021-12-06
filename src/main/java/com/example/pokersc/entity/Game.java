@@ -42,7 +42,7 @@ public class Game {
                 if(remainingChips[i] + amount <= 1200) {
                     totalBuyin[i] += amount;
                     remainingChips[i] += amount;
-                    return true;
+                    return "success";
                 }
                 else{
                     return "chips exceeded";
