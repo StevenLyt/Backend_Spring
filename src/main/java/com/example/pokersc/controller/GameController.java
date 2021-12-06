@@ -54,10 +54,6 @@ public class GameController {
         game = gameThread.game;
         reception = new Reception(game);
         this.reception.start();
-        //game.addUser(usersRepository.findByUsername("gyx").get(), 100,0);
-        //game.addUser(usersRepository.findByUsername("gyx2").get(), 100,1);
-        //game.addUser(usersRepository.findByUsername("gyx3").get(), 100,2);
-
     }
 
     @ModelAttribute
@@ -106,11 +102,11 @@ public class GameController {
                     gameString.append("\"winRate\": ").append((double) user.getTotal_win()/(user.getTotal_round()+1)).append(",");
                     gameString.append("\"hand\": ").append(game.ongoing && hand.getReadyForShowDown()[userPos] ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
                     gameString.append("\"profileUrl\": \"").append(user.getProfile_url()).append("\",");
-                    gameString.append("\"ifFold\": ").append(game.ongoing ? (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos]) : false).append(",");
-                    gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
+                    gameString.append("\"ifFold\": ").append(game.ongoing && (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos])).append(",");
+                    gameString.append("\"isDealer\": ").append(game.ongoing && userPos == hand.getDealerPos()).append(",");
                     gameString.append("\"isSelf\": ").append(user.getUsername() == username).append(",");
                     gameString.append("\"isActive\": ").append(false).append(",");
-                    gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
+                    gameString.append("\"isWinner\": ").append(game.ongoing && userPos == hand.getWinnerPos());
                     gameString.append("},");
                     userPos++;
                 }
@@ -270,7 +266,6 @@ public class GameController {
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent()) {
             User user = optional.get();
-            //TODO: call something like addUser();
             for(User u: game.userArr){
                 if(u!=null && u.getUsername().equals(username)){
                     return "failure";
@@ -291,7 +286,6 @@ public class GameController {
 
     @PostMapping("/games/buyin")
     public String userBuyin(@RequestParam String username, @RequestParam int amount) {
-        // TODO buyin during game
         boolean result = game.rebuy(username,amount);
         if(result){
             return "success";
