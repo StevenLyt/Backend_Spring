@@ -33,8 +33,10 @@ public class Game {
     }
 
     //return true if buyin is complete
-    public boolean rebuy(String username, int amount){
-        while(!handend){}
+    public String rebuy(String username, int amount){
+        if(!handend){
+            return "not handend"
+        }
         for(int i = 0; i < userArr.length; i++){
             if (userArr[i]!=null && userArr[i].getUsername().equals(username)){
                 if(remainingChips[i] + amount <= 1200) {
@@ -43,12 +45,12 @@ public class Game {
                     return true;
                 }
                 else{
-                    return false;
+                    return "chips exceeded";
                 }
 
             }
         }
-        return false;
+        return "user not found";
     }
 
     public void updatePos(){
