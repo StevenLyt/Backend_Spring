@@ -6,10 +6,17 @@ public class GameThread extends Thread{
 
     public Game game;
     public Hand hand;
+    public int[] emojis;
+    public long[] emojiTimes;
 
     public GameThread(){
         this.game = new Game();
         this.hand = null;
+        this.emojis = new int[8];
+        this.emojiTimes = new long[8];
+        for(int i = 0; i < 8; i++){
+            this.emojis[i] = -1;
+        }
     }
 
     public void run(){

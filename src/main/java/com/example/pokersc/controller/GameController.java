@@ -51,10 +51,6 @@ public class GameController {
         game = gameThread.game;
         reception = new Reception(game);
         this.reception.start();
-        //game.addUser(usersRepository.findByUsername("gyx").get(), 100,0);
-        //game.addUser(usersRepository.findByUsername("gyx2").get(), 100,1);
-        //game.addUser(usersRepository.findByUsername("gyx3").get(), 100,2);
-
     }
 
     @ModelAttribute
@@ -71,6 +67,14 @@ public class GameController {
         for(User user: game.userArr) {
             if(user != null){
                 usersRepository.save(user);
+            }
+        }
+
+        long time = System.currentTimeMillis() / 1000;
+        for(int i = 0; i < 8; i++){
+            if(time - gameThread.emojiTimes[i] > 3){
+                gameThread.emojis[i] = -1;
+                gameThread.emojiTimes[i] = time;
             }
         }
 
@@ -111,6 +115,7 @@ public class GameController {
                     gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
                     gameString.append("\"isSelf\": ").append(user.getUsername() == username).append(",");
                     gameString.append("\"isActive\": ").append(false).append(",");
+                    gameString.append("\"emoji\": ").append(gameThread.emojis[userPos]).append(",");
                     gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
                     gameString.append("},");
                     userPos++;
@@ -198,6 +203,7 @@ public class GameController {
                 gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
                 gameString.append("\"isSelf\": ").append(user.getUsername().equals(username)).append(",");
                 gameString.append("\"isActive\": ").append(!game.handend ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
+                gameString.append("\"emoji\": ").append(gameThread.emojis[userPos]).append(",");
                 gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
                 gameString.append("},");
                 userPos++;
@@ -359,6 +365,26 @@ public class GameController {
             return "success";
         } else {
             return "failure";
+        }
+    }
+
+    @PostMapping("games/emoji")
+    public String sendEmoji(@RequestParam String username, @RequestParam int emoji) {
+        int position = 0;
+        for(User user: game.userArr) {
+            if(user!=null && user.getUsername().equals(username)) {
+                break;
+            }
+            position++;
+        }
+        if(position == 8){
+            return "failure";
+        }
+        else{
+            long timestamp = System.currentTimeMillis() / 1000;
+            this.gameThread.emojis[position] = emoji;
+            this.gameThread.emojiTimes[position] = timestamp;
+            return "success";
         }
     }
 }
