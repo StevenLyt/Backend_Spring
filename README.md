@@ -4,16 +4,12 @@ In this project, we implemented two controllere: `UserController` and `GameContr
 - `UserController` handles user sign-up and log-in.
 - `GameController` deals with game-related functionalities, such as joining a game or raise to a certain amount.
   
-Below is detailed specification about each endpoint and related controller function. One thing to note is that to avoid confusion and, we decided to include `/api` at the beginning of all endpoint. To achieve this end, we added the following annotation before each controller definition:
-```java
-@RequestMapping(name ="/api")
-```
-
+Below is detailed specification about each endpoint and related controller functions. 
 ## UserController
 - User sign-up. 
   This would return `failure` if the username is already taken. Otherwise, it woould store the new useer into our database and return the password's hash, which would be used in later information retrieval.
 ```
-POST /api/signup?username={}&password={}&profile_url={}
+POST /signup?username={}&password={}&profile_url={}
 ```
 ```java
 @PostMapping("/signup")
@@ -24,7 +20,7 @@ public String userSignup(@RequestParam String username, @RequestParam String pas
   This would retun `failure` if either the username doesn't exist or the password is incorrect. If verification is successful, this would return the password's hash.
 
 ```
-POST /api/login?username={}&password={}
+POST /login?username={}&password={}
 ```
 ```java
 @PostMapping("/login")
@@ -33,7 +29,7 @@ public String userLogin(@RequestParam String username, @RequestParam String pass
 
 ## GameController
 
-- Get current game state for a specific user. To preveny information leak, returned string would only include this specific person's hand and other information that needs to be displayed. This function will return a json of the following info.
+- Get current game state for a specific user. To prevent information leak, returned string would only include this specific person's hand and other information that needs to be displayed. This function will return a json string. The following example demonstrates all entries needed: 
 ```
 {
     "users": [
@@ -65,7 +61,7 @@ public String userLogin(@RequestParam String username, @RequestParam String pass
 }
 ```
 ```
-POST /api/games?username={}&passwordHash={}
+POST /games?username={}&passwordHash={}
 ```
 ```java
 @PostMapping("/games")
@@ -76,7 +72,7 @@ public String getGameState(@RequestParam String username, @RequestParam String p
   This will first check if this user isn't in the game yet and the position is valid. If so, a user is added to the game with the specified position and buy-in amount, and `sucess` is returned. Otherwise, this would return `failure`. 
 
 ```
-POST /api/games/join?username={}&position={}&buyin={}
+POST /games/join?username={}&position={}&buyin={}
 ```
 ```java
 @PostMapping("/games/join")
@@ -86,7 +82,7 @@ public String joinGameByUsername(@RequestParam String username, @RequestParam in
   If user isn't present in the current game, return `failure`, otherwise add the corresponding amount to the user's balance and return `success`.
 
 ```
-POST /api/games/buyin?username={}&amount={}
+POST /games/buyin?username={}&amount={}
 ```
 ```java
 @PostMapping("/games/buyin")
@@ -97,7 +93,7 @@ public String userBuyin(@RequestParam String username, @RequestParam int amount)
   If the user isn't present in the current game, return `failure`, otherwise remove the user from current game and return `success`.
 
 ```
-POST /api/games/leave?username={}
+POST /games/leave?username={}
 ```
 ```java
 @PostMapping("/games/leave")
@@ -113,10 +109,10 @@ public String leaveGameByUsername(@RequestParam String username)
    This will first check if this is a valid action, i.e. whether this user has already fold or whether it's their turn to take action. If the action is detected as invalid, `failure` is returned. Otherwise return `success`.
 
 ```
-POST /api/games/fold?username={}
-POST /api/games/check?username={}
-POST /api/games/call?username={}
-POST /api/games/raise?username={}amount={}
+POST /games/fold?username={}
+POST /games/check?username={}
+POST /games/call?username={}
+POST /games/raise?username={}amount={}
 ```
 ```java
 @PostMapping("/games/fold")
@@ -127,4 +123,14 @@ public String userCheck(@RequestParam String username)
 public String userCall( @RequestParam String username)
 @PostMapping("games/raise"
 public String userRaise(@RequestParam String username, @RequestParam int amount) 
+```
+
+- Send emoji.
+  This would take a useername and a integer that denotes an emoji. If the user is found, other users would be informed and `success` is returned. Otherwise return `failure`.
+ ```
+ POST /games/emoji?username={}&emoji={}
+ ```
+```java
+@PostMapping("games/emoji")
+public String sendEmoji(@RequestParam String username, @RequestParam int emoji) 
 ```

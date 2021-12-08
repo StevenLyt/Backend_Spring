@@ -1,7 +1,6 @@
 package com.example.pokersc.controller;
 
 import com.example.pokersc.entity.*;
-import com.example.pokersc.repository.GameResultsRepository;
 import com.example.pokersc.repository.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import java.util.*;
 @RestController
 public class GameController {
 
-    @Autowired
-    private GameResultsRepository gameResultsRepository;
     @Autowired
     private UsersRepository usersRepository;
     private Game game;
