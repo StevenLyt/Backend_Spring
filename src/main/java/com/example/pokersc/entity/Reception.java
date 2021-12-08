@@ -1,10 +1,5 @@
 package com.example.pokersc.entity;
 
-import net.bytebuddy.dynamic.scaffold.MethodGraph;
-import org.springframework.data.util.Pair;
-import org.springframework.hateoas.Link;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.*;
 
 public class Reception extends Thread {

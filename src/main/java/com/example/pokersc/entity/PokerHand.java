@@ -1,10 +1,9 @@
 package com.example.pokersc.entity;
 
-import java.util.Collections;
 import java.util.List;
 
 public class PokerHand implements Comparable {
-    public static enum HAND_RANK {
+    public enum HAND_RANK {
         HIGH_CARD(0),
         PAIR(1),
         TWO_PAIR(2),

@@ -108,12 +108,12 @@ public class GameController {
                     gameString.append("\"winRate\": ").append((double) user.getTotal_win()/(user.getTotal_round()+1)).append(",");
                     gameString.append("\"hand\": ").append(game.ongoing && hand.getReadyForShowDown()[userPos] ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
                     gameString.append("\"profileUrl\": \"").append(user.getProfile_url()).append("\",");
-                    gameString.append("\"ifFold\": ").append(game.ongoing ? (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos]) : false).append(",");
-                    gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
+                    gameString.append("\"ifFold\": ").append(game.ongoing && (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos])).append(",");
+                    gameString.append("\"isDealer\": ").append(game.ongoing && userPos == hand.getDealerPos()).append(",");
                     gameString.append("\"isSelf\": ").append(user.getUsername() == username).append(",");
                     gameString.append("\"isActive\": ").append(false).append(",");
                     gameString.append("\"emoji\": ").append(gameThread.emojis[userPos]).append(",");
-                    gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
+                    gameString.append("\"isWinner\": ").append(game.ongoing && userPos == hand.getWinnerPos());
                     gameString.append("},");
                     userPos++;
                 }
@@ -196,12 +196,12 @@ public class GameController {
 
                 gameString.append("\"hand\": ").append(game.ongoing && (hand.getReadyForShowDown()[userPos] || user.getUsername().equals(username)) ? Arrays.toString(hand.getPlayerCards()[userPos].getPlayerHand()):"[\"\",\"\"]").append(",");
                 gameString.append("\"profileUrl\": \"").append(user.getProfile_url()).append("\",");
-                gameString.append("\"ifFold\": ").append(game.ongoing ? (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos]) : false).append(",");
-                gameString.append("\"isDealer\": ").append(game.ongoing ? userPos == hand.getDealerPos() : false).append(",");
+                gameString.append("\"ifFold\": ").append(game.ongoing && (!hand.getActive()[userPos] && !hand.getReadyForShowDown()[userPos])).append(",");
+                gameString.append("\"isDealer\": ").append(game.ongoing && userPos == hand.getDealerPos()).append(",");
                 gameString.append("\"isSelf\": ").append(user.getUsername().equals(username)).append(",");
-                gameString.append("\"isActive\": ").append(!game.handend ? hand.getActionOnWhichPlayer() == userPos : false).append(",");
+                gameString.append("\"isActive\": ").append(!game.handend && hand.getActionOnWhichPlayer() == userPos).append(",");
                 gameString.append("\"emoji\": ").append(gameThread.emojis[userPos]).append(",");
-                gameString.append("\"isWinner\": ").append(game.ongoing ? userPos == hand.getWinnerPos() : false);
+                gameString.append("\"isWinner\": ").append(game.ongoing && userPos == hand.getWinnerPos());
                 gameString.append("},");
                 userPos++;
             }
@@ -247,7 +247,7 @@ public class GameController {
                 gameString.append(",\n" + "    \"isFinished\":").append(Boolean.toString(hand.isFinished()));
                 gameString.append(",\n" + "    \"canCheck\":").append(hand.getMaxBetInThisPhase() == 0 || position == hand.getBigBlind() && hand.getState() == 0 && hand.getMaxBetInThisPhase() == 2);
                 gameString.append(",\n" + "    \"timeLeft\":").append(game.handend ? "\"\"":hand.timeLeft);
-                gameString.append(",\n" + "    \"canLeave\":").append(game.handend ? true: false);
+                gameString.append(",\n" + "    \"canLeave\":").append(game.handend);
                 gameString.append(",\n" + "    \"numPlayers\":").append(hand.getNumPlayers());
 
                 gameString.append("\n}");
@@ -278,7 +278,6 @@ public class GameController {
         Optional<User> optional = usersRepository.findByUsername(username);
         if(optional.isPresent()) {
             User user = optional.get();
-            //TODO: call something like addUser();
             for(User u: game.userArr){
                 if(u!=null && u.getUsername().equals(username)){
                     return "failure";
@@ -299,10 +298,7 @@ public class GameController {
 
     @PostMapping("/games/buyin")
     public String userBuyin(@RequestParam String username, @RequestParam int amount) {
-        // TODO buyin during game
-
-        String result = game.rebuy(username,amount);
-        return result;
+        return game.rebuy(username,amount);
     }
 
     @PostMapping("/games/leave")

@@ -1,8 +1,5 @@
 package com.example.pokersc.entity;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Action {
     public enum Act {

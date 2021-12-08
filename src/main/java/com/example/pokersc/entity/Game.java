@@ -2,7 +2,6 @@ package com.example.pokersc.entity;
 
 public class Game {
 
-    private int id;
     public int numPlayers;
     public User[] userArr;
     public int dealerPos;

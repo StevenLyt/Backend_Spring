@@ -377,24 +377,6 @@ public class Hand {
         this.maxBetInThisPhase = 0;
     }
 
-    // check if every player puts same amount or folds
-   /* private boolean readyForNextRound(){
-        int amount = 0;
-        for(int i = 0; i < 8; i++){
-            if(active[i] && !isAllin[i] ) {
-                amount = chipPutInThisPhase[i];
-                break;
-            }
-        }
-        for(int i = 0; i < 8; i++){
-            if(active[i] && !isAllin[i] && chipPutInThisPhase[i] != amount) {
-               return false;
-            }
-        }
-        return true;
-    }*/
-
-
     // update active arr, chipPutInThisPhase arr, maxBetInThisPhase, pot, numPlayer
     public void doAction(int pos){
         String[] actions = {"raise", "check", "fold", "call"};

@@ -12,9 +12,8 @@ public class User {
     private String username;
     private String passwordHash;
     private String profile_url;
-    private int total_win;  //TODO: store total win round
+    private int total_win;
     private int total_round;
-    //private int total_profit;
     private int total_profit;
 
     public int getTotal_profit() {
@@ -67,32 +66,10 @@ public class User {
         this.total_round = total_round;
     }
 
-    /*
-    public int getBuyin() {
-        return buyin;
-    }
-
-     */
-
-    /*
-    public void setBuyin(int buyin) {
-        this.buyin = buyin;
-    }
-
-     */
-
-    /*
-    public void addAmount(double amount) {
-        this.buyin += amount;
-    }
-     */
-
     public User(String username, String password, String profile_url) {
         this.username = username;
         this.passwordHash = password;
         this.profile_url = profile_url;
-        this.total_profit=0;
-        //this.buyin = 0;
         this.total_round = 0;
         this.total_profit = 0;
     }
