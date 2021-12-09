@@ -201,7 +201,7 @@ public class Test {
         System.out.println(pairResult.compareTo(highCardResult));
 
         // Same Ranking Test
-        // the result should all be 1 because set one is set to be higher ranked tha set 2
+        // the result should all be 1 because set one is set to be higher ranked than set 2
         System.out.println(straightFlushResult.compareTo(straightFlushResult2));
         System.out.println(fourOfAKindResult.compareTo(fourOfAKindResult2));
         System.out.println(fullHouseResult.compareTo(fullHouseResult2));
