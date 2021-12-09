@@ -110,7 +110,6 @@ public class HandRanker {
         handCards = getHighestCards(allCards, QUADS);
         if(handCards.size() == QUADS) {
             handCards.addAll(getMultipleHighestCards(allCards, FULL_HAND - QUADS));
-            System.out.println("four" + handCards);
             pokerHand = new PokerHand(HAND_RANK.FOUR_OF_A_KIND, handCards);
             return true;
         }
@@ -120,7 +119,6 @@ public class HandRanker {
     private boolean isFullHouse(List<Card> allCards) {
         handCards = getHighestCards(allCards, SET);
         handCards.addAll(getHighestCards(allCards, PAIR));
-        System.out.println("full house" + handCards);
         if(handCards.size() == FULL_HOUSE) {
             pokerHand = new PokerHand(HAND_RANK.FULL_HOUSE, handCards);
             return true;
@@ -132,7 +130,6 @@ public class HandRanker {
         handCards = getHighestCards(allCards, SET);
         if(handCards.size() == SET) {
             handCards.addAll(getMultipleHighestCards(allCards, FULL_HAND - SET));
-            System.out.println("set" + handCards);
             pokerHand = new PokerHand(HAND_RANK.THREE_OF_A_KIND, handCards);
             return true;
         }
@@ -145,7 +142,6 @@ public class HandRanker {
         handCards.addAll(getHighestCards(allCards, PAIR));
         if(handCards.size() == PAIR + PAIR) {
             handCards.addAll(getMultipleHighestCards(allCards, FULL_HAND - PAIR - PAIR));
-            System.out.println("two pair" + handCards);
             pokerHand = new PokerHand(HAND_RANK.TWO_PAIR, handCards);
             return true;
         }
@@ -159,7 +155,6 @@ public class HandRanker {
 
         if (handCards.size() == PAIR) {
             handCards.addAll(getMultipleHighestCards(allCards, FULL_HAND - PAIR));
-            System.out.println("one pair" + handCards);
             pokerHand = new PokerHand(HAND_RANK.PAIR, handCards);
             return true;
         }
@@ -167,9 +162,7 @@ public class HandRanker {
     }
 
     private boolean isHighCard(List<Card> allCards) {
-        System.out.println(allCards);
         handCards = getMultipleHighestCards(allCards, FULL_HAND);
-        System.out.println(handCards);
         pokerHand = new PokerHand(HAND_RANK.HIGH_CARD, handCards);
         return true;
     }
